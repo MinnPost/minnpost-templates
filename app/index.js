@@ -24,15 +24,19 @@ util.inherits(MinnpostApplicationGenerator, yeoman.generators.Base);
 MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   var done = this.async();
   var directory = process.cwd().split('/')[process.cwd().split('/').length - 1];
-  var title = directory.replace(/-/g, ' ').replace(/\w\S*/g, function(txt) {
-    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-  });
   var prompts = [];
+  var validateRequired = function(input) {
+    return (input) ? true : 'Please provide a value';
+  };
 
   // Yeoman greet the user.
   console.log(this.yeoman);
 
+  // See inquirer.js for how prompt works
+  // https://github.com/SBoudrias/Inquirer.js
+
   // Name of project
+  directory = (directory.indexOf('minnpost-') !== 0) ? 'minnpost-' + directory : directory;
   prompts.push({
     type: 'input',
     name: 'projectName',
@@ -47,14 +51,20 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     type: 'input',
     name: 'projectTitle',
     message: 'The title of the project, something like MinnPost Sweetness',
-    default: title,
+    validate: validateRequired,
+    default: function(props) {
+      return props.projectName.replace(/-/g, ' ').replace(/\w\S*/g, function(txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+      });
+    },
   });
   // Description of project
   prompts.push({
     type: 'input',
     name: 'projectDescription',
     message: 'A short description of the project',
-    default: title,
+    validate: validateRequired,
+    default: ''
   });
 
   // Call prompt
@@ -81,11 +91,22 @@ MinnpostApplicationGenerator.prototype.projectfiles = function projectfiles() {
   this.copy('jshintrc', '.jshintrc');
 };
 
-// Process application
-MinnpostApplicationGenerator.prototype.app = function app() {
-  this.mkdir('app');
-  this.mkdir('app/templates');
+// Process README
+MinnpostApplicationGenerator.prototype.readme = function readme() {
+  this.template('README.md', 'README.md');
+};
 
-  this.copy('_package.json', 'package.json');
-  this.copy('_bower.json', 'bower.json');
+// Process data and data processing
+MinnpostApplicationGenerator.prototype.data = function data() {
+  this.mkdir('data');
+  this.mkdir('data-processing');
+};
+
+// Process javascript
+MinnpostApplicationGenerator.prototype.app = function app() {
+  this.mkdir('js');
+  this.mkdir('js/templates');
+
+  this.template('_package.json', 'package.json');
+  this.template('_bower.json', 'bower.json');
 };
