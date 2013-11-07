@@ -4,7 +4,7 @@ var path = require('path');
 var yeoman = require('yeoman-generator');
 
 
-var MinnpostTemplateApplicationGenerator = module.exports = function MinnpostTemplateApplicationGenerator(args, options, config) {
+var MinnpostApplicationGenerator = module.exports = function MinnpostApplicationGenerator(args, options, config) {
   yeoman.generators.Base.apply(this, arguments);
 
   this.on('end', function () {
@@ -14,9 +14,9 @@ var MinnpostTemplateApplicationGenerator = module.exports = function MinnpostTem
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 };
 
-util.inherits(MinnpostTemplateApplicationGenerator, yeoman.generators.Base);
+util.inherits(MinnpostApplicationGenerator, yeoman.generators.Base);
 
-MinnpostTemplateApplicationGenerator.prototype.askFor = function askFor() {
+MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   var cb = this.async();
 
   // have Yeoman greet the user.
@@ -36,7 +36,7 @@ MinnpostTemplateApplicationGenerator.prototype.askFor = function askFor() {
   }.bind(this));
 };
 
-MinnpostTemplateApplicationGenerator.prototype.app = function app() {
+MinnpostApplicationGenerator.prototype.app = function app() {
   this.mkdir('app');
   this.mkdir('app/templates');
 
@@ -44,7 +44,7 @@ MinnpostTemplateApplicationGenerator.prototype.app = function app() {
   this.copy('_bower.json', 'bower.json');
 };
 
-MinnpostTemplateApplicationGenerator.prototype.projectfiles = function projectfiles() {
+MinnpostApplicationGenerator.prototype.projectfiles = function projectfiles() {
   this.copy('editorconfig', '.editorconfig');
   this.copy('jshintrc', '.jshintrc');
 };

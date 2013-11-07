@@ -1,4 +1,4 @@
-# MinnPost Template: News Application [![Build Status](https://secure.travis-ci.org/MinnPost/generator-minnpost-template-application.png?branch=master)](https://travis-ci.org/MinnPost/generator-minnpost-template-application)
+# MinnPost Template: News Application [![Build Status](https://secure.travis-ci.org/MinnPost/minnpost-template-application.png?branch=master)](https://travis-ci.org/MinnPost/minnpost-template-application)
 
 A generator for [Yeoman](http://yeoman.io).
 

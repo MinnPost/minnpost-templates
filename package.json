@@ -1,12 +1,12 @@
 {
-  "name": "generator-minnpost-template-application",
+  "name": "generator-minnpost-application",
   "version": "0.0.0",
   "description": "Template for front-end-based news applications using Yeoman.",
   "keywords": [
     "yeoman-generator"
   ],
-  "homepage": "https://github.com/MinnPost/generator-minnpost-template-application",
-  "bugs": "https://github.com/MinnPost/generator-minnpost-template-application/issues",
+  "homepage": "https://github.com/MinnPost/minnpost-template-application",
+  "bugs": "https://github.com/MinnPost/minnpost-template-application/issues",
   "author": {
     "name": "Alan Palazzolo (MinnPost)",
     "email": "apalazzolo@minnpost.com",
@@ -15,7 +15,7 @@
   "main": "app/index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/MinnPost/generator-minnpost-template-application.git"
+    "url": "git://github.com/MinnPost/minnpost-template-application.git"
   },
   "scripts": {
     "test": "mocha"
