@@ -26,9 +26,9 @@ All commands are assumed to on the [command line](http://en.wikipedia.org/wiki/C
    * On a Mac, do: `brew install node`.
 1. Optionally, for development, install [Grunt](http://gruntjs.com/): `npm install -g grunt-cli`
 1. Install [Bower](http://bower.io/): `npm install -g bower`
-<% if (yeoman.rubyGems.length > 0 || yeoman.useSass) { %>1. Install [Ruby](http://www.ruby-lang.org/en/downloads/), though it is probably already installed on your system.
+<% if (yeoman.useRuby || yeoman.useSass) { %>1. Install [Ruby](http://www.ruby-lang.org/en/downloads/), though it is probably already installed on your system.
 1. Install [Bundler](http://gembundler.com/): `gem install bundler` <% } %>
-<% if (yeoman.pythonDeps.length > 0) { %>1. Install [Python](http://www.python.org/getit/), though it is probably already installed on your system.
+<% if (yeoman.usePython) { %>1. Install [Python](http://www.python.org/getit/), though it is probably already installed on your system.
 1. Install [pip](https://pypi.python.org/pypi/pip): `easy_install pip`
 1. Optional, use [virtualenv](http://www.virtualenv.org/en/latest/), where `.env` an environment name that you can change if you want.
     1. `easy_install virtualenv`
@@ -46,8 +46,8 @@ Get the code for this project and install the necessary dependency libraries and
 1. Go into the template directory: `cd <%= yeoman.projectName %>`
 1. Install NodeJS packages: `npm install`
 1. Install Bower components: `bower install`
-<% if (yeoman.rubyGems.length > 0 { %>1. Install Ruby gems: `bundle install`<% } %>
-<% if (yeoman.pythonDeps.length > 0) { %>1. Install python packages: `pip install -r requirements.txt` <% } %>
+<% if (yeoman.useRuby) { %>1. Install Ruby gems: `bundle install`<% } %>
+<% if (yeoman.usePython) { %>1. Install python packages: `pip install -r requirements.txt` <% } %>
 <% if (yeoman.hasMaps) { %>1. Because Leaflet comes unbuilt, we need to build it: `cd bower_components/leaflet/ && npm install && jake; cd -;`<% } %>
 
 ### Running

@@ -66,6 +66,84 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     validate: validateRequired,
     default: ''
   });
+  // Project defaults
+  prompts.push({
+    type: 'confirm',
+    name: 'projectDefaults',
+    message: 'The whole kitten caboodle (sass, compass, default bower components, etc)',
+    default: true
+  });
+  // If not project defaults
+  prompts.push({
+    type: 'checkbox',
+    name: 'projectPrerequsites',
+    message: 'Preqequisite technologies that are needed',
+    choices: [
+      { name: 'SASS', value: 'useSass' },
+      { name: 'Compass', value: 'useCompass' },
+      { name: 'Python', value: 'usePython' },
+      { name: 'Ruby', value: 'useRuby' }
+    ],
+    when: function(props) {
+      return !props.projectDefaults;
+    }
+  });
+  // Bower libraries
+  prompts.push({
+    type: 'input',
+    name: 'bowerComponents',
+    message: 'Bower components (library#1.2.3 other#~1.2.3)',
+    default: 'jquery#~1.9 underscore#~1.5.2 backbone#~1.1.0 ractive#~0.3.7 ractive-backbone#~0.1.0 unsemantic',
+    when: function(props) {
+      return !props.projectDefaults;
+    }
+  });
+  // Node libraries
+  prompts.push({
+    type: 'input',
+    name: 'nodeModules',
+    message: 'Node modules (library@1.2.3 other@~1.2.3)',
+    default: '',
+    when: function(props) {
+      return !props.projectDefaults;
+    }
+  });
+  // Ruby libraries
+  prompts.push({
+    type: 'input',
+    name: 'rubyGems',
+    message: 'Ruby gems (library..)',
+    default: '',
+    when: function(props) {
+      return !props.projectDefaults && props.projectPrerequsites.indexOf('useRuby') >= 0;
+    }
+  });
+  // Python libraries
+  prompts.push({
+    type: 'input',
+    name: 'pythonDependencies',
+    message: 'Python dependencies (library..)',
+    default: '',
+    when: function(props) {
+      return !props.projectDefaults && props.projectPrerequsites.indexOf('usePython') >= 0;
+    }
+  });
+  // Features
+  prompts.push({
+    type: 'checkbox',
+    name: 'projectFeatures',
+    message: 'Sets of features',
+    choices: [
+      { name: 'Maps', value: 'hasMaps' },
+      { name: 'Dates', value: 'hasDates' },
+      { name: 'Form inputs', value: 'hasInputs' },
+      { name: 'Sticky horizontal menu', value: 'hasHMenu' }
+      // Sticky menu (vertical)
+    ],
+    when: function(props) {
+      return !props.projectDefaults;
+    }
+  });
 
   // Call prompt
   this.prompt(prompts, function(props) {
