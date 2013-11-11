@@ -27,7 +27,7 @@ All commands are assumed to on the [command line](http://en.wikipedia.org/wiki/C
 1. Optionally, for development, install [Grunt](http://gruntjs.com/): `npm install -g grunt-cli`
 1. Install [Bower](http://bower.io/): `npm install -g bower`
 <% if (projectPrerequisites.useRuby || projectPrerequisites.useSass) { %>1. Install [Ruby](http://www.ruby-lang.org/en/downloads/), though it is probably already installed on your system.
-1. Install [Bundler](http://gembundler.com/): `gem install bundler` <% } %>
+1. Install [Bundler](http://gembundler.com/): `gem install bundler`<% } %>
 <% if (projectPrerequisites.usePython) { %>1. Install [Python](http://www.python.org/getit/), though it is probably already installed on your system.
 1. Install [pip](https://pypi.python.org/pypi/pip): `easy_install pip`
 1. Optional, use [virtualenv](http://www.virtualenv.org/en/latest/), where `.env` an environment name that you can change if you want.

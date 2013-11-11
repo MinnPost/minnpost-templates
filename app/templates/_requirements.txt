@@ -1,0 +1,2 @@
+<% pythonDependencies.forEach(function(m, i) { %>
+<%= m.name %><% if (m.version && m.version != '*') { %><%= m.version %><% } %><% }) %>

@@ -94,7 +94,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   prompts.push({
     type: 'input',
     name: 'bowerComponents',
-    message: 'Bower components (library#1.2.3 other#~1.2.3)',
+    message: 'Bower components, something like library#1.2.3 other#~1.2.3',
     default: defaultBowerComponents,
     when: function(props) {
       return !props.projectDefaults;
@@ -104,7 +104,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   prompts.push({
     type: 'input',
     name: 'nodeModules',
-    message: 'Node modules (library@1.2.3 other@~1.2.3)',
+    message: 'Node modules, something like library@1.2.3 other@~1.2.3',
     default: '',
     when: function(props) {
       return !props.projectDefaults;
@@ -124,7 +124,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   prompts.push({
     type: 'input',
     name: 'pythonDependencies',
-    message: 'Python dependencies (library..)',
+    message: 'Python dependencies, something like library@==1.2.3 other@>=1.2.3',
     default: '',
     when: function(props) {
       return !props.projectDefaults && props.projectPrerequisites.indexOf('usePython') >= 0;
@@ -228,10 +228,32 @@ MinnpostApplicationGenerator.prototype.readme = function readme() {
   this.template('_README.md', 'README.md');
 };
 
+// Process LICENSE
+MinnpostApplicationGenerator.prototype.license = function license() {
+  this.copy('LICENSE.txt', 'LICENSE.txt');
+};
+
 // Process data and data processing
 MinnpostApplicationGenerator.prototype.data = function data() {
   this.mkdir('data');
   this.mkdir('data-processing');
+};
+
+// Process python
+MinnpostApplicationGenerator.prototype.python = function python() {
+  if (this.projectPrerequisites.usePython) {
+    this.template('_requirements.txt', 'requirements.txt');
+  }
+};
+
+// Process styling
+MinnpostApplicationGenerator.prototype.styles = function styles() {
+  if (this.projectPrerequisites.useSass || this.projectPrerequisites.useCompass) {
+    this.mkdir('sass');
+  }
+  else {
+    this.mkdir('css');
+  }
 };
 
 // Process javascript application stuff
