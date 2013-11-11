@@ -1,0 +1,4 @@
+source 'https://rubygems.org'
+
+<% rubyGems.forEach(function(m, i) { %>
+gem '<%= m.name %>'<% if (m.version && m.version != '*') { %>, '<%= m.version %>'<% } %><% }) %>

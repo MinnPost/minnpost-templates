@@ -42,7 +42,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   prompts.push({
     type: 'input',
     name: 'projectName',
-    message: 'The name of the project, usually in the form of "minnpost-sweet-app"',
+    message: 'The name of the project, usually in the form of "minnpost-sweet-app":',
     default: directory,
     validate: function(input) {
       return (input.indexOf('minnpost-') === 0) ? true : 'Please prefix your application with "minnpost-"';
@@ -52,7 +52,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   prompts.push({
     type: 'input',
     name: 'projectTitle',
-    message: 'The title of the project, something like MinnPost Sweetness',
+    message: 'The title of the project, something like MinnPost Sweetness:',
     validate: validateRequired,
     default: function(props) {
       return props.projectName.replace(/-/g, ' ').replace(/\w\S*/g, function(txt) {
@@ -64,7 +64,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   prompts.push({
     type: 'input',
     name: 'projectDescription',
-    message: 'A short description of the project',
+    message: 'A short description of the project:',
     validate: validateRequired,
     default: ''
   });
@@ -72,14 +72,14 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   prompts.push({
     type: 'confirm',
     name: 'projectDefaults',
-    message: 'The whole kitten caboodle (sass, compass, default bower components, etc)',
+    message: 'The whole kitten caboodle (sass, compass, default bower components, etc):',
     default: true
   });
   // If not project defaults
   prompts.push({
     type: 'checkbox',
     name: 'projectPrerequisites',
-    message: 'Preqequisite technologies that are needed',
+    message: 'Preqequisite technologies that are needed:',
     choices: [
       { name: 'SASS', value: 'useSass' },
       { name: 'Compass', value: 'useCompass' },
@@ -94,7 +94,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   prompts.push({
     type: 'input',
     name: 'bowerComponents',
-    message: 'Bower components, something like library#1.2.3 other#~1.2.3',
+    message: 'Bower components, something like library#1.2.3 other#~1.2.3:',
     default: defaultBowerComponents,
     when: function(props) {
       return !props.projectDefaults;
@@ -104,7 +104,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   prompts.push({
     type: 'input',
     name: 'nodeModules',
-    message: 'Node modules, something like library@1.2.3 other@~1.2.3',
+    message: 'Node modules, something like library@1.2.3 other@~1.2.3:',
     default: '',
     when: function(props) {
       return !props.projectDefaults;
@@ -114,7 +114,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   prompts.push({
     type: 'input',
     name: 'rubyGems',
-    message: 'Ruby gems (library..)',
+    message: 'Ruby gems, something like library@1.2.3 other@~>1.2.3:',
     default: '',
     when: function(props) {
       return !props.projectDefaults && props.projectPrerequisites.indexOf('useRuby') >= 0;
@@ -124,7 +124,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   prompts.push({
     type: 'input',
     name: 'pythonDependencies',
-    message: 'Python dependencies, something like library@==1.2.3 other@>=1.2.3',
+    message: 'Python dependencies, something like library@==1.2.3 other@>=1.2.3:',
     default: '',
     when: function(props) {
       return !props.projectDefaults && props.projectPrerequisites.indexOf('usePython') >= 0;
@@ -243,6 +243,13 @@ MinnpostApplicationGenerator.prototype.data = function data() {
 MinnpostApplicationGenerator.prototype.python = function python() {
   if (this.projectPrerequisites.usePython) {
     this.template('_requirements.txt', 'requirements.txt');
+  }
+};
+
+// Process ruby
+MinnpostApplicationGenerator.prototype.ruby = function ruby() {
+  if (this.projectPrerequisites.useRuby) {
+    this.template('_Gemfile', 'Gemfile');
   }
 };
 
