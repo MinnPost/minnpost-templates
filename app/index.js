@@ -25,6 +25,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   var done = this.async();
   var directory = process.cwd().split('/')[process.cwd().split('/').length - 1];
   var prompts = [];
+  var defaultBowerComponents = 'jquery#~1.9 underscore#~1.5.2 backbone#~1.1.0 ractive#~0.3.7 ractive-backbone#~0.1.0 unsemantic';
   var validateRequired = function(input) {
     return (input) ? true : 'Please provide a value';
   };
@@ -93,7 +94,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     type: 'input',
     name: 'bowerComponents',
     message: 'Bower components (library#1.2.3 other#~1.2.3)',
-    default: 'jquery#~1.9 underscore#~1.5.2 backbone#~1.1.0 ractive#~0.3.7 ractive-backbone#~0.1.0 unsemantic',
+    default: defaultBowerComponents,
     when: function(props) {
       return !props.projectDefaults;
     }
@@ -139,10 +140,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       { name: 'Form inputs', value: 'hasInputs' },
       { name: 'Sticky horizontal menu', value: 'hasHMenu' }
       // Sticky menu (vertical)
-    ],
-    when: function(props) {
-      return !props.projectDefaults;
-    }
+    ]
   });
 
   // Call prompt
@@ -150,7 +148,50 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     var i;
     var thisYeoman = this;
 
-    // Attach all inputs
+    // Change choice list to objects
+    ['projectPrerequsites', 'projectFeatures'].forEach(function(p) {
+      var newProp = {};
+      if (props[p] !== undefined) {
+        props[p].forEach(function(v) {
+          newProp[v] = true;
+        });
+        props[p] = newProp;
+      }
+    });
+
+    // Handle the defualt prop
+    if (props.projectDefaults === true) {
+      props.projectPrerequsites = {
+        useSass: true,
+        useCompass: true
+      }
+      props.bowerComponents = defaultBowerComponents;
+    }
+
+    // Handle project features
+    if (props.projectFeatures['hasMaps'] === true) {
+      // Attach leaflet
+      props.bowerComponents .= ' leaflet#~0.6.4';
+    }
+    if (props.projectFeatures['hasDates'] === true) {
+      // Attach moment
+      props.bowerComponents .= ' moment#~2.4.0';
+    }
+    if (props.projectFeatures['hasInputs'] === true) {
+      // Attach placeholder.js
+      props.bowerComponents .= ' Placeholders.js#~3.0.1';
+    }
+    if (props.projectFeatures['hasHMenu'] === true) {
+      // Attach sticky menu
+      props.bowerComponents .= ' sticky-kit#~1.0.1';
+    }
+
+    // Process library fields into a real object for
+    // templates
+
+
+    // Attach all inputs so that they can be referenced in
+    // templates.
     for (i in props) {
       this[i] = props[i];
     }
