@@ -1,7 +1,33 @@
 'use strict';
+
 var util = require('util');
 var path = require('path');
 var yeoman = require('yeoman-generator');
+var request = require('request');
+var cheerio = require('cheerio');
+
+// Helper functions
+var getMinnPostResources = function(done) {
+  var url = 'http://minnpost.com/data';
+  console.log('Retrieving CSS/JS resource from MinnPost site to include in template.');
+
+  request(url, function(err, resp, body) {
+    var resources = {};
+    var $ = cheerio.load(body);
+
+    $('html head link[type="text/css"]').each(function(i, elem) {
+      resources.css = resources.css || [];
+      resources.css.push($(elem).clone().parent().html());
+    });
+
+    $('html head script[type="text/javascript"]').each(function(i, elem) {
+      resources.js = resources.js || [];
+      resources.js.push($(elem).clone().parent().html());
+    });
+
+    done(resources);
+  });
+};
 
 // Generator object
 var MinnpostApplicationGenerator = module.exports = function MinnpostApplicationGenerator(args, options, config) {
@@ -208,7 +234,12 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     for (i in props) {
       this[i] = props[i];
     }
-    done();
+
+    // Get the MinnPost resources for putting into templates
+    getMinnPostResources(function(resources) {
+      thisYeoman.minnpostResources = resources;
+      done();
+    });
   }.bind(this));
 };
 
