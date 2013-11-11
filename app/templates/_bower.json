@@ -1,6 +1,20 @@
 {
-  "name": "package",
+  "name": "<%= projectName %>",
   "version": "0.0.0",
-  "dependencies": {}
+  "main": "index.html",
+  "homepage": "https://github.com/minnpost/<%= projectName %>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/minnpost/<%= projectName %>"
+  },
+  "bugs": "https://github.com/minnpost/<%= projectName %>/issues",
+  "license": "MIT",
+  "author": {
+    "name": "MinnPost",
+    "email": "data@minnpost.com"
+  },
+  "dependencies": {<% bowerComponents.forEach(function(m, i) { %>
+    "<%= m.name %>": "<%= m.version %>"<% if (i < bowerComponents.length - 1) { %>,<% } %><% }) %>
+  }
 }
 

@@ -26,6 +26,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   var directory = process.cwd().split('/')[process.cwd().split('/').length - 1];
   var prompts = [];
   var defaultBowerComponents = 'jquery#~1.9 underscore#~1.5.2 backbone#~1.1.0 ractive#~0.3.7 ractive-backbone#~0.1.0 unsemantic';
+  var separators = { bowerComponents: '#', nodeModules: '@', rubyGems: '@', pythonDependencies: '@'};
   var validateRequired = function(input) {
     return (input) ? true : 'Please provide a value';
   };
@@ -77,7 +78,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   // If not project defaults
   prompts.push({
     type: 'checkbox',
-    name: 'projectPrerequsites',
+    name: 'projectPrerequisites',
     message: 'Preqequisite technologies that are needed',
     choices: [
       { name: 'SASS', value: 'useSass' },
@@ -116,7 +117,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     message: 'Ruby gems (library..)',
     default: '',
     when: function(props) {
-      return !props.projectDefaults && props.projectPrerequsites.indexOf('useRuby') >= 0;
+      return !props.projectDefaults && props.projectPrerequisites.indexOf('useRuby') >= 0;
     }
   });
   // Python libraries
@@ -126,7 +127,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     message: 'Python dependencies (library..)',
     default: '',
     when: function(props) {
-      return !props.projectDefaults && props.projectPrerequsites.indexOf('usePython') >= 0;
+      return !props.projectDefaults && props.projectPrerequisites.indexOf('usePython') >= 0;
     }
   });
   // Features
@@ -149,7 +150,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     var thisYeoman = this;
 
     // Change choice list to objects
-    ['projectPrerequsites', 'projectFeatures'].forEach(function(p) {
+    ['projectPrerequisites', 'projectFeatures'].forEach(function(p) {
       var newProp = {};
       if (props[p] !== undefined) {
         props[p].forEach(function(v) {
@@ -161,7 +162,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
 
     // Handle the defualt prop
     if (props.projectDefaults === true) {
-      props.projectPrerequsites = {
+      props.projectPrerequisites = {
         useSass: true,
         useCompass: true
       }
@@ -171,24 +172,36 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     // Handle project features
     if (props.projectFeatures['hasMaps'] === true) {
       // Attach leaflet
-      props.bowerComponents .= ' leaflet#~0.6.4';
+      props.bowerComponents += ' leaflet#~0.6.4';
     }
     if (props.projectFeatures['hasDates'] === true) {
       // Attach moment
-      props.bowerComponents .= ' moment#~2.4.0';
+      props.bowerComponents += ' moment#~2.4.0';
     }
     if (props.projectFeatures['hasInputs'] === true) {
       // Attach placeholder.js
-      props.bowerComponents .= ' Placeholders.js#~3.0.1';
+      props.bowerComponents += ' Placeholders.js#~3.0.1';
     }
     if (props.projectFeatures['hasHMenu'] === true) {
       // Attach sticky menu
-      props.bowerComponents .= ' sticky-kit#~1.0.1';
+      props.bowerComponents += ' sticky-kit#~1.0.1';
     }
 
     // Process library fields into a real object for
     // templates
-
+    for (i in separators) {
+      var dependencies = [];
+      props[i] = (props[i] !== undefined) ? props[i].trim() : '';
+      props[i].split(' ').forEach(function(l) {
+        if (l.split(separators[i])[0]) {
+          dependencies.push({
+            name: l.split(separators[i])[0],
+            version: (l.split(separators[i])[1]) ? l.split(separators[i])[1] : '*'
+          });
+        }
+      });
+      props[i] = dependencies;
+    }
 
     // Attach all inputs so that they can be referenced in
     // templates.
@@ -212,7 +225,7 @@ MinnpostApplicationGenerator.prototype.projectfiles = function projectfiles() {
 
 // Process README
 MinnpostApplicationGenerator.prototype.readme = function readme() {
-  this.template('README.md', 'README.md');
+  this.template('_README.md', 'README.md');
 };
 
 // Process data and data processing
@@ -221,7 +234,7 @@ MinnpostApplicationGenerator.prototype.data = function data() {
   this.mkdir('data-processing');
 };
 
-// Process javascript
+// Process javascript application stuff
 MinnpostApplicationGenerator.prototype.app = function app() {
   this.mkdir('js');
   this.mkdir('js/templates');

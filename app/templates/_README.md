@@ -1,6 +1,6 @@
-# <%= yeoman.projectTitle || yeoman.projectName %>
+# <%= projectTitle || projectName %>
 
-<%= yeoman.projectDescription || '*Description goes here*' %>
+<%= projectDescription || '*Description goes here*' %>
 
 ## Data
 
@@ -26,29 +26,29 @@ All commands are assumed to on the [command line](http://en.wikipedia.org/wiki/C
    * On a Mac, do: `brew install node`.
 1. Optionally, for development, install [Grunt](http://gruntjs.com/): `npm install -g grunt-cli`
 1. Install [Bower](http://bower.io/): `npm install -g bower`
-<% if (yeoman.useRuby || yeoman.useSass) { %>1. Install [Ruby](http://www.ruby-lang.org/en/downloads/), though it is probably already installed on your system.
+<% if (projectPrerequisites.useRuby || projectPrerequisites.useSass) { %>1. Install [Ruby](http://www.ruby-lang.org/en/downloads/), though it is probably already installed on your system.
 1. Install [Bundler](http://gembundler.com/): `gem install bundler` <% } %>
-<% if (yeoman.usePython) { %>1. Install [Python](http://www.python.org/getit/), though it is probably already installed on your system.
+<% if (projectPrerequisites.usePython) { %>1. Install [Python](http://www.python.org/getit/), though it is probably already installed on your system.
 1. Install [pip](https://pypi.python.org/pypi/pip): `easy_install pip`
 1. Optional, use [virtualenv](http://www.virtualenv.org/en/latest/), where `.env` an environment name that you can change if you want.
     1. `easy_install virtualenv`
     1. `virtualenv .env`
     1. `cd .env && source bin/activiate; cd -;` <% } %>
-<% if (yeoman.useSass) { %>1. Install [Sass](http://sass-lang.com/): `gem install sass`<% } %>
-<% if (yeoman.useCompass) { %>1. Install [Compass](http://compass-style.org/): `gem install compass`<% } %>
-<% if (yeoman.hasMaps) { %>1. Because Leaflet comes unbuilt, we need to build it with Jake: `npm install -g jake`<% } %>
+<% if (projectPrerequisites.useSass) { %>1. Install [Sass](http://sass-lang.com/): `gem install sass`<% } %>
+<% if (projectPrerequisites.useCompass) { %>1. Install [Compass](http://compass-style.org/): `gem install compass`<% } %>
+<% if (projectFeatures.hasMaps) { %>1. Because Leaflet comes unbuilt, we need to build it with Jake: `npm install -g jake`<% } %>
 
 ### Get code and install packages
 
 Get the code for this project and install the necessary dependency libraries and packages.
 
-1. Check out this code with [Git](http://git-scm.com/): `git clone https://github.com/MinnPost/<%= yeoman.projectName %>.git`
-1. Go into the template directory: `cd <%= yeoman.projectName %>`
+1. Check out this code with [Git](http://git-scm.com/): `git clone https://github.com/MinnPost/<%= projectName %>.git`
+1. Go into the template directory: `cd <%= projectName %>`
 1. Install NodeJS packages: `npm install`
 1. Install Bower components: `bower install`
-<% if (yeoman.useRuby) { %>1. Install Ruby gems: `bundle install`<% } %>
-<% if (yeoman.usePython) { %>1. Install python packages: `pip install -r requirements.txt` <% } %>
-<% if (yeoman.hasMaps) { %>1. Because Leaflet comes unbuilt, we need to build it: `cd bower_components/leaflet/ && npm install && jake; cd -;`<% } %>
+<% if (projectPrerequisites.useRuby) { %>1. Install Ruby gems: `bundle install`<% } %>
+<% if (projectPrerequisites.usePython) { %>1. Install python packages: `pip install -r requirements.txt` <% } %>
+<% if (projectFeatures.hasMaps) { %>1. Because Leaflet comes unbuilt, we need to build it: `cd bower_components/leaflet/ && npm install && jake; cd -;`<% } %>
 
 ### Running
 
