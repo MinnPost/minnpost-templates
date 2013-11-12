@@ -36,18 +36,21 @@
     node-body fieldlayout node-field-body
   -->
   <div class="node-body fieldlayout node-field-body">
-    <!-- Library or external CSS files -->
+    <!-- Application and libraries CSS -->
     <style type="text/css">
-      @import url('./bower_components/');
-    </style>
-
-    <!-- Application CSS -->
-    <style type="text/css">
-      @import url('./css/styles.css');
+      <% for (var c in filteredComponentMap.css) { filteredComponentMap.css[c].forEach(function(f) { %>
+      @import url('bower_components/<%= f %>.css');<% }) } %>
+      <% if (projectPrerequisites.useSass || projectPrerequisites.useCompass) { %>
+      @import url('.tmp/css/main.css');<% } else { %>
+      @import url('styles/styles.css');<% } %>
     </style>
     <!--[if lte IE 8]>
       <style type="text/css">
-        @import url('./css/styles.ie.css');
+        <% for (var c in filteredComponentMap.ie) { filteredComponentMap.ie[c].forEach(function(f) { %>
+        @import url('bower_components/<%= f %>.css');<% }) } %>
+        <% if (projectPrerequisites.useSass || projectPrerequisites.useCompass) { %>
+        @import url('.tmp/css/main.ie.css');<% } else { %>
+        @import url('styles/styles.ie.css');<% } %>
       </style>
     <![endif]-->
 

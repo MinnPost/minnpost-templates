@@ -56,6 +56,28 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   var validateRequired = function(input) {
     return (input) ? true : 'Please provide a value';
   };
+  var componentMap = {
+    js: {
+      jquery: ['jquery/jquery.min'],
+      backbone: ['backbone/backbone-min'],
+      underscore: ['underscore/underscore-min'],
+      leaflet: ['leaflet/dist/leaflet'],
+      moment: ['moment/min/moment.min'],
+      'Placeholder.js': ['Placeholder.js/lib/adapters/placeholders.jquery'],
+      ractive: ['ractive/build/Ractive-legacy.min'],
+      'ractive-backbone': ['ractive-backbone/Ractive-Backbone.min'],
+      requirejs: ['requirejs/require'],
+      text: ['text/text.js']
+    },
+    css: {
+      leaflet: ['leaflet/dist/leaflet'],
+      unsemantic: ['unsemantic/assets/stylesheets/unsemantic-grid-responsive-tablet']
+    },
+    ie: {
+      leaflet: ['leaflet/dist/leaflet.ie'],
+      unsemantic: ['unsemantic/assets/stylesheets/ie']
+    }
+  };
 
   // Yeoman greet the user.
   console.log(this.yeoman);
@@ -232,6 +254,22 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       props[i] = dependencies;
     }
 
+    // Add componenet map and provide filtered version
+    props.componentMap = componentMap;
+    props.filteredComponentMap = {};
+    ['js', 'css', 'ie'].forEach(function(s) {
+      props.filteredComponentMap[s] = {};
+      for (i in componentMap[s]) {
+        if (['requirejs', 'text'].indexOf(i) === -1) {
+          props.bowerComponents.forEach(function(b) {
+            if (i === b.name) {
+              props.filteredComponentMap[s][i] = componentMap[s][i];
+            }
+          });
+        }
+      }
+    });
+
     // Attach all inputs so that they can be referenced in
     // templates.
     for (i in props) {
@@ -289,11 +327,13 @@ MinnpostApplicationGenerator.prototype.ruby = function ruby() {
 
 // Process styling
 MinnpostApplicationGenerator.prototype.styles = function styles() {
+  this.mkdir('styles');
   if (this.projectPrerequisites.useSass || this.projectPrerequisites.useCompass) {
-    this.mkdir('sass');
+    this.mkdir('.tmp/css');
   }
   else {
-    this.mkdir('css');
+    this.template('styles/_styles.css', 'styles/styles.css');
+    this.template('styles/_styles.ie.css', 'styles/styles.ie.css');
   }
 };
 

@@ -11,9 +11,8 @@ require.config({
   baseUrl: 'js',
   paths: {
     '<%= projectName %>': 'app',
-    components: '../bower_components',
-    jquery: '../bower_components/jquery/jquery.min',
-    backbone: '../bower_components/backbone/backbone-min',
-    underscore: '../bower_components/underscore/underscore-min'
+    <% for (var c in filteredComponentMap.js) { %>
+    '<%= c %>': '../bower_components/<%= filteredComponentMap.js[c][0] %>',<% } %>
+    components: '../bower_components'
   }
 });
