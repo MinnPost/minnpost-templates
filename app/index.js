@@ -67,7 +67,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       ractive: ['ractive/build/Ractive-legacy.min'],
       'ractive-backbone': ['ractive-backbone/Ractive-Backbone.min'],
       requirejs: ['requirejs/require'],
-      text: ['text/text.js']
+      text: ['text/text']
     },
     css: {
       leaflet: ['leaflet/dist/leaflet'],
@@ -260,7 +260,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     ['js', 'css', 'ie'].forEach(function(s) {
       props.filteredComponentMap[s] = {};
       for (i in componentMap[s]) {
-        if (['requirejs', 'text'].indexOf(i) === -1) {
+        if (['requirejs'].indexOf(i) === -1) {
           props.bowerComponents.forEach(function(b) {
             if (i === b.name) {
               props.filteredComponentMap[s][i] = componentMap[s][i];
@@ -359,6 +359,10 @@ MinnpostApplicationGenerator.prototype.app = function app() {
   this.copy('js/collections.js', 'js/collections.js');
   this.copy('js/views.js', 'js/views.js');
   this.copy('js/routers.js', 'js/routers.js');
+
+  // Template files
+  this.template('js/templates/_application.mustache', 'js/templates/application.mustache');
+  this.copy('js/templates/loading.mustache', 'js/templates/loading.mustache');
 };
 
 // Process HTML

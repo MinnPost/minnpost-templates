@@ -1,15 +1,18 @@
 /**
- * Main application file.  This pulls in all the parts
+ * Main application file for: <%= projectName %>
+ *
+ * This pulls in all the parts
  * and creates the main object for the application.
  */
-define('<%= projectName %>', ['underscore', 'helpers', 'models', 'collections', 'views', 'routers'],
-  function(_, helpers, models, collections, views, routers) {
+define('<%= projectName %>', ['underscore', 'helpers', 'routers'],
+  function(_, helpers, routers) {
 
   // Constructor for app
   var App = function(options) {
     this.options = options;
+    this.el = this.options.el;
     if (this.el) {
-      this.$el = $(el);
+      this.$el = $(this.el);
     }
   };
 
@@ -18,9 +21,15 @@ define('<%= projectName %>', ['underscore', 'helpers', 'models', 'collections', 
 
   // Start function
   App.prototype.start = function() {
-    // Get initial data
     // Create router
+    this.router = new routers.Router({
+      app: this
+    });
+
+    // Get any initial, global data
+
     // Start backbone history
+    this.router.start();
   };
 
   return App;

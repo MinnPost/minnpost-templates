@@ -1,4 +1,8 @@
-require.config({
+/**
+ * RequireJS config which maps out where files are and shims
+ * any non-compliant libraries.
+ */
+ require.config({
   shim: {
     'underscore': {
       exports: '_'
