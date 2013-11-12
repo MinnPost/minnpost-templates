@@ -17,12 +17,12 @@ var getMinnPostResources = function(done) {
 
     $('html head link[type="text/css"]').each(function(i, elem) {
       resources.css = resources.css || [];
-      resources.css.push($(elem).clone().parent().html());
+      resources.css.push($.html($(elem)));
     });
 
     $('html head script[type="text/javascript"]').each(function(i, elem) {
       resources.js = resources.js || [];
-      resources.js.push($(elem).clone().parent().html());
+      resources.js.push($.html($(elem)));
     });
 
     done(resources);
@@ -213,6 +213,9 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       props.bowerComponents += ' sticky-kit#~1.0.1';
     }
 
+    // Add requireJS manually as this is needed
+    props.bowerComponents += ' requirejs#~2.1.9 text#~2.0.10';
+
     // Process library fields into a real object for
     // templates
     for (i in separators) {
@@ -299,6 +302,21 @@ MinnpostApplicationGenerator.prototype.app = function app() {
   this.mkdir('js');
   this.mkdir('js/templates');
 
+  // Package files
   this.template('_package.json', 'package.json');
   this.template('_bower.json', 'bower.json');
+
+  // Application files
+  this.template('js/_config.js', 'js/config.js');
+  this.template('js/_app.js', 'js/app.js');
+  this.copy('js/helpers.js', 'js/helpers.js');
+  this.copy('js/models.js', 'js/models.js');
+  this.copy('js/collections.js', 'js/collections.js');
+  this.copy('js/views.js', 'js/views.js');
+  this.copy('js/routers.js', 'js/routers.js');
+};
+
+// Process HTML
+MinnpostApplicationGenerator.prototype.html = function html() {
+  this.template('_index.html', 'index.html');
 };
