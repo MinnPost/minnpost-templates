@@ -1,0 +1,7 @@
+/**
+ * Styles for: <%= projectName %>
+ */
+<% if (projectPrerequisites.useCompass) { %>@import "compass";<% } %>
+@import "_variables";
+@import "_mixins";
+@import "_styles";

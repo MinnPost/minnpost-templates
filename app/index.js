@@ -330,6 +330,11 @@ MinnpostApplicationGenerator.prototype.styles = function styles() {
   this.mkdir('styles');
   if (this.projectPrerequisites.useSass || this.projectPrerequisites.useCompass) {
     this.mkdir('.tmp/css');
+    this.template('styles/__variables.scss', 'styles/_variables.scss');
+    this.template('styles/__styles.scss', 'styles/_styles.scss');
+    this.template('styles/__mixins.scss', 'styles/_mixins.scss');
+    this.template('styles/_main.scss', 'styles/main.scss');
+    this.template('styles/_main.ie.scss', 'styles/main.ie.scss');
   }
   else {
     this.template('styles/_styles.css', 'styles/styles.css');
