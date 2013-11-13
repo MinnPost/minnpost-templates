@@ -376,4 +376,5 @@ MinnpostApplicationGenerator.prototype.images = function images() {
 // Process HTML
 MinnpostApplicationGenerator.prototype.html = function html() {
   this.template('_index.html', 'index.html');
+  this.template('_index-build.html', 'index-build.html');
 };

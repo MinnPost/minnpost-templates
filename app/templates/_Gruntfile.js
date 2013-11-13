@@ -124,6 +124,11 @@ module.exports = function(grunt) {
       options: {
         separator: '\r\n\r\n'
       },
+      // JS version
+      js: {
+        src: ['dist/<%%= pkg.name %>.latest.js'],
+        dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.js'
+      },
       // JS Libs
       jsLibs: {
         src: [
@@ -138,8 +143,6 @@ module.exports = function(grunt) {
       // CSS
       css: {
         src: [
-          <% for (var c in filteredComponentMap.css) { filteredComponentMap.css[c].forEach(function(f) { %>
-          'bower_components/<%= f %>.css',<% }) } %>
           '<%%= compass.dist.options.cssDir %>/main.css'
         ],
         dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.css'
@@ -150,8 +153,6 @@ module.exports = function(grunt) {
       },
       cssIe: {
         src: [
-          <% for (var c in filteredComponentMap.ie) { filteredComponentMap.ie[c].forEach(function(f) { %>
-          'bower_components/<%= f %>.css',<% }) } %>
           '<%%= compass.dist.options.cssDir %>/main.ie.css'
         ],
         dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.ie.css'
@@ -159,6 +160,25 @@ module.exports = function(grunt) {
       cssIeLatest: {
         src: ['<%%= concat.cssIe.src %>'],
         dest: 'dist/<%%= pkg.name %>.latest.ie.css'
+      },
+      // CSS Libs
+      cssLibs: {
+        src: [
+          // Add any library CSS here
+          <% var libs = []; for (var c in componentMap.css) { componentMap.css[c].forEach(function(f) { libs.push(f); }) } %>
+          <% libs.forEach(function(f, i) { %>
+          'bower_components/<%= f %>.css'<% if (i < libs.length - 1) { %>,<% } %><% }) %>
+        ],
+        dest: 'dist/<%%= pkg.name %>.libs.css'
+      },
+      cssIeLibs: {
+        src: [
+          // Add any library CSS here
+          <% var libs = []; for (var c in componentMap.ie) { componentMap.ie[c].forEach(function(f) { libs.push(f); }) } %>
+          <% libs.forEach(function(f, i) { %>
+          'bower_components/<%= f %>.css'<% if (i < libs.length - 1) { %>,<% } %><% }) %>
+        ],
+        dest: 'dist/<%%= pkg.name %>.libs.ie.css'
       }
     },
     uglify: {
