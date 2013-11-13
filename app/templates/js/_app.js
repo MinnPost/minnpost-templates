@@ -26,8 +26,6 @@ define('<%= projectName %>', ['underscore', 'helpers', 'routers'],
       app: this
     });
 
-    // Get any initial, global data
-
     // Start backbone history
     this.router.start();
   };

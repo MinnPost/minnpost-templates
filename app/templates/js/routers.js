@@ -6,7 +6,7 @@ define('routers', [
   'helpers', 'models', 'collections', 'views',
   'text!templates/application.mustache',
   'text!templates/loading.mustache'
-  ], function(_, Backbone, Ractive, helpers, models, collections, views,
+], function(_, Backbone, Ractive, helpers, models, collections, views,
     tApplication, tLoading) {
   var routers = {};
 

@@ -363,6 +363,9 @@ MinnpostApplicationGenerator.prototype.app = function app() {
   // Template files
   this.template('js/templates/_application.mustache', 'js/templates/application.mustache');
   this.copy('js/templates/loading.mustache', 'js/templates/loading.mustache');
+
+  // Grunt stuff
+  this.template('_Gruntfile.js', 'Gruntfile.js');
 };
 
 // Process HTML

@@ -2,7 +2,7 @@
 /**
  * Helpers to extend to an app.
  */
- define('helpers', ['jquery', 'underscore', 'backbone'],
+define('helpers', ['jquery', 'underscore', 'backbone'],
   function($, _, Backbone) {
 
   return {
