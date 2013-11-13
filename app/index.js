@@ -368,6 +368,11 @@ MinnpostApplicationGenerator.prototype.app = function app() {
   this.template('_Gruntfile.js', 'Gruntfile.js');
 };
 
+// Process images
+MinnpostApplicationGenerator.prototype.images = function images() {
+  this.mkdir('images');
+};
+
 // Process HTML
 MinnpostApplicationGenerator.prototype.html = function html() {
   this.template('_index.html', 'index.html');

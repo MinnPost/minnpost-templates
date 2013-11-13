@@ -17,6 +17,9 @@ require.config({
     '<%= projectName %>': 'app',
     <% for (var c in filteredComponentMap.js) { %>
     '<%= c %>': '../bower_components/<%= filteredComponentMap.js[c][0] %>',<% } %>
-    components: '../bower_components'
+    // Hard code a few libraries that some libraries already
+    // refer to but with different names
+    Backbone: '../bower_components/backbone/backbone-min',
+    Ractive: '../bower_components/ractive/build/Ractive-legacy.min'
   }
 });

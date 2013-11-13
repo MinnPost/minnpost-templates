@@ -64,62 +64,6 @@ module.exports = function(grunt) {
       }
     },
     <% } %>
-    // R.js to bring together files through requirejs.
-    requirejs: {
-      compile: {
-        options: {
-          name: 'minnpost-template-testing',
-          baseUrl: 'js',
-          mainConfigFile: 'js/config.js',
-          out: 'dist/<%%= pkg.name %>.latest.js',
-          optimize: 'none'
-        }
-      }
-    },
-    // Brings files toggether
-    concat: {
-      options: {
-        separator: '\r\n\r\n'
-      },
-      // CSS
-      dist_css: {
-        src: [
-          <% for (var c in filteredComponentMap.css) { filteredComponentMap.css[c].forEach(function(f) { %>
-          'bower_components/<%= f %>.css',<% }) } %>
-          '<%%= compass.dist.options.cssDir %>/main.css'
-        ],
-        dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.css'
-      },
-      dist_css_latest: {
-        src: ['<%%= concat.dist_css.src %>'],
-        dest: 'dist/<%%= pkg.name %>.latest.css'
-      },
-      dist_css_ie: {
-        src: [
-          <% for (var c in filteredComponentMap.ie) { filteredComponentMap.ie[c].forEach(function(f) { %>
-          'bower_components/<%= f %>.css',<% }) } %>
-          '<%%= compass.dist.options.cssDir %>/main.ie.css'
-        ],
-        dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.ie.css'
-      },
-      dist_css_latest_ie: {
-        src: ['<%%= concat.dist_css_ie.src %>'],
-        dest: 'dist/<%%= pkg.name %>.latest.ie.css'
-      }
-    },
-    uglify: {
-      options: {
-        banner: '<%%= meta.banner %>'
-      },
-      dist: {
-        src: ['<%%= requirejs.compile.options.out %>'],
-        dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.min.js'
-      },
-      dist_latest: {
-        src: ['<%%= requirejs.compile.options.out %>'],
-        dest: 'dist/<%%= pkg.name %>.latest.min.js'
-      }
-    },
     // Copy relevant files over to distribution
     copy: {
       images: {
@@ -152,6 +96,82 @@ module.exports = function(grunt) {
             dest: 'dist/data/'
           }
         ]
+      }
+    },
+    // R.js to bring together files through requirejs.  We exclude libraries
+    // and compile them separately.
+    requirejs: {
+      compile: {
+        options: {
+          name: 'minnpost-template-testing',
+          exclude: [
+            // Add any libraries here (make sure to put them in the paths
+            // in the config.js file)
+            <% for (var c in filteredComponentMap.js) { %>
+            '<%= c %>',<% } %>
+            'Ractive',
+            'Backbone'
+          ],
+          baseUrl: 'js',
+          mainConfigFile: 'js/config.js',
+          out: 'dist/<%%= pkg.name %>.latest.js',
+          optimize: 'none'
+        }
+      }
+    },
+    // Brings files toggether
+    concat: {
+      options: {
+        separator: '\r\n\r\n'
+      },
+      // JS Libs
+      jsLibs: {
+        src: [
+          // Add any libraries here that need to be included and are excluded
+          // from the requirejs process
+          <% var libs = []; for (var c in componentMap.js) { componentMap.js[c].forEach(function(f) { libs.push(f); }) } %>
+          <% libs.forEach(function(f, i) { %>
+          'bower_components/<%= f %>.js'<% if (i < libs.length - 1) { %>,<% } %><% }) %>
+        ],
+        dest: 'dist/<%%= pkg.name %>.libs.js'
+      },
+      // CSS
+      css: {
+        src: [
+          <% for (var c in filteredComponentMap.css) { filteredComponentMap.css[c].forEach(function(f) { %>
+          'bower_components/<%= f %>.css',<% }) } %>
+          '<%%= compass.dist.options.cssDir %>/main.css'
+        ],
+        dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.css'
+      },
+      cssLatest: {
+        src: ['<%%= concat.css.src %>'],
+        dest: 'dist/<%%= pkg.name %>.latest.css'
+      },
+      cssIe: {
+        src: [
+          <% for (var c in filteredComponentMap.ie) { filteredComponentMap.ie[c].forEach(function(f) { %>
+          'bower_components/<%= f %>.css',<% }) } %>
+          '<%%= compass.dist.options.cssDir %>/main.ie.css'
+        ],
+        dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.ie.css'
+      },
+      cssIeLatest: {
+        src: ['<%%= concat.cssIe.src %>'],
+        dest: 'dist/<%%= pkg.name %>.latest.ie.css'
+      }
+    },
+    uglify: {
+      options: {
+        banner: '<%%= meta.banner %>'
+      },
+      dist: {
+        src: ['<%%= requirejs.compile.options.out %>'],
+        dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.min.js'
+      },
+      distLatest: {
+        src: ['<%%= requirejs.compile.options.out %>'],
+        dest: 'dist/<%%= pkg.name %>.latest.min.js'
       }
     },
     // Deploy to S3
@@ -218,7 +238,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-s3');
 
   // Default build task
-  grunt.registerTask('default', ['jshint', 'compass:dist', 'clean', 'concat', 'requirejs', 'uglify', 'copy']);
+  grunt.registerTask('default', ['jshint', 'compass:dev', 'compass:dist', 'clean', 'copy', 'requirejs', 'concat', 'uglify']);
 
   // Watch tasks
   grunt.registerTask('watcher', ['jshint', 'compass:dev']);
