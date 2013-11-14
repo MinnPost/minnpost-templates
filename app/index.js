@@ -419,7 +419,7 @@ MinnpostApplicationGenerator.prototype.app = function app() {
 
 // Process images
 MinnpostApplicationGenerator.prototype.images = function images() {
-  this.mkdir('images');
+  this.directory('images', 'images');
 };
 
 // Process HTML

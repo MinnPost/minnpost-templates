@@ -1,6 +1,14 @@
 <div class="message-container"></div>
 
-<div class="content-container"></div>
+<div class="content-container">
+
+  <h3><%= projectTitle %></h3>
+
+  {{^noData}}
+    {{>loading}}
+  {{/noData}}
+
+</div>
 
 <div class="footnote-container">
   <div class="footnote">

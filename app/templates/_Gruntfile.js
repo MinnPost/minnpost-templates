@@ -57,7 +57,6 @@ module.exports = function(grunt) {
       },
       dist: {
         options: {
-          imagesDir: './images',
           environment: 'production',
           outputStyle: 'compressed',
           relativeAssets: false,

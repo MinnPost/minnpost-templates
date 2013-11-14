@@ -2,11 +2,12 @@
  * Routers
  */
 define('routers', [
-  'underscore', 'Backbone', 'Ractive',
+  'underscore', 'Backbone', 'Ractive', 'Ractive-Backbone',
   'helpers', 'models', 'collections', 'views',
   'text!templates/application.mustache',
   'text!templates/loading.mustache'
-], function(_, Backbone, Ractive, helpers, models, collections, views,
+], function(_, Backbone, Ractive, RactiveBackbone,
+    helpers, models, collections, views,
     tApplication, tLoading) {
   var routers = {};
 
