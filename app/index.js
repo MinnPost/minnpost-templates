@@ -5,6 +5,7 @@ var path = require('path');
 var yeoman = require('yeoman-generator');
 var request = require('request');
 var cheerio = require('cheerio');
+var exec = require('child_process').exec;
 
 // Helper functions
 var getMinnPostResources = function(done) {
@@ -29,6 +30,15 @@ var getMinnPostResources = function(done) {
   });
 };
 
+// Exec output
+var execOutput = function(error, stdout, stderr) {
+  console.log('stdout: ' + stdout);
+  console.log('stderr: ' + stderr);
+  if (error !== null) {
+    console.log('exec error: ' + error);
+  }
+};
+
 // Generator object
 var MinnpostApplicationGenerator = module.exports = function MinnpostApplicationGenerator(args, options, config) {
   yeoman.generators.Base.apply(this, arguments);
@@ -36,7 +46,17 @@ var MinnpostApplicationGenerator = module.exports = function MinnpostApplication
   this.on('end', function () {
     this.installDependencies({
       skipInstall: options['skip-install'],
-      skipMessage: options['skip-install-message']
+      skipMessage: options['skip-install-message'],
+      callback: function() {
+        // Put all the commands together
+        var commands = 'echo "";';
+        if (this.projectFeatures.hasMaps) {
+          commands += ' npm install -g jake; cd bower_components/leaflet/ && npm install && jake; cd -;';
+        }
+
+        console.log('Some finishing touches...');
+        exec(commands, execOutput);
+      }.bind(this)
     });
   });
 
@@ -295,6 +315,9 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
         }
       });
     }
+
+    // Make a server port
+    props.serverPort = 8800 + Math.floor(Math.random() * 100);
 
     // Attach all inputs so that they can be referenced in
     // templates.

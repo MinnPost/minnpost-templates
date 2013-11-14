@@ -220,7 +220,7 @@ module.exports = function(grunt) {
     connect: {
       server: {
         options: {
-          port: <%= 8800 + Math.floor(Math.random() * 100) %>
+          port: <%= serverPort %>
         }
       }
     },
@@ -241,7 +241,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
-  grunt.loadNpmTasks('grunt-mustache');
   grunt.loadNpmTasks('grunt-s3');
 
   // Default build task

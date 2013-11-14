@@ -21,9 +21,9 @@ The following describes how the data was processed and is not necessarily needed
 All commands are assumed to on the [command line](http://en.wikipedia.org/wiki/Command-line_interface), often called the Terminal, unless otherwise noted.  The following will install technologies needed for the other steps and will only needed to be run once on your computer so there is a good chance you already have these technologies on your computer.
 
 1. Install [Git](http://git-scm.com/).
-   * On a Mac, install [Homebrew](http://brew.sh/), then do: `brew install git`.
+   * On a Mac, install [Homebrew](http://brew.sh/), then do: `brew install git`
 1. Install [NodeJS](http://nodejs.org/).
-   * On a Mac, do: `brew install node`.
+   * On a Mac, do: `brew install node`
 1. Optionally, for development, install [Grunt](http://gruntjs.com/): `npm install -g grunt-cli`
 1. Install [Bower](http://bower.io/): `npm install -g bower`
 <% if (projectPrerequisites.useRuby || projectPrerequisites.useSass) { %>1. Install [Ruby](http://www.ruby-lang.org/en/downloads/), though it is probably already installed on your system.
@@ -34,8 +34,10 @@ All commands are assumed to on the [command line](http://en.wikipedia.org/wiki/C
     1. `easy_install virtualenv`
     1. `virtualenv .env`
     1. `cd .env && source bin/activiate; cd -;` <% } %>
-<% if (projectPrerequisites.useSass) { %>1. Install [Sass](http://sass-lang.com/): `gem install sass`<% } %>
-<% if (projectPrerequisites.useCompass) { %>1. Install [Compass](http://compass-style.org/): `gem install compass`<% } %>
+<% if (projectPrerequisites.useSass) { %>1. Install [Sass](http://sass-lang.com/): `gem install sass`
+   * On a Mac do: `sudo gem install sass`<% } %>
+<% if (projectPrerequisites.useCompass) { %>1. Install [Compass](http://compass-style.org/): `gem install compass`
+   * On a Mac do: `sudo gem install compass`<% } %>
 <% if (projectFeatures.hasMaps) { %>1. Because Leaflet comes unbuilt, we need to build it with Jake: `npm install -g jake`<% } %>
 
 ### Get code and install packages
@@ -52,8 +54,9 @@ Get the code for this project and install the necessary dependency libraries and
 
 ### Running
 
-* Run: `grunt server`
-    * This will run a local webserver for development and you can view the application in your web browser at [http://localhost:8899](http://localhost:8899).
+1. Get pump primed with: `grunt`
+1. Run: `grunt server`
+    * This will run a local webserver for development and you can view the application in your web browser at [http://localhost:<%= serverPort %>](http://localhost:<%= serverPort %>).
     * Utilize `index.html` for development, while `index-deploy.html` is used for the deployed version, and `index-build.html` is used to test the build before deployment.
     * The server runs `grunt watch` which will watch for linting JS files and compiling SASS.  If you have your own webserver, feel free to use that with just this command.
 
@@ -67,7 +70,7 @@ To build or compile all the assets together for easy and efficient deployment, d
 
 Deploying will push the relevant files up to Amazon's AWS S3 so that they can be easily referenced on the MinnPost site.  This is specific to MinnPost, and your deployment might be different.
 
-1. Run: `grunt mp-deploy`
+1. Run: `grunt deploy`
 
 ## Hacks
 
