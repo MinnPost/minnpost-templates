@@ -8,7 +8,8 @@
 module.exports = function(grunt) {
   var _ = grunt.util._;
 
-  // Maintain list of libraries here
+  // Maintain list of libraries here.  Order matters for build
+  // processing
   var components = <%= JSON.stringify(filteredComponentMap) %>;
 
   // Project configuration.  Most of this is directly read from

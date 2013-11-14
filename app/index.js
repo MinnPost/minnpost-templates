@@ -79,10 +79,10 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
 
   // Map of resource for library parts, keyed by their bower
   // package name.  rname is the requireJS module name.  For files
-  // leave off the extension name
+  // leave off the extension name.  Order matters
   var componentMap = {
     requirejs: {
-      rname: 'require',
+      rname: 'requirejs',
       js: ['requirejs/require']
     },
     text: {
