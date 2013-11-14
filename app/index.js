@@ -56,26 +56,57 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   var validateRequired = function(input) {
     return (input) ? true : 'Please provide a value';
   };
+
+  // Map of resource for library parts, keyed by their bower
+  // package name.  rname is the requireJS module name.  For files
+  // leave off the extension name
   var componentMap = {
-    js: {
-      jquery: ['jquery/jquery.min'],
-      backbone: ['backbone/backbone-min'],
-      underscore: ['underscore/underscore-min'],
-      leaflet: ['leaflet/dist/leaflet'],
-      moment: ['moment/min/moment.min'],
-      'Placeholder.js': ['Placeholder.js/lib/adapters/placeholders.jquery'],
-      ractive: ['ractive/build/Ractive-legacy.min'],
-      'ractive-backbone': ['ractive-backbone/Ractive-Backbone.min'],
-      requirejs: ['requirejs/require'],
-      text: ['text/text']
+    requirejs: {
+      rname: 'require',
+      js: ['requirejs/require']
     },
-    css: {
-      leaflet: ['leaflet/dist/leaflet'],
-      unsemantic: ['unsemantic/assets/stylesheets/unsemantic-grid-responsive-tablet']
+    text: {
+      rname: 'text',
+      js: ['text/text']
     },
-    ie: {
-      leaflet: ['leaflet/dist/leaflet.ie'],
-      unsemantic: ['unsemantic/assets/stylesheets/ie']
+    jquery: {
+      rname: 'jquery',
+      js: ['jquery/jquery.min']
+    },
+    underscore: {
+      rname: 'underscore',
+      js: ['underscore/underscore-min']
+    },
+    backbone: {
+      rname: 'Backbone',
+      js: ['backbone/backbone-min']
+    },
+    ractive: {
+      rname: 'Ractive',
+      js: ['ractive/build/Ractive-legacy.min']
+    },
+    'ractive-backbone': {
+      rname: 'Ractive-Backbone',
+      js: ['ractive-backbone/Ractive-Backbone.min']
+    },
+    moment: {
+      rname: 'moment',
+      js: ['moment/min/moment.min']
+    },
+    'Placeholder.js': {
+      rname: 'placeholder',
+      js: ['Placeholder.js/lib/adapters/placeholders.jquery']
+    },
+    unsemantic: {
+      css: ['unsemantic/assets/stylesheets/unsemantic-grid-responsive-tablet'],
+      ie: ['unsemantic/assets/stylesheets/ie'],
+      rname: 'unsemantic'
+    },
+    leaflet: {
+      js: ['leaflet/dist/leaflet'],
+      css: ['leaflet/dist/leaflet'],
+      ie: ['leaflet/dist/leaflet.ie'],
+      rname: 'Leaflet'
     }
   };
 
@@ -257,18 +288,13 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     // Add componenet map and provide filtered version
     props.componentMap = componentMap;
     props.filteredComponentMap = {};
-    ['js', 'css', 'ie'].forEach(function(s) {
-      props.filteredComponentMap[s] = {};
-      for (i in componentMap[s]) {
-        if (['requirejs'].indexOf(i) === -1) {
-          props.bowerComponents.forEach(function(b) {
-            if (i === b.name) {
-              props.filteredComponentMap[s][i] = componentMap[s][i];
-            }
-          });
+    for (i in componentMap) {
+      props.bowerComponents.forEach(function(b) {
+        if (i === b.name) {
+          props.filteredComponentMap[i] = componentMap[i];
         }
-      }
-    });
+      });
+    }
 
     // Attach all inputs so that they can be referenced in
     // templates.

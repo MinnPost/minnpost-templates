@@ -18,6 +18,7 @@ module.exports = function(grunt) {
         ' Licensed <%%= _.pluck(pkg.licenses, "type").join(", ") %> */' +
         '<%%= "\\n\\n" %>'
     },
+    components: <%= JSON.stringify(filteredComponentMap) %>,
     // Clean up the distribution fold
     clean: {
       folder: 'dist/'
@@ -104,14 +105,7 @@ module.exports = function(grunt) {
       compile: {
         options: {
           name: 'minnpost-template-testing',
-          exclude: [
-            // Add any libraries here (make sure to put them in the paths
-            // in the config.js file)
-            <% for (var c in filteredComponentMap.js) { %>
-            '<%= c %>',<% } %>
-            'Ractive',
-            'Backbone'
-          ],
+          //exclude: ['<%%= _.pluck(components, "rname") %>'],
           baseUrl: 'js',
           mainConfigFile: 'js/config.js',
           out: 'dist/<%%= pkg.name %>.latest.js',
@@ -131,13 +125,7 @@ module.exports = function(grunt) {
       },
       // JS Libs
       jsLibs: {
-        src: [
-          // Add any libraries here that need to be included and are excluded
-          // from the requirejs process
-          <% var libs = []; for (var c in componentMap.js) { componentMap.js[c].forEach(function(f) { libs.push(f); }) } %>
-          <% libs.forEach(function(f, i) { %>
-          'bower_components/<%= f %>.js'<% if (i < libs.length - 1) { %>,<% } %><% }) %>
-        ],
+        src: ['<%%= _.pluck(components, "js") %>'],
         dest: 'dist/<%%= pkg.name %>.libs.js'
       },
       // CSS
@@ -163,21 +151,11 @@ module.exports = function(grunt) {
       },
       // CSS Libs
       cssLibs: {
-        src: [
-          // Add any library CSS here
-          <% var libs = []; for (var c in componentMap.css) { componentMap.css[c].forEach(function(f) { libs.push(f); }) } %>
-          <% libs.forEach(function(f, i) { %>
-          'bower_components/<%= f %>.css'<% if (i < libs.length - 1) { %>,<% } %><% }) %>
-        ],
+        src: ['<%%= _.pluck(components, "css") %>'],
         dest: 'dist/<%%= pkg.name %>.libs.css'
       },
       cssIeLibs: {
-        src: [
-          // Add any library CSS here
-          <% var libs = []; for (var c in componentMap.ie) { componentMap.ie[c].forEach(function(f) { libs.push(f); }) } %>
-          <% libs.forEach(function(f, i) { %>
-          'bower_components/<%= f %>.css'<% if (i < libs.length - 1) { %>,<% } %><% }) %>
-        ],
+        src: ['<%%= _.pluck(components, "ie") %>'],
         dest: 'dist/<%%= pkg.name %>.libs.ie.css'
       }
     },
@@ -240,7 +218,7 @@ module.exports = function(grunt) {
     // Watches files for changes and performs task
     watch: {
       files: ['<%%= jshint.files %>', 'sass/*.scss'],
-      tasks: 'lint-watch'
+      tasks: 'watcher'
     }
   });
 

@@ -38,16 +38,16 @@
   <div class="node-body fieldlayout node-field-body">
     <!-- Application and libraries CSS -->
     <style type="text/css">
-      <% for (var c in filteredComponentMap.css) { filteredComponentMap.css[c].forEach(function(f) { %>
-      @import url('bower_components/<%= f %>.css');<% }) } %>
+      <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].css) { filteredComponentMap[c].css.forEach(function(f) { %>
+      @import url('bower_components/<%= f %>.css');<% })}} %>
       <% if (projectPrerequisites.useSass || projectPrerequisites.useCompass) { %>
       @import url('.tmp/css/main.css');<% } else { %>
       @import url('styles/styles.css');<% } %>
     </style>
     <!--[if lte IE 8]>
       <style type="text/css">
-        <% for (var c in filteredComponentMap.ie) { filteredComponentMap.ie[c].forEach(function(f) { %>
-        @import url('bower_components/<%= f %>.css');<% }) } %>
+        <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].css) { filteredComponentMap[c].ie.forEach(function(f) { %>
+        @import url('bower_components/<%= f %>.css');<% })}} %>
         <% if (projectPrerequisites.useSass || projectPrerequisites.useCompass) { %>
         @import url('.tmp/css/main.ie.css');<% } else { %>
         @import url('styles/styles.ie.css');<% } %>
@@ -102,7 +102,6 @@
     </script>
 
     <script type="text/javascript" src="bower_components/requirejs/require.js"></script>
-    <script type="text/javascript" src="bower_components/text/text.js"></script>
     <script type="text/javascript" src="js/config.js"></script>
 
     <script type="text/javascript">

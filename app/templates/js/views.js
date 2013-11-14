@@ -5,7 +5,7 @@
  * Ractive classes can be extended but we still need a number of
  * things at instantian, like templates
  */
-define('views', ['underscore', 'ractive', 'helpers'],
+define('views', ['underscore', 'Ractive', 'helpers'],
   function(_, Ractive, helpers) {
   var views = {};
 

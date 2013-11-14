@@ -2,7 +2,7 @@
  * Routers
  */
 define('routers', [
-  'underscore', 'backbone', 'ractive',
+  'underscore', 'Backbone', 'Ractive',
   'helpers', 'models', 'collections', 'views',
   'text!templates/application.mustache',
   'text!templates/loading.mustache'
