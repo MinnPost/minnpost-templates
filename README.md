@@ -19,7 +19,7 @@ All commands are assumed to on the [command line](http://en.wikipedia.org/wiki/C
 Get the code for this project and install the necessary dependency libraries and packages.
 
 1. Check out this code with [Git](http://git-scm.com/): `git clone https://github.com/MinnPost/minnpost-template-application.git`
-1. Go into the template directory: `cd template-application`
+1. Go into the template directory: `cd minnpost-template-application`
 1. Install NodeJS packages: `npm install`
 1. Link this code base so Yeoman can see it: `npm link`
 

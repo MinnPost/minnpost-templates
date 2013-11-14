@@ -14,7 +14,7 @@ require.config({
   },
   baseUrl: 'js',
   paths: {
-    <% for (var c in filteredComponentMap) { if (c !== 'requirejs' && filteredComponentMap[c].js) { %>
+    <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].js) { %>
     '<%= filteredComponentMap[c].rname %>': '../bower_components/<%= filteredComponentMap[c].js[0] %>',<% }} %>
     '<%= projectName %>': 'app'
   }

@@ -6,6 +6,11 @@
  * distribution, and deploying.
  */
 module.exports = function(grunt) {
+  var _ = grunt.util._;
+
+  // Maintain list of libraries here
+  var components = <%= JSON.stringify(filteredComponentMap) %>;
+
   // Project configuration.  Most of this is directly read from
   // package.json.
   grunt.initConfig({
@@ -18,7 +23,7 @@ module.exports = function(grunt) {
         ' Licensed <%%= _.pluck(pkg.licenses, "type").join(", ") %> */' +
         '<%%= "\\n\\n" %>'
     },
-    components: <%= JSON.stringify(filteredComponentMap) %>,
+    components: components,
     // Clean up the distribution fold
     clean: {
       folder: 'dist/'
@@ -102,13 +107,22 @@ module.exports = function(grunt) {
     // R.js to bring together files through requirejs.  We exclude libraries
     // and compile them separately.
     requirejs: {
-      compile: {
+      app: {
         options: {
           name: 'minnpost-template-testing',
-          //exclude: ['<%%= _.pluck(components, "rname") %>'],
+          exclude: _.compact(_.flatten(_.pluck(_.filter(components, function(c) { return (c.js !== undefined); }), 'rname'))),
           baseUrl: 'js',
           mainConfigFile: 'js/config.js',
           out: 'dist/<%%= pkg.name %>.latest.js',
+          optimize: 'none'
+        }
+      },
+      libs: {
+        options: {
+          include: _.compact(_.flatten(_.pluck(_.filter(components, function(c) { return (c.js !== undefined); }), 'rname'))),
+          baseUrl: 'js',
+          mainConfigFile: 'js/config.js',
+          out: 'dist/<%%= pkg.name %>.libs.js',
           optimize: 'none'
         }
       }
@@ -122,11 +136,6 @@ module.exports = function(grunt) {
       js: {
         src: ['dist/<%%= pkg.name %>.latest.js'],
         dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.js'
-      },
-      // JS Libs
-      jsLibs: {
-        src: ['<%%= _.pluck(components, "js") %>'],
-        dest: 'dist/<%%= pkg.name %>.libs.js'
       },
       // CSS
       css: {
@@ -151,11 +160,11 @@ module.exports = function(grunt) {
       },
       // CSS Libs
       cssLibs: {
-        src: ['<%%= _.pluck(components, "css") %>'],
+        src: ['<%%= _.map(_.compact(_.flatten(_.pluck(components, "css"))), function(c) { return "bower_components/" + c + ".css"; }) %>'],
         dest: 'dist/<%%= pkg.name %>.libs.css'
       },
       cssIeLibs: {
-        src: ['<%%= _.pluck(components, "ie") %>'],
+        src: ['<%%= _.map(_.compact(_.flatten(_.pluck(components, "ie"))), function(c) { return "bower_components/" + c + ".css"; }) %>'],
         dest: 'dist/<%%= pkg.name %>.libs.ie.css'
       }
     },
@@ -164,11 +173,11 @@ module.exports = function(grunt) {
         banner: '<%%= meta.banner %>'
       },
       dist: {
-        src: ['<%%= requirejs.compile.options.out %>'],
+        src: ['<%%= requirejs.app.options.out %>'],
         dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.min.js'
       },
       distLatest: {
-        src: ['<%%= requirejs.compile.options.out %>'],
+        src: ['<%%= requirejs.app.options.out %>'],
         dest: 'dist/<%%= pkg.name %>.latest.min.js'
       }
     },
