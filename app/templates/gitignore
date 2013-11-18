@@ -4,10 +4,11 @@ bower_components/
 !dist
 dist/data.js
 dist/templates.js
-false
+
 
 # General git ignores
 .sass-cache
+.tmp
 .DS_Store
 *.psd
 *.[oa]
