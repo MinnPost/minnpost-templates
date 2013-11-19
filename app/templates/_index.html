@@ -25,6 +25,9 @@
 <body class="not-front page-node node-type-article one-sidebar sidebar-right">
 <% } %>
 
+  <% if (isInline) { %>
+  <div class="node-body fieldlayout node-field-body">
+  <% } %>
 
   <!-- =========================================================
     START: Embeddable
@@ -141,6 +144,9 @@
     END: Embeddable
     == ========================================================= -->
 
+  <% if (isInline) { %>
+  </div>
+  <% } %>
 
 </body>
 </html>

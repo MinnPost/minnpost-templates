@@ -90,31 +90,38 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     },
     jquery: {
       rname: 'jquery',
-      js: ['jquery/jquery.min']
+      js: ['jquery/jquery.min'],
+      returns: '$'
     },
     underscore: {
       rname: 'underscore',
-      js: ['underscore/underscore-min']
+      js: ['underscore/underscore-min'],
+      returns: '_'
     },
     backbone: {
       rname: 'Backbone',
-      js: ['backbone/backbone-min']
+      js: ['backbone/backbone-min'],
+      returns: 'Backbone'
     },
     ractive: {
       rname: 'Ractive',
-      js: ['ractive/build/Ractive-legacy.min']
+      js: ['ractive/build/Ractive-legacy.min'],
+      returns: 'Ractive'
     },
     'ractive-backbone': {
       rname: 'Ractive-Backbone',
-      js: ['ractive-backbone/Ractive-Backbone.min']
+      js: ['ractive-backbone/Ractive-Backbone.min'],
+      returns: 'RactiveBackbone'
     },
     moment: {
       rname: 'moment',
-      js: ['moment/min/moment.min']
+      js: ['moment/min/moment.min'],
+      returns: 'moment'
     },
     'Placeholder.js': {
       rname: 'placeholder',
-      js: ['Placeholder.js/lib/adapters/placeholders.jquery']
+      js: ['Placeholder.js/lib/adapters/placeholders.jquery'],
+      returns: 'placeholder'
     },
     unsemantic: {
       css: ['unsemantic/assets/stylesheets/unsemantic-grid-responsive-tablet'],
@@ -125,11 +132,13 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       js: ['leaflet/dist/leaflet'],
       css: ['leaflet/dist/leaflet'],
       ie: ['leaflet/dist/leaflet.ie'],
-      rname: 'Leaflet'
+      rname: 'Leaflet',
+      returns: 'L'
     },
     highcharts: {
       js: ['highcharts/highcharts.js'],
-      rname: 'highcharts'
+      rname: 'highcharts',
+      returns: 'Highcharts'
     }
   };
 
@@ -440,19 +449,20 @@ MinnpostApplicationGenerator.prototype.app = function app() {
   if (this.isApplication) {
     this.template('js/_config.js', 'js/config.js');
     this.template('js/_app.js', 'js/app.js');
-    this.copy('js/helpers.js', 'js/helpers.js');
+    this.template('js/_helpers.js', 'js/helpers.js');
     this.copy('js/models.js', 'js/models.js');
     this.copy('js/collections.js', 'js/collections.js');
     this.copy('js/views.js', 'js/views.js');
     this.copy('js/routers.js', 'js/routers.js');
+    this.template('js/templates/_application.mustache', 'js/templates/application.mustache');
+    this.copy('js/templates/loading.mustache', 'js/templates/loading.mustache');
   }
   else {
     this.template('js/_app-inline.js', 'js/app.js');
+    this.template('js/_helpers.js', 'js/helpers.js');
+    this.template('js/templates/_application.underscore', 'js/templates/application.underscore');
+    this.copy('js/templates/loading.mustache', 'js/templates/loading.underscore');
   }
-
-  // Template files
-  this.template('js/templates/_application.mustache', 'js/templates/application.mustache');
-  this.copy('js/templates/loading.mustache', 'js/templates/loading.mustache');
 
   // Grunt stuff
   this.template('_Gruntfile.js', 'Gruntfile.js');

@@ -3,11 +3,15 @@
  *
  * Try to ensure that styles are specific to the application.
  *
- * Make the default styles for a 960px wide screen.  A mobile
- * first approach is fine, but starting with a 960px wide
+ * Make the default styles for a <%= (isInline) ? '640px' : '960px' %> wide screen.  A mobile
+ * first approach is fine, but starting with a <%= (isInline) ? '640px' : '960px' %> wide
  * screen means that older browsers that do not support
  * media queries will be fine as they are all desktop browsers.
  */
+
+<% var container = (isApplication) ? projectName + '-application-container' : projectName + '-inline-container.inline-processed'; %>
+
+<% if (isApplication) { %>
 body .node-unpublished {
   background-repeat: no-repeat;
 }
@@ -17,43 +21,15 @@ body .node-unpublished {
   margin: 0 auto;
   padding-top: 1em;
 }
+<% } %>
 
-.interactive-container .footnote {
-  font-size: .75em;
-  font-style: italic;
-  color: #414141;
-  margin-top: 3em;
-  border-top: 1px solid #BCBCBC;
-  padding-top: 1em;
-}
-
-.<%= projectName %>-application-container {
-  max-width: 960px;
+.<%= container %> {
+  max-width: <%= (isInline) ? '640px' : '960px' %>;
   margin: 0 auto;
   padding-top: 1em;
 }
 
-.<%= projectName %>-application-container .clear { clear: both; }
-.<%= projectName %>-application-container .hidden { display: none; }
-
-.<%= projectName %>-application-container .sans-serif {
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-}
-
-/* Clearfix from http://nicolasgallagher.com/micro-clearfix-hack/ */
-.<%= projectName %>-application-container .cf:before,
-.<%= projectName %>-application-container .cf:after {
-  content: " "; /* 1 */
-  display: table; /* 2 */
-}
-.<%= projectName %>-application-container .cf:after {
-  clear: both;
-}
-.<%= projectName %>-application-container .cf {
-  *zoom: 1;
-}
-
-.<%= projectName %>-application-container .footnote {
+.<%= container %> .footnote {
   font-size: .75em;
   font-style: italic;
   color: #414141;
@@ -62,7 +38,36 @@ body .node-unpublished {
   padding-top: 1em;
 }
 
-.<%= projectName %>-application-container .loading {
+.<%= container %> .clear { clear: both; }
+.<%= container %> .hidden { display: none; }
+
+.<%= container %> .sans-serif {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+/* Clearfix from http://nicolasgallagher.com/micro-clearfix-hack/ */
+.<%= container %> .cf:before,
+.<%= container %> .cf:after {
+  content: " "; /* 1 */
+  display: table; /* 2 */
+}
+.<%= container %> .cf:after {
+  clear: both;
+}
+.<%= container %> .cf {
+  *zoom: 1;
+}
+
+.<%= container %> .footnote {
+  font-size: .75em;
+  font-style: italic;
+  color: #414141;
+  margin-top: 3em;
+  border-top: 1px solid #BCBCBC;
+  padding-top: 1em;
+}
+
+.<%= container %> .loading {
   width: 100%;
   text-align: center;
   padding: 2em 2em;
@@ -71,7 +76,7 @@ body .node-unpublished {
   height: 100%;
   line-height: 100%;
 }
-.<%= projectName %>-application-container .loading span {
+.<%= container %> .loading span {
   padding: 10px 5px 10px 40px;
   background: transparent url('https://s3.amazonaws.com/data.minnpost/projects/2012-mn-election-results/images/ajax-loader.gif') center left no-repeat;
   vertical-align: middle;

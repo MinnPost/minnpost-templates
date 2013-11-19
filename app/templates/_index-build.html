@@ -25,6 +25,10 @@
   <!-- =========================================================
     START: Embeddable
     == ========================================================= -->
+  <% if (isInline) { %>
+  <div class="<%= projectName %>-inline-container"></div>
+  <script type="text/javascript" src="dist/<%= projectName %>.latest.min.js"></script>
+  <% } else { %>
 
   <!--
     For raw HTML fields, keep these classes
@@ -96,7 +100,7 @@
     </script>
 
     <script type="text/javascript" src="dist/<%= projectName %>.libs.js"></script>
-    <script type="text/javascript" src="dist/<%= projectName %>.latest.js"></script>
+    <script type="text/javascript" src="dist/<%= projectName %>.latest.min.js"></script>
 
     <script type="text/javascript">
       if (!window.requireTestMode) {
@@ -123,6 +127,7 @@
     </script>
   </div>
 
+  <% } %>
   <!-- =========================================================
     END: Embeddable
     == ========================================================= -->

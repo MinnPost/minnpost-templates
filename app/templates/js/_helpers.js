@@ -2,8 +2,8 @@
 /**
  * Helpers to extend to an app.
  */
-define('helpers', ['jquery', 'underscore', 'Backbone'],
-  function($, _, Backbone) {
+define('helpers', ['jquery', 'underscore'<% if (isApplication) { %>, 'Backbone'<% } %>],
+  function($, _<% if (isApplication) { %>, Backbone<% } %>) {
 
   return {
     /**
@@ -59,6 +59,7 @@ define('helpers', ['jquery', 'underscore', 'Backbone'],
       return match ? parseInt(match[2], 10) : false;
     },
 
+    <% if (isApplication) { %>
     /**
      * Override Backbone's ajax call to use JSONP by default as well
      * as force a specific callback to ensure that server side
@@ -74,6 +75,7 @@ define('helpers', ['jquery', 'underscore', 'Backbone'],
       }
       return Backbone.$.ajax.apply(Backbone.$, options);
     },
+    <% } %>
 
     /**
      * Wrapper for a JSONP request

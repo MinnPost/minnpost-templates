@@ -1,7 +1,6 @@
 /**
- * Main application JS for: <%= projectName %>
+ * Main JS for: <%= projectName %>
  */
-
 
 // Hack around existing jQuery
 if (typeof window.jQuery != 'undefined') {
@@ -32,19 +31,46 @@ require.config({
 });
 
 /**
- * Main application for: <%= projectName %>
+ * Create <%= projectName %> application class.
  *
  * Update with any libraries that are needed.
  */
-define('<%= projectName %>', ['jquery', 'underscore'],
-  function($, _) {
+define('<%= projectName %>', [
+  'jquery', 'underscore', 'helpers',
+  'text!templates/application.underscore', 'text!templates/loading.underscore'],
+  function($, _, helpers, tApplication, tLoading) {
 
+  // Main function for execution, proxied here so that
+  // you do not have to scroll down all the way
+  var startProxy = function() {
+    var thisApp = this;
+    this.$content = this.$el.find('.content-container');
+
+    /************************************
+     * Enter main application logic here.
+     ************************************/
+
+     // You can reference the main container with:
+     //   this.$el
+     // Or you probably want the content container,
+     // assuming you are using the default template
+     //   this.$content
+
+     // All the methods from helpers.js are attached
+     // to `this` as well.  These include things like
+     // formatters.
+  };
+
+  // Default options
   var defaultOptions = {
-    el: '<%= projectName %>-inline-container',
+    el: '.<%= projectName %>-inline-container',
     paths: {
       local: {
+        <% if (projectPrerequisites.useCompass) { %>
         css: '.tmp/css/styles.css',
-        ie: '.tmp/css/styles.ie.css',
+        ie: '.tmp/css/styles.ie.css',<% } else { %>
+        css: 'styles/styles.css',
+        ie: 'styles/styles.ie.css',<% } %>
         images: 'images/',
         data: 'data/'
       },
@@ -71,33 +97,43 @@ define('<%= projectName %>', ['jquery', 'underscore'],
       this.$el = $(this.el);
     }
 
-    this.determinePaths();
-    this.getResources();
+    this.setup();
     this.start();
   };
 
+  // Extend with helpers
+  _.extend(App.prototype, helpers);
+
   // Start function
   _.extend(App.prototype, {
-    // Determine paths
-    determinePaths: function() {
-      this.paths = this.options.paths.local;
+
+    // General setup tasks
+    setup: function() {
+      // Determine path
+      if (window.location.host.indexOf('localhost') !== -1) {
+        this.paths = this.options.paths.local;
+        if (window.location.pathname.indexOf('index-build') !== -1) {
+          this.paths = this.options.paths.build;
+        }
+      }
+      else {
+        this.paths = this.options.paths.deploy;
+      }
+
+      // Get resources like CSS
+      $('head').append('<link rel="stylesheet" href="' + this.paths.css + '" type="text/css" />');
+
+      // Add a processing class
+      this.$el.addClass('inline-processed');
+
+      // Render main template
+      this.$el.html(_.template(tApplication, {
+        loading: _.template(tLoading, {})
+      }));
     },
 
-    // Get resources, like CSS
-    getResources: function() {
-
-    },
-
-    start: function() {
-
-
-      /************************************
-       * Enter main application logic here.
-       ************************************/
-
-
-
-    }
+    // Main execution
+    start: startProxy
   });
 
   return App;

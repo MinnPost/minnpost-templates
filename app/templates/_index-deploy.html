@@ -25,6 +25,10 @@
   <!-- =========================================================
     START: Embeddable
     == ========================================================= -->
+  <% if (isInline) { %>
+  <div class="<%= projectName %>-inline-container"></div>
+  <script type="text/javascript" src="https://s3.amazonaws.com/data.minnpost/projects-inline/<%= projectName %>/<%= projectName %>.latest.min.js"></script>
+  <% } else { %>
 
   <!--
     For raw HTML fields, keep these classes
@@ -96,7 +100,7 @@
     </script>
 
     <script type="text/javascript" src="https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.libs.js"></script>
-    <script type="text/javascript" src="https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.latest.js"></script>
+    <script type="text/javascript" src="https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.latest.min.js"></script>
 
     <script type="text/javascript">
       if (!window.requireTestMode) {
@@ -123,6 +127,7 @@
     </script>
   </div>
 
+  <% } %>
   <!-- =========================================================
     END: Embeddable
     == ========================================================= -->

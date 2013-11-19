@@ -1,12 +1,13 @@
 /**
  * Main styles for: <%= projectName %>
  *
- * Make the default styles for a 960px wide screen.  A mobile
- * first approach is fine, but starting with a 960px wide
+ * Make the default styles for a <%= (isInline) ? '640px' : '960px' %> wide screen.  A mobile
+ * first approach is fine, but starting with a <%= (isInline) ? '640px' : '960px' %> wide
  * screen means that older browsers that do not support
  * media queries will be fine as they are all desktop browsers.
  */
 
+<% if (isApplication) { %>
 body .node-unpublished {
   background-repeat: no-repeat;
 }
@@ -22,6 +23,11 @@ body .node-unpublished {
   margin: 0 auto;
   padding-top: 1em;
   font-family: $sans-serif-font;
+<% } else { %>
+.<%= projectName %>-inline-container.inline-processed {
+<% } %>
+  max-width: 640px;
+  margin: 1em auto;
 
   .clear {
     clear: both;
@@ -72,7 +78,7 @@ body .node-unpublished {
   }
 
 
-  // Unsemantic "Mobile" breakpoint
+  // Breakpoints
   @media screen and (max-width: 768px) {
   }
 }
