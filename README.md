@@ -28,5 +28,6 @@ Get the code for this project and install the necessary dependency libraries and
 ### Create an application
 
 1. In a new folder: `mkdir ../minnpost-sweet-new-app && cd ../minnpost-sweet-new-app`
-1. Create the application: `yo minnpost-template-application`
+1. Currently the link process does not provide a nicely usable Yeoman generator name, so use the following to copy the full name of the generator, which will look like the path to where the code (`Users:name:something:minnpost-template-application`): `yo --help`
+1. Create the application, use the path copied above: `yo <minnpost-template-application>`
 
