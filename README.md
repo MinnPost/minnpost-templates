@@ -2,6 +2,8 @@
 
 A generator for [Yeoman](http://yeoman.io).
 
+The template created from this generator is a Grunt, RequireJS, and Bower powered front-end application.  It will get compiled into a bit of embeddable HTML that links to CSS and JS files that are uploaded to S3.  It is not necessary, but it intended for full page articles on the current MinnPost site.
+
 ## Getting Started
 
 ### Prerequsites
