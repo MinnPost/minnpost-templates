@@ -19,12 +19,21 @@
   <%= js %> <% }) %>
 
 </head>
+<% if (isApplication) { %>
 <body class="not-front logged-in page-node node-type-article one-sidebar sidebar-right section-data">
+<% } else { %>
+<body class="not-front page-node node-type-article one-sidebar sidebar-right">
+<% } %>
 
 
   <!-- =========================================================
     START: Embeddable
     == ========================================================= -->
+  <% if (isInline) { %>
+  <div class="<%= projectName %>-inline-container"></div>
+  <script type="text/javascript" src="bower_components/requirejs/require.js"></script>
+  <script type="text/javascript" src="js/app.js"></script>
+  <% } else { %>
 
   <!--
     For raw HTML fields, keep these classes
@@ -127,6 +136,7 @@
     </script>
   </div>
 
+  <% } %>
   <!-- =========================================================
     END: Embeddable
     == ========================================================= -->

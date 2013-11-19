@@ -1,5 +1,5 @@
 {
-  "name": "generator-minnpost-application",
+  "name": "generator-minnpost",
   "version": "0.0.0",
   "description": "Template for front-end-based news applications using Yeoman.",
   "keywords": [

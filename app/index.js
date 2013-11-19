@@ -50,7 +50,7 @@ var MinnpostApplicationGenerator = module.exports = function MinnpostApplication
       callback: function() {
         // Put all the commands together
         var commands = 'echo "";';
-        if (this.projectFeatures.hasMaps) {
+        if (this.projectFeatures.hasMaps || this.projectType === 'leafletMap') {
           commands += ' npm install -g jake; cd bower_components/leaflet/ && npm install && jake; cd -;';
         }
 
@@ -71,7 +71,6 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   var done = this.async();
   var directory = process.cwd().split('/')[process.cwd().split('/').length - 1];
   var prompts = [];
-  var defaultBowerComponents = 'jquery#~1.9 underscore#~1.5.2 backbone#~1.1.0 ractive#~0.3.7 ractive-backbone#~0.1.0 unsemantic';
   var separators = { bowerComponents: '#', nodeModules: '@', rubyGems: '@', pythonDependencies: '@'};
   var validateRequired = function(input) {
     return (input) ? true : 'Please provide a value';
@@ -127,6 +126,10 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       css: ['leaflet/dist/leaflet'],
       ie: ['leaflet/dist/leaflet.ie'],
       rname: 'Leaflet'
+    },
+    highcharts: {
+      js: ['highcharts/highcharts.js'],
+      rname: 'highcharts'
     }
   };
 
@@ -141,7 +144,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   prompts.push({
     type: 'input',
     name: 'projectName',
-    message: 'The name of the project, usually in the form of "minnpost-sweet-app":',
+    message: 'The name of the project.  This should be all lowercase, start with minnpost, use dashes for spaces, and be unique across all projects (ex. minnpost-sweet-app):',
     default: directory,
     validate: function(input) {
       return (input.indexOf('minnpost-') === 0) ? true : 'Please prefix your application with "minnpost-"';
@@ -151,7 +154,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   prompts.push({
     type: 'input',
     name: 'projectTitle',
-    message: 'The title of the project, something like MinnPost Sweetness:',
+    message: 'The title of the project (ex. MinnPost Sweetness):',
     validate: validateRequired,
     default: function(props) {
       return props.projectName.replace(/-/g, ' ').replace(/\w\S*/g, function(txt) {
@@ -167,20 +170,34 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     validate: validateRequired,
     default: ''
   });
+  // The type of project
+  prompts.push({
+    type: 'list',
+    name: 'projectType',
+    message: 'The type of project:',
+    choices: [
+      { name: 'Full application', value: 'application' },
+      { name: '[inline] Leaflet map', value: 'leafletMap' },
+      { name: '[inline] highcharts chart', value: 'highchartsChart' },
+      { name: '[inline] Other', value: 'inlineOther' }
+    ]
+  });
   // Project defaults
   prompts.push({
     type: 'confirm',
     name: 'projectDefaults',
-    message: 'The whole kitten caboodle (sass, compass, default bower components, etc):',
-    default: true
+    message: 'Use application project defaults (compass, default bower components, etc):',
+    default: true,
+    when: function(props) {
+      return props.projectType === 'application';
+    }
   });
-  // If not project defaults
+  // Technologies needed
   prompts.push({
     type: 'checkbox',
     name: 'projectPrerequisites',
     message: 'Preqequisite technologies that are needed:',
     choices: [
-      { name: 'SASS', value: 'useSass' },
       { name: 'Compass', value: 'useCompass' },
       { name: 'Python', value: 'usePython' },
       { name: 'Ruby', value: 'useRuby' }
@@ -193,8 +210,8 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   prompts.push({
     type: 'input',
     name: 'bowerComponents',
-    message: 'Bower components, something like library#1.2.3 other#~1.2.3:',
-    default: defaultBowerComponents,
+    message: 'Other Bower components (ex. library#1.2.3 other#~1.2.3):',
+    default: '',
     when: function(props) {
       return !props.projectDefaults;
     }
@@ -203,7 +220,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   prompts.push({
     type: 'input',
     name: 'nodeModules',
-    message: 'Node modules, something like library@1.2.3 other@~1.2.3:',
+    message: 'Node modules (ex. library@1.2.3 other@~1.2.3):',
     default: '',
     when: function(props) {
       return !props.projectDefaults;
@@ -213,7 +230,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   prompts.push({
     type: 'input',
     name: 'rubyGems',
-    message: 'Ruby gems, something like library@1.2.3 other@~>1.2.3:',
+    message: 'Ruby gems (ex. library@1.2.3 other@~>1.2.3):',
     default: '',
     when: function(props) {
       return !props.projectDefaults && props.projectPrerequisites.indexOf('useRuby') >= 0;
@@ -223,7 +240,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   prompts.push({
     type: 'input',
     name: 'pythonDependencies',
-    message: 'Python dependencies, something like library@==1.2.3 other@>=1.2.3:',
+    message: 'Python dependencies (ex. library@==1.2.3 other@>=1.2.3):',
     default: '',
     when: function(props) {
       return !props.projectDefaults && props.projectPrerequisites.indexOf('usePython') >= 0;
@@ -233,20 +250,27 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   prompts.push({
     type: 'checkbox',
     name: 'projectFeatures',
-    message: 'Sets of features',
+    message: 'Application features:',
     choices: [
       { name: 'Maps', value: 'hasMaps' },
       { name: 'Dates', value: 'hasDates' },
       { name: 'Form inputs', value: 'hasInputs' },
       { name: 'Sticky horizontal menu', value: 'hasHMenu' }
       // Sticky menu (vertical)
-    ]
+    ],
+    when: function(props) {
+      return props.projectType === 'application';
+    }
   });
 
   // Call prompt
   this.prompt(prompts, function(props) {
     var i;
     var thisYeoman = this;
+
+    // Mark as inline or application
+    props.isInline = (props.projectType !== 'application');
+    props.isApplication = (props.projectType === 'application');
 
     // Change choice list to objects
     ['projectPrerequisites', 'projectFeatures'].forEach(function(p) {
@@ -257,33 +281,45 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
         });
         props[p] = newProp;
       }
+      else {
+        props[p] = {};
+      }
     });
 
     // Handle the defualt prop
-    if (props.projectDefaults === true) {
+    if (props.isApplication && props.projectDefaults === true) {
       props.projectPrerequisites = {
         useSass: true,
         useCompass: true
       }
-      props.bowerComponents = defaultBowerComponents;
+      props.bowerComponents = 'jquery#~1.9 underscore#~1.5.2 backbone#~1.1.0 ractive#~0.3.7 ractive-backbone#~0.1.0 unsemantic ' + props.bowerComponents;
+    }
+
+    // If inline use some default bower components
+    if (props.isInline) {
+      props.bowerComponents = 'jquery#~1.9 underscore#~1.5.2 ' + props.bowerComponents;
     }
 
     // Handle project features
     if (props.projectFeatures['hasMaps'] === true) {
-      // Attach leaflet
       props.bowerComponents += ' leaflet#~0.6.4';
     }
     if (props.projectFeatures['hasDates'] === true) {
-      // Attach moment
       props.bowerComponents += ' moment#~2.4.0';
     }
     if (props.projectFeatures['hasInputs'] === true) {
-      // Attach placeholder.js
       props.bowerComponents += ' Placeholders.js#~3.0.1';
     }
     if (props.projectFeatures['hasHMenu'] === true) {
-      // Attach sticky menu
       props.bowerComponents += ' sticky-kit#~1.0.1';
+    }
+
+    // Handle project types
+    if (props.projectType === 'leafletMap') {
+      props.bowerComponents += ' leaflet#~0.6.4';
+    }
+    if (props.projectType === 'highchartsChart') {
+      props.bowerComponents += ' highcharts#~3.0.7';
     }
 
     // Add requireJS manually as this is needed
@@ -377,7 +413,7 @@ MinnpostApplicationGenerator.prototype.ruby = function ruby() {
 // Process styling
 MinnpostApplicationGenerator.prototype.styles = function styles() {
   this.mkdir('styles');
-  if (this.projectPrerequisites.useSass || this.projectPrerequisites.useCompass) {
+  if (this.projectPrerequisites.useCompass) {
     this.mkdir('.tmp/css');
     this.template('styles/__variables.scss', 'styles/_variables.scss');
     this.template('styles/__styles.scss', 'styles/_styles.scss');
@@ -401,13 +437,18 @@ MinnpostApplicationGenerator.prototype.app = function app() {
   this.template('_bower.json', 'bower.json');
 
   // Application files
-  this.template('js/_config.js', 'js/config.js');
-  this.template('js/_app.js', 'js/app.js');
-  this.copy('js/helpers.js', 'js/helpers.js');
-  this.copy('js/models.js', 'js/models.js');
-  this.copy('js/collections.js', 'js/collections.js');
-  this.copy('js/views.js', 'js/views.js');
-  this.copy('js/routers.js', 'js/routers.js');
+  if (this.isApplication) {
+    this.template('js/_config.js', 'js/config.js');
+    this.template('js/_app.js', 'js/app.js');
+    this.copy('js/helpers.js', 'js/helpers.js');
+    this.copy('js/models.js', 'js/models.js');
+    this.copy('js/collections.js', 'js/collections.js');
+    this.copy('js/views.js', 'js/views.js');
+    this.copy('js/routers.js', 'js/routers.js');
+  }
+  else {
+    this.template('js/_app-inline.js', 'js/app.js');
+  }
 
   // Template files
   this.template('js/templates/_application.mustache', 'js/templates/application.mustache');

@@ -34,11 +34,11 @@ All commands are assumed to on the [command line](http://en.wikipedia.org/wiki/C
     1. `easy_install virtualenv`
     1. `virtualenv .env`
     1. `cd .env && source bin/activiate; cd -;` <% } %>
-<% if (projectPrerequisites.useSass) { %>1. Install [Sass](http://sass-lang.com/): `gem install sass`
-   * On a Mac do: `sudo gem install sass`<% } %>
-<% if (projectPrerequisites.useCompass) { %>1. Install [Compass](http://compass-style.org/): `gem install compass`
+<% if (projectPrerequisites.useCompass) { %>1. Install [Sass](http://sass-lang.com/): `gem install sass`
+   * On a Mac do: `sudo gem install sass`
+   1. Install [Compass](http://compass-style.org/): `gem install compass`
    * On a Mac do: `sudo gem install compass`<% } %>
-<% if (projectFeatures.hasMaps) { %>1. Because Leaflet comes unbuilt, we need to build it with Jake: `npm install -g jake`<% } %>
+<% if (projectFeatures.hasMaps || projectType === 'leafletMap') { %>1. Because Leaflet comes unbuilt, we need to build it with Jake: `npm install -g jake`<% } %>
 
 ### Get code and install packages
 
@@ -50,11 +50,10 @@ Get the code for this project and install the necessary dependency libraries and
 1. Install Bower components: `bower install`
 <% if (projectPrerequisites.useRuby) { %>1. Install Ruby gems: `bundle install`<% } %>
 <% if (projectPrerequisites.usePython) { %>1. Install python packages: `pip install -r requirements.txt` <% } %>
-<% if (projectFeatures.hasMaps) { %>1. Because Leaflet comes unbuilt, we need to build it: `cd bower_components/leaflet/ && npm install && jake; cd -;`<% } %>
+<% if (projectFeatures.hasMaps || projectType === 'leafletMap') { %>1. Because Leaflet comes unbuilt, we need to build it: `cd bower_components/leaflet/ && npm install && jake; cd -;`<% } %>
 
 ### Running
 
-1. Get pump primed with: `grunt`
 1. Run: `grunt server`
     * This will run a local webserver for development and you can view the application in your web browser at [http://localhost:<%= serverPort %>](http://localhost:<%= serverPort %>).
     * Utilize `index.html` for development, while `index-deploy.html` is used for the deployed version, and `index-build.html` is used to test the build before deployment.
@@ -71,6 +70,7 @@ To build or compile all the assets together for easy and efficient deployment, d
 Deploying will push the relevant files up to Amazon's AWS S3 so that they can be easily referenced on the MinnPost site.  This is specific to MinnPost, and your deployment might be different.
 
 1. Run: `grunt deploy`
+<% if (isInline) { %>1. This will output a bit of HTML to embed in your article.<% } %>
 
 ## Hacks
 
