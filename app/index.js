@@ -469,6 +469,10 @@ MinnpostApplicationGenerator.prototype.app = function app() {
 
   // Grunt stuff
   this.template('_Gruntfile.js', 'Gruntfile.js');
+
+  // Create a JSON file of the enabled components so
+  // that it can be reused in multiple places
+  this.write('bower_map.json', JSON.stringify(this.filteredComponentMap, null, '  '));
 };
 
 // Process images

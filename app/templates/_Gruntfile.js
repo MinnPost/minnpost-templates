@@ -13,7 +13,7 @@ module.exports = function(grunt) {
    *
    * Order matters for build.
    */
-  var components = <%= JSON.stringify(filteredComponentMap) %>;
+  var components = grunt.file.readJSON('bower_map.json');
 
   // Project configuration.  Many values are directly read from
   // package.json.

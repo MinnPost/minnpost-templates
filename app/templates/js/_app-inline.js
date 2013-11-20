@@ -64,14 +64,22 @@ function($, _, helpers,
     // Make map.  Check the options below to see what
     // the defaults are.
     this.map = new L.Map(this.options.defaultMapId, this.options.defaultMapOptions);
+    // Add base layer
+    this.map.addLayer(this.options.minnpostBaseLayer);
+    // Center view
     this.map.setView(this.options.minneapolisPoint, 8);
     // This removes the embedded attribution which should be in the footnote
     // but ensure that attribution is given correctly
     this.map.attributionControl.setPrefix(false);
-    // Add base lyaer
-    this.map.addLayer(this.options.minnpostBaseLayer);
 
     // Do more with the map here
+
+    // Due to how Leaflet animates and (probably) how the CSS
+    // is pulled in dynamically, the map gets offset, so we wait
+    // just a moment and invalidate the size to reset the map
+    window.setTimeout(function() {
+      thisApp.map.invalidateSize();
+    }, 500);
     <% } %>
   };
 
@@ -135,9 +143,7 @@ function($, _, helpers,
     if (this.el) {
       this.$el = $(this.el);
     }
-
     this.setup();
-    this.start();
   };
 
   // Extend with helpers
@@ -148,9 +154,12 @@ function($, _, helpers,
 
     // General setup tasks
     setup: function() {
+      var thisApp = this;
+
       // Determine path
       if (window.location.host.indexOf('localhost') !== -1) {
         this.paths = this.options.paths.local;
+        this.options.isLocal = true;
         if (window.location.pathname.indexOf('index-build') !== -1) {
           this.paths = this.options.paths.build;
         }
@@ -159,7 +168,33 @@ function($, _, helpers,
         this.paths = this.options.paths.deploy;
       }
 
-      // Get resources like CSS
+      // If local read in the bower map and add css
+      if (this.options.isLocal) {
+        $.getJSON('bower_map.json', function(data) {
+          _.each(data, function(c, ci) {
+            if (c.css) {
+              _.each(c.css, function(s, si) {
+                $('head').append('<link rel="stylesheet" href="bower_components/' + s + '.css" type="text/css" />');
+              });
+            }
+            if (c.ie && (thisApp.isMSIE() && thisApp.isMSIE() <= 8)) {
+              _.each(c.ie, function(s, si) {
+                $('head').append('<link rel="stylesheet" href="bower_components/' + s + '.css" type="text/css" />');
+              });
+            }
+          });
+
+          thisApp.render();
+        });
+      }
+      else {
+        thisApp.render();
+      }
+    },
+
+    // Rendering tasks
+    render: function() {
+      // Get main CSS
       $('head').append('<link rel="stylesheet" href="' + this.paths.css + '" type="text/css" />');
       if (this.isMSIE() && this.isMSIE() <= 8) {
         $('head').append('<link rel="stylesheet" href="' + this.paths.ie + '" type="text/css" />');
@@ -172,6 +207,8 @@ function($, _, helpers,
       this.$el.html(_.template(tApplication, {
         loading: _.template(tLoading, {})
       }));
+
+      this.start();
     },
 
     // Main execution
