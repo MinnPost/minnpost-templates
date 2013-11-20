@@ -8,11 +8,14 @@
 module.exports = function(grunt) {
   var _ = grunt.util._;
 
-  // Maintain list of libraries here.  Order matters for build
-  // processing
+  /**
+   * Maintain list of libraries here.
+   *
+   * Order matters for build.
+   */
   var components = <%= JSON.stringify(filteredComponentMap) %>;
 
-  // Project configuration.  Most of this is directly read from
+  // Project configuration.  Many values are directly read from
   // package.json.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -21,14 +24,16 @@ module.exports = function(grunt) {
         '<%%= grunt.template.today("yyyy-mm-dd") + "\\n" %>' +
         '<%%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
         '* Copyright (c) <%%= grunt.template.today("yyyy") %> <%%= pkg.author.name %>;' +
-        ' Licensed <%%= _.pluck(pkg.licenses, "type").join(", ") %> */' +
+        ' Licensed <%%= pkg.license || _.pluck(pkg.licenses, "type").join(", ") %> */' +
         '<%%= "\\n\\n" %>'
     },
     components: components,
+
     // Clean up the distribution fold
     clean: {
       folder: 'dist/'
     },
+
     // JS Hint checks code for coding styles and possible errors
     jshint: {
       options: {
@@ -41,6 +46,7 @@ module.exports = function(grunt) {
       },
       files: ['Gruntfile.js', 'js/*.js', 'data-processing/*.js']
     },
+
     <% if (projectPrerequisites.useCompass) { %>
     // Compass is an extended SASS.  Set it up so that it generates to .tmp/
     compass: {
@@ -70,6 +76,7 @@ module.exports = function(grunt) {
       }
     },
     <% } %>
+
     // Copy relevant files over to distribution
     copy: {
       images: {
@@ -81,15 +88,6 @@ module.exports = function(grunt) {
             src: ['*'],
             dest: 'dist/images/'
           }
-          /*
-          {
-            cwd: '<%%= compass.options.generatedImagesDir %>',
-            expand: true,
-            filter: 'isFile',
-            src: ['*'],
-            dest: 'dist/images/'
-          }
-          */
         ]
       },
       data: {
@@ -104,6 +102,8 @@ module.exports = function(grunt) {
         ]
       }
     },
+
+    <% if (isApplication) { %>
     // R.js to bring together files through requirejs.  We exclude libraries
     // and compile them separately.
     requirejs: {
@@ -127,7 +127,28 @@ module.exports = function(grunt) {
         }
       }
     },
+    <% } else { %>
+    // R.js to bring together files through requirejs.
+    requirejs: {
+      app: {
+        options: {
+          name: '<%= projectName %>',
+          include: ['requirejs'],
+          baseUrl: 'js',
+          mainConfigFile: 'js/app.js',
+          out: 'dist/<%%= pkg.name %>.latest.js',
+          optimize: 'none',
+          wrap: {
+            startFile: 'js/wrapper.start.js',
+            endFile: 'js/wrapper.end.js'
+          }
+        }
+      }
+    },
+    <% } %>
+
     // Brings files toggether
+    <% if (isApplication) { %>
     concat: {
       options: {
         separator: '\r\n\r\n'
@@ -140,7 +161,9 @@ module.exports = function(grunt) {
       // CSS
       css: {
         src: [
-          '<%%= compass.dist.options.cssDir %>/main.css'
+          <% if (projectPrerequisites.useCompass) { %>
+          '<%%= compass.dist.options.cssDir %>/main.css'<% } else { %>
+          'styles/styles.css'<% } %>
         ],
         dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.css'
       },
@@ -150,7 +173,9 @@ module.exports = function(grunt) {
       },
       cssIe: {
         src: [
-          '<%%= compass.dist.options.cssDir %>/main.ie.css'
+          <% if (projectPrerequisites.useCompass) { %>
+          '<%%= compass.dist.options.cssDir %>/main.ie.css'<% } else { %>
+          'styles/styles.ie.css'<% } %>
         ],
         dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.ie.css'
       },
@@ -168,16 +193,55 @@ module.exports = function(grunt) {
         dest: 'dist/<%%= pkg.name %>.libs.ie.css'
       }
     },
+    <% } else { %>
+    concat: {
+      options: {
+        separator: '\r\n\r\n'
+      },
+      // JS version
+      js: {
+        src: ['dist/<%%= pkg.name %>.latest.js'],
+        dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.js'
+      },
+      // CSS
+      css: {
+        src: [
+          <% if (projectPrerequisites.useCompass) { %>
+          '<%%= _.union(_.map(_.compact(_.flatten(_.pluck(components, "css"))), function(c) { return "bower_components/" + c + ".css"; }), [compass.dist.options.cssDir + "/main.css"]) %>'<% } else { %>
+          '<%%= _.union(_.map(_.compact(_.flatten(_.pluck(components, "css"))), function(c) { return "bower_components/" + c + ".css"; }), ["styles/styles.css"]) %>'<% } %>
+        ],
+        dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.css'
+      },
+      cssLatest: {
+        src: ['dist/<%%= pkg.name %>.<%%= pkg.version %>.css'],
+        dest: 'dist/<%%= pkg.name %>.latest.css'
+      },
+      cssIe: {
+        src: [
+          <% if (projectPrerequisites.useCompass) { %>
+          '<%%= _.union(_.map(_.compact(_.flatten(_.pluck(components, "ie"))), function(c) { return "bower_components/" + c + ".css"; }), [compass.dist.options.cssDir + "/main.ie.css"]) %>'<% } else { %>
+          '<%%= _.union(_.map(_.compact(_.flatten(_.pluck(components, "ie"))), function(c) { return "bower_components/" + c + ".css"; }), ["styles/styles.ie.css"]) %>'<% } %>
+        ],
+        dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.ie.css'
+      },
+      cssIeLatest: {
+        src: ['dist/<%%= pkg.name %>.<%%= pkg.version %>.ie.css'],
+        dest: 'dist/<%%= pkg.name %>.latest.ie.css'
+      }
+    },
+    <% } %>
+
+    // Minify JS for network efficiency
     uglify: {
       options: {
         banner: '<%%= meta.banner %>'
       },
       dist: {
-        src: ['<%%= requirejs.app.options.out %>'],
+        src: ['<%%= concat.js.src %>'],
         dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.min.js'
       },
       distLatest: {
-        src: ['<%%= requirejs.app.options.out %>'],
+        src: ['<%%= concat.js.src %>'],
         dest: 'dist/<%%= pkg.name %>.latest.min.js'
       }
     },
@@ -201,16 +265,16 @@ module.exports = function(grunt) {
         upload: [
           {
             src: 'dist/*',
-            dest: 'projects/<%%= pkg.name %>/'
+            dest: 'projects<% if (isInline) { %>-inline<% } %>/<%%= pkg.name %>/'
           },
           {
             src: 'dist/data/**/*',
-            dest: 'projects/<%%= pkg.name %>/data/',
+            dest: 'projects<% if (isInline) { %>-inline<% } %>/<%%= pkg.name %>/data/',
             rel: 'dist/data'
           },
           {
             src: 'dist/images/**/*',
-            dest: 'projects/<%%= pkg.name %>/images/',
+            dest: 'projects<% if (isInline) { %>-inline<% } %>/<%%= pkg.name %>/images/',
             rel: 'dist/images'
           }
         ]
@@ -226,7 +290,7 @@ module.exports = function(grunt) {
     },
     // Watches files for changes and performs task
     watch: {
-      files: ['<%%= jshint.files %>', 'styles/*.scss'],
+      files: ['<%%= jshint.files %>'<% if (projectPrerequisites.useCompass) { %>, 'styles/*.scss'<% } %>],
       tasks: 'watcher'
     }
   });
@@ -252,7 +316,7 @@ module.exports = function(grunt) {
   grunt.registerTask('server', ['compass:dev', 'connect', 'watch']);
   <% } else { %>
   grunt.registerTask('watcher', ['jshint']);
-  grunt.registerTask('server', 'connect', 'watch']);
+  grunt.registerTask('server', ['connect', 'watch']);
   <% } %>
 
   // Deploy tasks

@@ -2,12 +2,6 @@
  * Main JS for: <%= projectName %>
  */
 
-// Hack around existing jQuery
-if (typeof window.jQuery != 'undefined') {
-  window._jQuery = window.jQuery;
-  window._$ = window.$;
-}
-
 /**
  * RequireJS config which maps out where files are and shims
  * any non-compliant libraries.
@@ -37,7 +31,8 @@ require.config({
  */
 define('<%= projectName %>', [
   'jquery', 'underscore', 'helpers',
-  'text!templates/application.underscore', 'text!templates/loading.underscore'],
+  'text!templates/application.underscore', 'text!templates/loading.underscore'
+],
   function($, _, helpers, tApplication, tLoading) {
 
   // Main function for execution, proxied here so that
@@ -67,8 +62,8 @@ define('<%= projectName %>', [
     paths: {
       local: {
         <% if (projectPrerequisites.useCompass) { %>
-        css: '.tmp/css/styles.css',
-        ie: '.tmp/css/styles.ie.css',<% } else { %>
+        css: '.tmp/css/main.css',
+        ie: '.tmp/css/main.ie.css',<% } else { %>
         css: 'styles/styles.css',
         ie: 'styles/styles.ie.css',<% } %>
         images: 'images/',
@@ -87,7 +82,7 @@ define('<%= projectName %>', [
         data: 'https://s3.amazonaws.com/data.minnpost/projects-inline/<%= projectName %>/<%= projectName %>/data/'
       }
     }
-  }
+  };
 
   // Constructor for app
   var App = function(options) {
@@ -122,6 +117,9 @@ define('<%= projectName %>', [
 
       // Get resources like CSS
       $('head').append('<link rel="stylesheet" href="' + this.paths.css + '" type="text/css" />');
+      if (this.isMSIE() && this.isMSIE() <= 8) {
+        $('head').append('<link rel="stylesheet" href="' + this.paths.ie + '" type="text/css" />');
+      }
 
       // Add a processing class
       this.$el.addClass('inline-processed');
@@ -147,10 +145,3 @@ require(['jquery', '<%= projectName %>'], function($, App) {
     var app = new App();
   });
 });
-
-
-// Hack back in the original jQuery
-if (typeof window._jQuery != 'undefined') {
-  window.jQuery = window._jQuery;
-  window.$ = window._$;
-}

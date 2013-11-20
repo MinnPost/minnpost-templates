@@ -34,8 +34,10 @@
     == ========================================================= -->
   <% if (isInline) { %>
   <div class="<%= projectName %>-inline-container"></div>
+  <script type="text/javascript" src="js/wrapper.start.js"></script>
   <script type="text/javascript" src="bower_components/requirejs/require.js"></script>
   <script type="text/javascript" src="js/app.js"></script>
+  <script type="text/javascript" src="js/wrapper.end.js"></script>
   <% } else { %>
 
   <!--

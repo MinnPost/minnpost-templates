@@ -450,16 +450,18 @@ MinnpostApplicationGenerator.prototype.app = function app() {
     this.template('js/_config.js', 'js/config.js');
     this.template('js/_app.js', 'js/app.js');
     this.template('js/_helpers.js', 'js/helpers.js');
-    this.copy('js/models.js', 'js/models.js');
-    this.copy('js/collections.js', 'js/collections.js');
-    this.copy('js/views.js', 'js/views.js');
-    this.copy('js/routers.js', 'js/routers.js');
+    this.copy('js/models.js');
+    this.copy('js/collections.js');
+    this.copy('js/views.js');
+    this.copy('js/routers.js');
     this.template('js/templates/_application.mustache', 'js/templates/application.mustache');
-    this.copy('js/templates/loading.mustache', 'js/templates/loading.mustache');
+    this.copy('js/templates/loading.mustache');
   }
   else {
     this.template('js/_app-inline.js', 'js/app.js');
     this.template('js/_helpers.js', 'js/helpers.js');
+    this.copy('js/wrapper.start.js');
+    this.copy('js/wrapper.end.js');
     this.template('js/templates/_application.underscore', 'js/templates/application.underscore');
     this.copy('js/templates/loading.mustache', 'js/templates/loading.underscore');
   }
