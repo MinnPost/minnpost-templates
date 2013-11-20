@@ -206,6 +206,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     type: 'checkbox',
     name: 'projectPrerequisites',
     message: 'Preqequisite technologies that are needed:',
+    default: 'useCompass',
     choices: [
       { name: 'Compass', value: 'useCompass' },
       { name: 'Python', value: 'usePython' },

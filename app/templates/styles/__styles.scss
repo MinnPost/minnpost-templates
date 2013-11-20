@@ -77,6 +77,12 @@ body .node-unpublished {
     }
   }
 
+  <% if (projectType === 'leafletMap') { %>
+  .inline-map {
+    width: 100%;
+    height: 350px;
+  }
+  <% } %>
 
   // Breakpoints
   @media screen and (max-width: 768px) {

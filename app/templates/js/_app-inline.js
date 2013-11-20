@@ -31,9 +31,14 @@ require.config({
  */
 define('<%= projectName %>', [
   'jquery', 'underscore', 'helpers',
+  <%= (projectType === 'leafletMap') ? "'Leaflet', " : '' %>
+  <%= (projectType === 'highchartsChart') ? "'Highcharts', " : '' %>
   'text!templates/application.underscore', 'text!templates/loading.underscore'
 ],
-  function($, _, helpers, tApplication, tLoading) {
+function($, _, helpers,
+  <%= (projectType === 'leafletMap') ? "L, " : '' %>
+  <%= (projectType === 'highchartsChart') ? "Highcharts, " : '' %>
+  tApplication, tLoading) {
 
   // Main function for execution, proxied here so that
   // you do not have to scroll down all the way
@@ -54,6 +59,20 @@ define('<%= projectName %>', [
      // All the methods from helpers.js are attached
      // to `this` as well.  These include things like
      // formatters.
+
+    <% if (projectType === 'leafletMap') { %>
+    // Make map.  Check the options below to see what
+    // the defaults are.
+    this.map = new L.Map(this.options.defaultMapId, this.options.defaultMapOptions);
+    this.map.setView(this.options.minneapolisPoint, 8);
+    // This removes the embedded attribution which should be in the footnote
+    // but ensure that attribution is given correctly
+    this.map.attributionControl.setPrefix(false);
+    // Add base lyaer
+    this.map.addLayer(this.options.minnpostBaseLayer);
+
+    // Do more with the map here
+    <% } %>
   };
 
   // Default options
@@ -83,6 +102,31 @@ define('<%= projectName %>', [
       }
     }
   };
+
+  <% if (projectType === 'leafletMap') { %>
+  // Add in some default map values
+  defaultOptions = _.extend(defaultOptions, {
+    defaultMapId: '<%= projectName %>-map',
+    minneapolisPoint: L.latLng(44.983333998267824, -93.26667000248563),
+    stpaulPoint: L.latLng(44.95370289870105, -93.08995780069381),
+    minnesotaPoint: L.latLng(46.518286790004616, -94.55406386114191),
+    minnpostBaseLayer: new L.tileLayer('//{s}.tiles.mapbox.com/v3/minnpost.map-wi88b700/{z}/{x}/{y}.png'),
+    defaultMapOptions: {
+      scrollWheelZoom: false,
+      trackResize: true
+    },
+    defaultMapStyle: {
+      stroke: true,
+      color: '#2DA51D',
+      weight: 1.5,
+      opacity: 0.9,
+      fill: true,
+      fillColor: '#2DA51D',
+      fillOpacity: 0.2,
+      clickable: false
+    }
+  });
+  <% } %>
 
   // Constructor for app
   var App = function(options) {

@@ -3,6 +3,10 @@
   <h3><%= projectTitle %></h3>
 
   <%%= loading %>
+
+  <% if (projectType === 'leafletMap') { %>
+  <div class="inline-map" id="<%= projectName %>-map"></div>
+  <% } %>
 </div>
 
 <div class="footnote-container">
