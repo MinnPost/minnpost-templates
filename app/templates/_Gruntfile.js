@@ -205,11 +205,7 @@ module.exports = function(grunt) {
       },
       // CSS
       css: {
-        src: [
-          <% if (projectPrerequisites.useCompass) { %>
-          '<%%= _.union(_.map(_.compact(_.flatten(_.pluck(components, "css"))), function(c) { return "bower_components/" + c + ".css"; }), [compass.dist.options.cssDir + "/main.css"]) %>'<% } else { %>
-          '<%%= _.union(_.map(_.compact(_.flatten(_.pluck(components, "css"))), function(c) { return "bower_components/" + c + ".css"; }), ["styles/styles.css"]) %>'<% } %>
-        ],
+        src: _.union(_.map(_.compact(_.flatten(_.pluck(components, "css"))), function(c) { return "bower_components/" + c + ".css"; }), [<% if (projectPrerequisites.useCompass) { %>'<%%= compass.dist.options.cssDir %>/main.css'<% } else { %>'styles/styles.css'<% } %>]),
         dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.css'
       },
       cssLatest: {
@@ -217,11 +213,7 @@ module.exports = function(grunt) {
         dest: 'dist/<%%= pkg.name %>.latest.css'
       },
       cssIe: {
-        src: [
-          <% if (projectPrerequisites.useCompass) { %>
-          '<%%= _.union(_.map(_.compact(_.flatten(_.pluck(components, "ie"))), function(c) { return "bower_components/" + c + ".css"; }), [compass.dist.options.cssDir + "/main.ie.css"]) %>'<% } else { %>
-          '<%%= _.union(_.map(_.compact(_.flatten(_.pluck(components, "ie"))), function(c) { return "bower_components/" + c + ".css"; }), ["styles/styles.ie.css"]) %>'<% } %>
-        ],
+        src: _.union(_.map(_.compact(_.flatten(_.pluck(components, "ie"))), function(c) { return "bower_components/" + c + ".ie"; }), [<% if (projectPrerequisites.useCompass) { %>'<%%= compass.dist.options.cssDir %>/main.ie.css'<% } else { %>'styles/styles.ie.css'<% } %>]),
         dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.ie.css'
       },
       cssIeLatest: {
