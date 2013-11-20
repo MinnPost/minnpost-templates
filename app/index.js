@@ -50,8 +50,11 @@ var MinnpostApplicationGenerator = module.exports = function MinnpostApplication
       callback: function() {
         // Put all the commands together
         var commands = 'echo "";';
-        if (this.projectFeatures.hasMaps || this.projectType === 'leafletMap') {
+        if (typeof this.filteredComponentMap.leaflet != 'undefined') {
           commands += ' npm install -g jake; cd bower_components/leaflet/ && npm install && jake; cd -;';
+        }
+        if (typeof this.filteredComponentMap['mapbox.js'] != 'undefined') {
+          commands += ' cd bower_components/mapbox.js/ && npm install && make; cd -;';
         }
 
         console.log('Some finishing touches...');
@@ -139,6 +142,13 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       js: ['highcharts/highcharts.js'],
       rname: 'highcharts',
       returns: 'Highcharts'
+    },
+    'mapbox.js': {
+      js: ['mapbox.js/dist/mapbox'],
+      css: ['mapbox.js/dist/mapbox'],
+      images: ['mapbox.js/dist/images'],
+      rname: 'mapbox',
+      returns: 'L'
     }
   };
 
@@ -187,6 +197,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     choices: [
       { name: 'Full application', value: 'application' },
       { name: '[inline] Leaflet map', value: 'leafletMap' },
+      { name: '[inline] Mapbox map', value: 'mapboxMap' },
       { name: '[inline] highcharts chart', value: 'highchartsChart' },
       { name: '[inline] Other', value: 'inlineOther' }
     ]
@@ -206,9 +217,8 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     type: 'checkbox',
     name: 'projectPrerequisites',
     message: 'Preqequisite technologies that are needed:',
-    default: 'useCompass',
     choices: [
-      { name: 'Compass', value: 'useCompass' },
+      { name: 'Compass', value: 'useCompass', checked: true },
       { name: 'Python', value: 'usePython' },
       { name: 'Ruby', value: 'useRuby' }
     ],
@@ -327,6 +337,9 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     // Handle project types
     if (props.projectType === 'leafletMap') {
       props.bowerComponents += ' leaflet#~0.6.4';
+    }
+    if (props.projectType === 'mapboxMap') {
+      props.bowerComponents += ' mapbox.js#~1.4.2';
     }
     if (props.projectType === 'highchartsChart') {
       props.bowerComponents += ' highcharts#~3.0.7';

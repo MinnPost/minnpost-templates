@@ -14,6 +14,11 @@ require.config({
     'Backbone': {
       deps: ['underscore', 'jquery'],
       exports: 'Backbone'
+    },
+    // Mapbox and requireJS don't really work, so we just let
+    // the L be global
+    'mapbox': {
+      exports: 'mapbox'
     }
   },
   baseUrl: 'js',
@@ -32,11 +37,13 @@ require.config({
 define('<%= projectName %>', [
   'jquery', 'underscore', 'helpers',
   <%= (projectType === 'leafletMap') ? "'Leaflet', " : '' %>
+  <%= (projectType === 'mapboxMap') ? "'mapbox', " : '' %>
   <%= (projectType === 'highchartsChart') ? "'Highcharts', " : '' %>
   'text!templates/application.underscore', 'text!templates/loading.underscore'
 ],
 function($, _, helpers,
   <%= (projectType === 'leafletMap') ? "L, " : '' %>
+  <%= (projectType === 'mapboxMap') ? "mapbox, " : '' %>
   <%= (projectType === 'highchartsChart') ? "Highcharts, " : '' %>
   tApplication, tLoading) {
 
@@ -50,22 +57,35 @@ function($, _, helpers,
      * Enter main application logic here.
      ************************************/
 
-     // You can reference the main container with:
-     //   this.$el
-     // Or you probably want the content container,
-     // assuming you are using the default template
-     //   this.$content
+    // You can reference the main container with:
+    //   this.$el
+    // Or you probably want the content container,
+    // assuming you are using the default template
+    //   this.$content
 
-     // All the methods from helpers.js are attached
-     // to `this` as well.  These include things like
-     // formatters.
+    // All the methods from helpers.js are attached
+    // to `this` as well.  These include things like
+    // formatters.
+
+    <% if (projectType === 'mapboxMap') { %>
+    // Use compositing for custom Mapbox maps.  This means
+    // adding multiple layers with one call:
+    //   ex. minnpost.map-4v6echxm,minnpost.map-BNMSNS
+    //
+    // See Mapbox.js API and examples
+    // https://www.mapbox.com/mapbox.js/api/
+    this.map = L.mapbox.map(this.options.defaultMapId, this.options.mapboxStreetsLightLabels);
+    // This removes the embedded attribution which should be in the footnote
+    // but ensure that attribution is given correctly
+    this.map.attributionControl.setPrefix(false);
+    <% } %>
 
     <% if (projectType === 'leafletMap') { %>
     // Make map.  Check the options below to see what
     // the defaults are.
     this.map = new L.Map(this.options.defaultMapId, this.options.defaultMapOptions);
     // Add base layer
-    this.map.addLayer(this.options.minnpostBaseLayer);
+    this.map.addLayer(this.options.defaultBaseLayer);
     // Center view
     this.map.setView(this.options.minneapolisPoint, 8);
     // This removes the embedded attribution which should be in the footnote
@@ -111,14 +131,19 @@ function($, _, helpers,
     }
   };
 
-  <% if (projectType === 'leafletMap') { %>
+  <% if (projectType === 'leafletMap' || projectType === 'mapboxMap') { %>
   // Add in some default map values
   defaultOptions = _.extend(defaultOptions, {
     defaultMapId: '<%= projectName %>-map',
     minneapolisPoint: L.latLng(44.983333998267824, -93.26667000248563),
     stpaulPoint: L.latLng(44.95370289870105, -93.08995780069381),
     minnesotaPoint: L.latLng(46.518286790004616, -94.55406386114191),
-    minnpostBaseLayer: new L.tileLayer('//{s}.tiles.mapbox.com/v3/minnpost.map-wi88b700/{z}/{x}/{y}.png'),
+    mapboxSatelliteStreets: 'minnpost.map-95lgm5jf',
+    mapboxStreetsDarkLabels: 'minnpost.map-4v6echxm',
+    mapboxStreetsLightLabels: 'minnpost.map-wi88b700',
+    mapboxTerrainLight: 'minnpost.map-vhjzpwel',
+    mapboxTerrainDark: 'minnpost.map-dhba3e3l',
+    defaultBaseLayer: new L.tileLayer('//{s}.tiles.mapbox.com/v3/minnpost.map-wi88b700/{z}/{x}/{y}.png'),
     defaultMapOptions: {
       scrollWheelZoom: false,
       trackResize: true

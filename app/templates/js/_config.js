@@ -10,6 +10,11 @@ require.config({
     'Backbone': {
       deps: ['underscore', 'jquery'],
       exports: 'Backbone'
+    },
+    // Mapbox and requireJS don't really work, so we just let
+    // the L be global
+    'mapbox': {
+      exports: 'mapbox'
     }
   },
   baseUrl: 'js',
