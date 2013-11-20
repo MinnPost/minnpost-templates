@@ -21,7 +21,6 @@
     "grunt-contrib-jshint": "~0.4.3",
     "grunt-contrib-uglify": "~0.2.2",
     "grunt-contrib-copy": "~0.4.1",
-    "grunt-contrib-jst": "~0.5.0",
     "grunt-contrib-clean": "~0.4.0",
     "grunt-gss-pull": "~0.1.2",
     "grunt-s3": "~0.2.0-alpha",
@@ -29,6 +28,7 @@
     "grunt-contrib-sass": "~0.3.0",
     "grunt-contrib-connect": "~0.3.0",
     "grunt-contrib-compass": "~0.5.0",
-    "grunt-contrib-requirejs": "~0.4.0"
+    "grunt-contrib-requirejs": "~0.4.0",
+    "grunt-contrib-cssmin": "~0.7.0"
   }
 }

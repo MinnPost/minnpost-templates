@@ -25,6 +25,12 @@ module.exports = function(grunt) {
         '<%%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
         '* Copyright (c) <%%= grunt.template.today("yyyy") %> <%%= pkg.author.name %>;' +
         ' Licensed <%%= pkg.license || _.pluck(pkg.licenses, "type").join(", ") %> */' +
+        '<%%= "\\n\\n" %>',
+      bannerLatest: '/*! <%%= pkg.title || pkg.name %> - LATEST VERSION - ' +
+        '<%%= grunt.template.today("yyyy-mm-dd") + "\\n" %>' +
+        '<%%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
+        '* Copyright (c) <%%= grunt.template.today("yyyy") %> <%%= pkg.author.name %>;' +
+        ' Licensed <%%= pkg.license || _.pluck(pkg.licenses, "type").join(", ") %> */' +
         '<%%= "\\n\\n" %>'
     },
     components: components,
@@ -229,14 +235,48 @@ module.exports = function(grunt) {
         banner: '<%%= meta.banner %>'
       },
       dist: {
-        src: ['<%%= concat.js.src %>'],
+        src: ['<%%= concat.js.dest %>'],
         dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.min.js'
       },
       distLatest: {
-        src: ['<%%= concat.js.src %>'],
+        options: {
+          banner: '<%%= meta.bannerLatest %>'
+        },
+        src: ['<%%= concat.js.dest %>'],
         dest: 'dist/<%%= pkg.name %>.latest.min.js'
       }
     },
+
+    // Minify CSS for network efficiency
+    cssmin: {
+      options: {
+        banner: '<%%= meta.banner %>',
+        report: true
+      },
+      css: {
+        src: ['<%%= concat.css.dest %>'],
+        dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.min.css'
+      },
+      cssLatest: {
+        options: {
+          banner: '<%%= meta.bannerLatest %>'
+        },
+        src: ['<%%= concat.css.dest %>'],
+        dest: 'dist/<%%= pkg.name %>.latest.min.css'
+      },
+      cssIe: {
+        src: ['<%%= concat.cssIe.dest %>'],
+        dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.min.ie.css'
+      },
+      cssIeLatest: {
+        options: {
+          banner: '<%%= meta.bannerLatest %>'
+        },
+        src: ['<%%= concat.cssIe.dest %>'],
+        dest: 'dist/<%%= pkg.name %>.latest.min.ie.css'
+      }
+    },
+
     // Deploy to S3
     s3: {
       options: {
@@ -297,10 +337,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-s3');
 
   // Default build task
-  grunt.registerTask('default', ['jshint', <% if (projectPrerequisites.useCompass) { %>'compass:dist', <% } %>'clean', 'copy', 'requirejs', 'concat', 'uglify']);
+  grunt.registerTask('default', ['jshint', <% if (projectPrerequisites.useCompass) { %>'compass:dist', <% } %>'clean', 'copy', 'requirejs', 'concat', 'cssmin', 'uglify']);
 
   // Watch tasks
   <% if (projectPrerequisites.useCompass) { %>
