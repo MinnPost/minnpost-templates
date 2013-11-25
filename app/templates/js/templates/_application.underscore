@@ -7,6 +7,11 @@
   <% if (projectType === 'leafletMap' || projectType === 'mapboxMap') { %>
   <div class="inline-map" id="<%= projectName %>-map"></div>
   <% } %>
+  <% if (projectType === 'datatablesTable') { %>
+  <div class="datatables-table <%= projectName %>-table cf">
+    <table></table>
+  </div>
+  <% } %>
 </div>
 
 <div class="footnote-container">

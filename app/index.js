@@ -149,6 +149,17 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       images: ['mapbox.js/dist/images'],
       rname: 'mapbox',
       returns: 'L'
+    },
+    datatables: {
+      js: ['datatables/media/js/jquery.dataTables'],
+      css: ['datatables/media/css/jquery.dataTables'],
+      rname: 'datatables',
+      returns: 'dataTable'
+    },
+    'jquery-csv': {
+      js: ['jquery-csv/src/jquery.csv'],
+      rname: 'jqueryCSV',
+      returns: 'jqueryCSV'
     }
   };
 
@@ -198,7 +209,8 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       { name: 'Full application', value: 'application' },
       { name: '[inline] Leaflet map', value: 'leafletMap' },
       { name: '[inline] Mapbox map', value: 'mapboxMap' },
-      { name: '[inline] highcharts chart', value: 'highchartsChart' },
+      { name: '[inline] Datatables table', value: 'datatablesTable' },
+      { name: '[inline] Highcharts chart', value: 'highchartsChart' },
       { name: '[inline] Other', value: 'inlineOther' }
     ]
   });
@@ -341,6 +353,9 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     if (props.projectType === 'mapboxMap') {
       props.bowerComponents += ' mapbox.js#~1.4.2';
     }
+    if (props.projectType === 'datatablesTable') {
+      props.bowerComponents += ' datatables#~1.9.4 jquery-csv#*';
+    }
     if (props.projectType === 'highchartsChart') {
       props.bowerComponents += ' highcharts#~3.0.7';
     }
@@ -417,6 +432,10 @@ MinnpostApplicationGenerator.prototype.license = function license() {
 MinnpostApplicationGenerator.prototype.data = function data() {
   this.mkdir('data');
   this.mkdir('data-processing');
+
+  if (this.projectType === 'datatablesTable') {
+    this.copy('data/example.csv');
+  }
 };
 
 // Process python
@@ -478,6 +497,11 @@ MinnpostApplicationGenerator.prototype.app = function app() {
     this.copy('js/wrapper.end.js');
     this.template('js/templates/_application.underscore', 'js/templates/application.underscore');
     this.copy('js/templates/loading.mustache', 'js/templates/loading.underscore');
+  }
+
+  if (this.projectType === 'datatablesTable') {
+    this.copy('js/templates/datatables-filter-links.underscore');
+    this.copy('js/datatables-plugins.js');
   }
 
   // Grunt stuff

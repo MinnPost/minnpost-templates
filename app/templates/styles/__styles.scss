@@ -84,6 +84,50 @@ body .node-unpublished {
   }
   <% } %>
 
+  <% if (projectType === 'datatablesTable') { %>
+  .datatables-table {
+    font-family: $sans-serif-font;
+
+    table {
+      margin-bottom: 1em;
+    }
+
+    table.dataTable tr.odd,
+    table.dataTable tr.odd td.sorting_1 {
+      background-color: #FDFDFD;
+    }
+    table.dataTable tr.even,
+    table.dataTable tr.even td.sorting_1 {
+      background-color: #EDEDED;
+    }
+
+    .dataTables_length,
+    .dataTables_filter,
+    .dataTables_info,
+    .dataTables_paginate {
+      color: $color-medium-gray;
+    }
+
+    .dataTables_length,
+    .dataTables_filter {
+      margin-bottom: 1em;
+    }
+
+    ul.datatables-filter-links {
+      margin-bottom: 1em;
+    }
+    ul.datatables-filter-links li {
+      @include inline-block();
+      list-style: none;
+      display: inline;
+      margin-right: 1em;
+    }
+    ul.datatables-filter-links li a.filtering {
+      font-weight: bold;
+    }
+  }
+  <% } %>
+
   // Breakpoints
   @media screen and (max-width: 768px) {
   }

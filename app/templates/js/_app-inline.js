@@ -25,6 +25,8 @@ require.config({
   paths: {
     <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].js) { %>
     '<%= filteredComponentMap[c].rname %>': '../bower_components/<%= filteredComponentMap[c].js[0] %>',<% }} %>
+    <% if (projectType === 'datatablesTable') { %>
+    'datatablesPlugins': 'datatables-plugins',<% } %>
     '<%= projectName %>': 'app'
   }
 });
@@ -39,12 +41,16 @@ define('<%= projectName %>', [
   <%= (projectType === 'leafletMap') ? "'Leaflet', " : '' %>
   <%= (projectType === 'mapboxMap') ? "'mapbox', " : '' %>
   <%= (projectType === 'highchartsChart') ? "'Highcharts', " : '' %>
+  <% if (projectType === 'datatablesTable') { %>
+  'datatables', 'jqueryCSV', 'datatablesPlugins', 'text!../data/example.csv', 'text!templates/datatables-filter-links.underscore',<% } %>
   'text!templates/application.underscore', 'text!templates/loading.underscore'
 ],
 function($, _, helpers,
   <%= (projectType === 'leafletMap') ? "L, " : '' %>
   <%= (projectType === 'mapboxMap') ? "mapbox, " : '' %>
   <%= (projectType === 'highchartsChart') ? "Highcharts, " : '' %>
+  <% if (projectType === 'datatablesTable') { %>
+  dataTable, jqueryCSV, datatablesPlugins, csvExample, tFilterLinks,<% } %>
   tApplication, tLoading) {
 
   // Main function for execution, proxied here so that
@@ -66,6 +72,57 @@ function($, _, helpers,
     // All the methods from helpers.js are attached
     // to `this` as well.  These include things like
     // formatters.
+
+    <% if (projectType === 'datatablesTable') { %>
+    // Parse data from CSV
+    this.csvData = $.csv.toArrays(csvExample, {
+      separator: ',',
+      delimiter: '"'
+    });
+
+    // Create titles from first row and remove it
+    this.tableColumns = {};
+    _.each(this.csvData[0], function(c, ci) {
+      thisApp.tableColumns[ci] = { sTitle: c };
+    });
+    this.csvData = _.rest(this.csvData);
+
+    // Define specific about how the columns work.
+    this.tableColumns = $.extend(true, this.tableColumns, {
+      // Makes it so that the last name column sorts on
+      // both last and first name
+      4: { aDataSort: [4, 5] },
+      5: { bSortable: false },
+      3: {
+        bSearchable: false,
+        mRender: function(data, type, full) {
+          return thisApp.formatNumber(parseFloat(data), 2);
+        }
+      },
+      2: {
+        sClass: 'money',
+        bSearchable: false,
+        mRender: function(data, type, full) {
+          return thisApp.formatCurrency(parseFloat(data), 2);
+        }
+      }
+    });
+
+    // Extend the default options
+    this.options.dataTables = $.extend(true, this.options.dataTables, {
+      aaData: this.csvData,
+      aoColumns: _.values(this.tableColumns)
+    });
+
+    // Make data table
+    this.$dataTable = this.$el.find('.minnpost-template-testing-table table');
+    this.$dataTable.dataTable(this.options.dataTables);
+
+    // Add filter links
+    this.addFilterLinks([
+      { term: 'Examplton', col: 4 }
+    ]);
+    <% } %>
 
     <% if (projectType === 'mapboxMap') { %>
     // Use compositing for custom Mapbox maps.  This means
@@ -161,6 +218,20 @@ function($, _, helpers,
   });
   <% } %>
 
+  <% if (projectType === 'datatablesTable') { %>
+  // Add on some default options for data tables
+  defaultOptions = _.extend(defaultOptions, {
+    dataTables: {
+      iDisplayLength: 20,
+      bLengthChange: false,
+      bProcessing: true,
+      bAutoWidth: true,
+      aaSorting: [[ 0, 'asc' ]],
+      aLengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All']]
+    }
+  });
+  <% } %>
+
   // Constructor for app
   var App = function(options) {
     this.options = _.extend(defaultOptions, options);
@@ -173,6 +244,11 @@ function($, _, helpers,
 
   // Extend with helpers
   _.extend(App.prototype, helpers);
+
+  <% if (projectType === 'datatablesTable') { %>
+  // Extend with data tables
+  _.extend(App.prototype, datatablesPlugins);
+  <% } %>
 
   // Start function
   _.extend(App.prototype, {
@@ -235,6 +311,30 @@ function($, _, helpers,
 
       this.start();
     },
+
+    <% if (projectType === 'datatablesTable') { %>
+    // Filter links for table tables
+    addFilterLinks: function(options) {
+      var thisApp = this;
+      var $container = this.$content.find('.datatables-table');
+
+      $container.prepend(_.template(tFilterLinks, { options: options }));
+      $container.on('click', '.datatables-filter-links a', function(e) {
+        e.preventDefault();
+        var $thisLink = $(this);
+
+        if ($thisLink.hasClass('filter-clear')) {
+          thisApp.$dataTable.fnFilterClear();
+        }
+        else {
+          thisApp.$dataTable.fnFilter($thisLink.text(), $thisLink.data('col'));
+        }
+
+        $('.filter-links a').removeClass('filtering');
+        $thisLink.addClass('filtering');
+      });
+    },
+    <% } %>
 
     // Main execution
     start: startProxy

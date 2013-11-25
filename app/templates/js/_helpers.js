@@ -24,21 +24,21 @@ define('helpers', ['jquery', 'underscore'<% if (isApplication) { %>, 'Backbone'<
      * Formats number into currency
      */
     formatCurrency: function(num) {
-      return '$' + _.formatNumber(num, 2);
+      return '$' + this.formatNumber(num, 2);
     },
 
     /**
      * Formats percentage
      */
     formatPercent: function(num) {
-      return _.formatNumber(num * 100, 1) + '%';
+      return this.formatNumber(num * 100, 1) + '%';
     },
 
     /**
      * Formats percent change
      */
     formatPercentChange: function(num) {
-      return ((num > 0) ? '+' : '') + _.formatPercent(num);
+      return ((num > 0) ? '+' : '') + this.formatPercent(num);
     },
 
     /**
