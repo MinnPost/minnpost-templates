@@ -90,8 +90,7 @@ module.exports = function(grunt) {
           {
             cwd: './images/',
             expand: true,
-            filter: 'isFile',
-            src: ['*'],
+            src: ['**'],
             dest: 'dist/images/'
           }
         ]
@@ -340,6 +339,16 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-s3');
 
+  <% if (isInline) { %>
+  grunt.registerTask('inline_embed', 'Inline embed code generation.', function(name) {
+    grunt.log.writeln('To embed this in the article, use the following:');
+    grunt.log.writeln('=====================================');
+    grunt.log.writeln('<div class="' + name + '-inline-container"></div>');
+    grunt.log.writeln('<script type="text/javascript" src="https://s3.amazonaws.com/data.minnpost/projects-inline/' + name + '/' + name + '.latest.min.js"></script>');
+    grunt.log.writeln('=====================================');
+  });
+  <% } %>
+
   // Default build task
   grunt.registerTask('default', ['jshint', <% if (projectPrerequisites.useCompass) { %>'compass:dist', <% } %>'clean', 'copy', 'requirejs', 'concat', 'cssmin', 'uglify']);
 
@@ -353,6 +362,6 @@ module.exports = function(grunt) {
   <% } %>
 
   // Deploy tasks
-  grunt.registerTask('deploy', ['s3']);
+  grunt.registerTask('deploy', ['s3'<% if (isInline) { %>, 'inline_embed:<%= projectName %>'<% } %>]);
 
 };

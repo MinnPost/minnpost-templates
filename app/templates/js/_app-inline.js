@@ -115,7 +115,7 @@ function($, _, helpers,
     });
 
     // Make data table
-    this.$dataTable = this.$el.find('.minnpost-template-testing-table table');
+    this.$dataTable = this.$el.find('table');
     this.$dataTable.dataTable(this.options.dataTables);
 
     // Add filter links
