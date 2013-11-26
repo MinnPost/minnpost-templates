@@ -2,8 +2,8 @@
  * Datatables plugins are just JS copied, so we put them
  * here.
  */
-define('datatablesPlugins', ['jquery', 'underscore', 'datatables'],
-  function($, _, dataTable) {
+define('datatablesPlugins', ['jquery', 'underscore', 'datatables', 'text!templates/datatables-filter-links.underscore'],
+  function($, _, dataTable, tFilterLinks) {
 
   /**
    * Clear all filtering.
@@ -68,8 +68,10 @@ define('datatablesPlugins', ['jquery', 'underscore', 'datatables'],
     // Filter links for table tables
     addFilterLinks: function(options) {
       var thisApp = this;
-      this.$content.prepend(_.template(tFilterLinks, { options: options }));
-      this.$content.on('click', '.datatables-filter-links a', function(e) {
+      var $container = this.$content.find('.datatables-table');
+
+      $container.prepend(_.template(tFilterLinks, { options: options }));
+      $container.on('click', '.datatables-filter-links a', function(e) {
         e.preventDefault();
         var $thisLink = $(this);
 
@@ -80,7 +82,7 @@ define('datatablesPlugins', ['jquery', 'underscore', 'datatables'],
           thisApp.$dataTable.fnFilter($thisLink.text(), $thisLink.data('col'));
         }
 
-        this.$content.find('.datatables-filter-links a').removeClass('filtering');
+        $container.find('.datatables-filter-links a').removeClass('filtering');
         $thisLink.addClass('filtering');
       });
     }

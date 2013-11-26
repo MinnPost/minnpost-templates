@@ -514,7 +514,11 @@ MinnpostApplicationGenerator.prototype.app = function app() {
 
 // Process images
 MinnpostApplicationGenerator.prototype.images = function images() {
-  this.directory('images', 'images');
+  this.copy('images/loader.gif');
+
+  if (this.projectType === 'datatablesTable') {
+    this.directory('images/datatables');
+  }
 };
 
 // Process HTML

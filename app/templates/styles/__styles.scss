@@ -106,6 +106,7 @@ body .node-unpublished {
     .dataTables_info,
     .dataTables_paginate {
       color: $color-medium-gray;
+      font-size: .85em;
     }
 
     .dataTables_length,
@@ -113,17 +114,91 @@ body .node-unpublished {
       margin-bottom: 1em;
     }
 
-    ul.datatables-filter-links {
+    .dataTables_filter input {
+      border: 1px solid $color-medium-gray;
+      font-family: $sans-serif-font;
+      padding: .25em;
+    }
+
+    .sorting {
+      background-image: image-url('datatables/sort_both.png');
+    }
+    .sorting_asc {
+      background-image: image-url('datatables/sort_asc.png');
+    }
+    .sorting_desc {
+      background-image: image-url('datatables/sort_desc.png');
+    }
+    .sorting_asc_disabled {
+      background-image: image-url('datatables/sort_asc_disabled.png');
+    }
+    .sorting_desc_disabled {
+      background-image: image-url('datatables/sort_desc_disabled.png');
+    }
+
+    .dataTables_paginate {
+      padding-right: .5em;
+
+      .paginate_disabled_previous,
+      .paginate_enabled_previous,
+      .paginate_disabled_next,
+      .paginate_enabled_next {
+        @include inline-block();
+        height: 28px;
+        width: 10px;
+        margin: 0;
+        padding: 0 0 0 25px;
+        background-position: center center;
+        background-repeat: no-repeat;
+        color: transparent;
+        font-size: .01em;
+      }
+      .paginate_disabled_previous {
+        background-image: image-url('datatables/back_disabled.png');
+      }
+      .paginate_disabled_next {
+        background-image: image-url('datatables/forward_disabled.png');
+      }
+      .paginate_enabled_previous {
+        background-image: image-url('datatables/back_enabled.png');
+      }
+      .paginate_enabled_previous:hover {
+        background-image: image-url('datatables/back_enabled_hover.png');
+      }
+      .paginate_enabled_next {
+        background-image: image-url('datatables/forward_enabled.png');
+      }
+      .paginate_enabled_next:hover {
+        background-image: image-url('datatables/forward_enabled_hover.png');
+      }
+    }
+
+    .datatables-filter-links-container {
       margin-bottom: 1em;
-    }
-    ul.datatables-filter-links li {
-      @include inline-block();
-      list-style: none;
-      display: inline;
-      margin-right: 1em;
-    }
-    ul.datatables-filter-links li a.filtering {
-      font-weight: bold;
+
+      .filter-label {
+        @include inline-block();
+        margin-right: .5em;
+      }
+
+      ul.datatables-filter-links {
+        @include inline-block();
+        padding: 0;
+        margin: 0;
+
+        li {
+          @include inline-block();
+          list-style: none;
+          display: inline;
+          margin: 0;
+          padding: 0;
+          margin-right: 1em;
+
+          a.filtering {
+            font-weight: bold;
+          }
+        }
+      }
     }
   }
   <% } %>

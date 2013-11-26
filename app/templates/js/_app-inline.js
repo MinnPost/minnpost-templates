@@ -42,7 +42,7 @@ define('<%= projectName %>', [
   <%= (projectType === 'mapboxMap') ? "'mapbox', " : '' %>
   <%= (projectType === 'highchartsChart') ? "'Highcharts', " : '' %>
   <% if (projectType === 'datatablesTable') { %>
-  'datatables', 'jqueryCSV', 'datatablesPlugins', 'text!../data/example.csv', 'text!templates/datatables-filter-links.underscore',<% } %>
+  'datatables', 'jqueryCSV', 'datatablesPlugins', 'text!../data/example.csv',<% } %>
   'text!templates/application.underscore', 'text!templates/loading.underscore'
 ],
 function($, _, helpers,
@@ -50,7 +50,7 @@ function($, _, helpers,
   <%= (projectType === 'mapboxMap') ? "mapbox, " : '' %>
   <%= (projectType === 'highchartsChart') ? "Highcharts, " : '' %>
   <% if (projectType === 'datatablesTable') { %>
-  dataTable, jqueryCSV, datatablesPlugins, csvExample, tFilterLinks,<% } %>
+  dataTable, jqueryCSV, datatablesPlugins, csvExample,<% } %>
   tApplication, tLoading) {
 
   // Main function for execution, proxied here so that
@@ -246,7 +246,7 @@ function($, _, helpers,
   _.extend(App.prototype, helpers);
 
   <% if (projectType === 'datatablesTable') { %>
-  // Extend with data tables
+  // Extend with data tables extras
   _.extend(App.prototype, datatablesPlugins);
   <% } %>
 
@@ -311,30 +311,6 @@ function($, _, helpers,
 
       this.start();
     },
-
-    <% if (projectType === 'datatablesTable') { %>
-    // Filter links for table tables
-    addFilterLinks: function(options) {
-      var thisApp = this;
-      var $container = this.$content.find('.datatables-table');
-
-      $container.prepend(_.template(tFilterLinks, { options: options }));
-      $container.on('click', '.datatables-filter-links a', function(e) {
-        e.preventDefault();
-        var $thisLink = $(this);
-
-        if ($thisLink.hasClass('filter-clear')) {
-          thisApp.$dataTable.fnFilterClear();
-        }
-        else {
-          thisApp.$dataTable.fnFilter($thisLink.text(), $thisLink.data('col'));
-        }
-
-        $('.filter-links a').removeClass('filtering');
-        $thisLink.addClass('filtering');
-      });
-    },
-    <% } %>
 
     // Main execution
     start: startProxy
