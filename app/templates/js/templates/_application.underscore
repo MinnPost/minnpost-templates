@@ -7,6 +7,12 @@
   <% if (projectType === 'leafletMap' || projectType === 'mapboxMap') { %>
   <div class="inline-map" id="<%= projectName %>-map"></div>
   <% } %>
+  <% if (projectType === 'highchartsChart') { %>
+  <div class="highcharts-chart-wrapper cf">
+    <div class="highcharts-chart-container minnpost-template-testing-chart">
+    </div>
+  </div>
+  <% } %>
   <% if (projectType === 'datatablesTable') { %>
   <div class="datatables-table <%= projectName %>-table cf">
     <table></table>

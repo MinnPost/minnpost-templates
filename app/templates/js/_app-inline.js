@@ -40,7 +40,7 @@ define('<%= projectName %>', [
   'jquery', 'underscore', 'helpers',
   <%= (projectType === 'leafletMap') ? "'Leaflet', " : '' %>
   <%= (projectType === 'mapboxMap') ? "'mapbox', " : '' %>
-  <%= (projectType === 'highchartsChart') ? "'Highcharts', " : '' %>
+  <%= (projectType === 'highchartsChart') ? "'highcharts', " : '' %>
   <% if (projectType === 'datatablesTable') { %>
   'datatables', 'jqueryCSV', 'datatablesPlugins', 'text!../data/example.csv',<% } %>
   'text!templates/application.underscore', 'text!templates/loading.underscore'
@@ -72,6 +72,30 @@ function($, _, helpers,
     // All the methods from helpers.js are attached
     // to `this` as well.  These include things like
     // formatters.
+
+    <% if (projectType === 'highchartsChart') { %>
+    // Some sample data
+    this.chartData = [{
+      name: 'Example',
+      data: [ 6 , 11, 32, 110, 235, 369, 640, 1005, 1436, 2063, 3057, 4618, 6444, 9822, 15468, 20434, 24126, 27387, 29459, 31056, 31982, 32040, 31233, 29224, 27342, 26662, 26956, 27912, 28999, 28965, 27826, 25579, 25722, 24826, 24605, 24304, 23464, 23708, 24099, 24357, 24237, 24401, 24344, 23586, 22380, 21004, 17287, 14747, 13076, 12555, 12144, 11009, 10950, 10871, 10824, 10577, 10527, 10475, 10421, 10358, 10295, 10104 ]
+    }];
+    // Add any custom highchart options
+    this.options.highChartOptions = $.extend(this.options.highChartOptions, {
+      series: this.chartData
+    });
+
+    // Create chart and assign some variables
+    this.$chart = this.$el.find('.highcharts-chart-container');
+    this.$wrapper = this.$el.find('.highcharts-chart-wrapper');
+    this.chart = this.$chart.highcharts(this.options.highChartOptions);
+    this.chart = this.chart.highcharts();
+
+    // Highcharts is not respecting the container dimensions,
+    // it seems to be because the element is not fully
+    // loaded, but still not able to find a good answer, so
+    // manually set dimentsions
+    this.chart.setSize(640, 200);
+    <% } %>
 
     <% if (projectType === 'datatablesTable') { %>
     // Parse data from CSV
@@ -214,6 +238,90 @@ function($, _, helpers,
       fillColor: '#2DA51D',
       fillOpacity: 0.2,
       clickable: false
+    }
+  });
+  <% } %>
+
+  <% if (projectType === 'highchartsChart') { %>
+  // Add on some default options for data tables
+  defaultOptions = _.extend(defaultOptions, {
+    highChartOptions: {
+      chart: {
+        type: 'line',
+        style: {
+          fontFamily: '"HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif',
+          color: '#BCBCBC'
+        }
+      },
+      colors: ['#094C86', '#BCBCBC'],
+      credits: {
+        enabled: false
+      },
+      title: {
+        enabled: false,
+        text: ''
+      },
+      legend: {
+        borderWidth: 0
+      },
+      plotOptions: {
+        line: {
+          lineWidth: 4,
+          states: {
+            hover: {
+              lineWidth: 5
+            }
+          },
+          marker: {
+            fillColor: '#ffffff',
+            lineWidth: 2,
+            lineColor: null,
+            symbol: 'circle',
+            enabled: false,
+            states: {
+              hover: {
+                enabled: true
+              }
+            }
+          }
+        }
+      },
+      xAxis: {
+        title: { },
+        minPadding: 0,
+        maxPadding: 0,
+        type: 'category',
+        labels: {
+          formatter: function() {
+            return this.value;
+          }
+        }
+      },
+      yAxis: {
+        title: {
+          enabled: false,
+          text: '[Update me]',
+          margin: 40,
+          style: {
+            color: 'inherit',
+            fontWeight: 'normal'
+          }
+        },
+        min: 0,
+        gridLineColor: '#BCBCBC'
+      },
+      tooltip: {
+        //shadow: false,
+        //borderRadius: 0,
+        //borderWidth: 0,
+        style: {},
+        useHTML: true,
+        formatter: function() {
+          return '<strong>' + this.series.name + '</strong><br />' +
+            this.y + '<br /><br />' +
+            '<em>For months ' + this.key + '</em>';
+        }
+      }
     }
   });
   <% } %>

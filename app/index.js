@@ -139,7 +139,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       returns: 'L'
     },
     highcharts: {
-      js: ['highcharts/highcharts.js'],
+      js: ['highcharts/highcharts'],
       rname: 'highcharts',
       returns: 'Highcharts'
     },
