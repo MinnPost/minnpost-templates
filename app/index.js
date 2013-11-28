@@ -143,6 +143,11 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       rname: 'highcharts',
       returns: 'Highcharts'
     },
+    // Using a local copy of Mapbox does not play
+    // nice with requireJS optimizer.  But, the current
+    // workflow in place is not meant for remote
+    // resources.
+    // TODO: Fix this
     'mapbox.js': {
       js: ['mapbox.js/dist/mapbox'],
       css: ['mapbox.js/dist/mapbox'],
@@ -351,7 +356,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       props.bowerComponents += ' leaflet#~0.6.4';
     }
     if (props.projectType === 'mapboxMap') {
-      props.bowerComponents += ' mapbox.js#~1.4.2';
+      props.bowerComponents += ' mapbox.js#~1.5.0';
     }
     if (props.projectType === 'datatablesTable') {
       props.bowerComponents += ' datatables#~1.9.4 jquery-csv#*';

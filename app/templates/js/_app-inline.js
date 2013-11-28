@@ -14,11 +14,6 @@ require.config({
     'Backbone': {
       deps: ['underscore', 'jquery'],
       exports: 'Backbone'
-    },
-    // Mapbox and requireJS don't really work, so we just let
-    // the L be global
-    'mapbox': {
-      exports: 'mapbox'
     }
   },
   baseUrl: 'js',
@@ -156,9 +151,6 @@ function($, _, helpers,
     // See Mapbox.js API and examples
     // https://www.mapbox.com/mapbox.js/api/
     this.map = L.mapbox.map(this.options.defaultMapId, this.options.mapboxStreetsLightLabels);
-    // This removes the embedded attribution which should be in the footnote
-    // but ensure that attribution is given correctly
-    this.map.attributionControl.setPrefix(false);
     <% } %>
 
     <% if (projectType === 'leafletMap') { %>
@@ -171,7 +163,7 @@ function($, _, helpers,
     this.map.setView(this.options.minneapolisPoint, 8);
     // This removes the embedded attribution which should be in the footnote
     // but ensure that attribution is given correctly
-    this.map.attributionControl.setPrefix(false);
+    this.map.removeControl(this.map.attributionControl);
 
     // Do more with the map here
 
