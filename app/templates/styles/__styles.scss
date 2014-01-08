@@ -25,9 +25,9 @@ body .node-unpublished {
   font-family: $sans-serif-font;
 <% } else { %>
 .<%= projectName %>-inline-container.inline-processed {
-<% } %>
   max-width: 640px;
   margin: 1em auto;
+<% } %>
 
   .clear {
     clear: both;
