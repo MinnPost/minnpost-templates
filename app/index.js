@@ -116,6 +116,16 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       js: ['ractive-backbone/Ractive-Backbone.min'],
       returns: 'RactiveBackbone'
     },
+    'ractive-events-tap': {
+      rname: 'Ractive-events-tap',
+      js: ['ractive-events-tap/Ractive-events-tap.min'],
+      returns: 'RactiveEventsTap'
+    },
+    'ractive-events-hover': {
+      rname: 'Ractive-events-hover',
+      js: ['ractive-events-tap/Ractive-events-hover.min'],
+      returns: 'RactiveEventsHover'
+    },
     moment: {
       rname: 'moment',
       js: ['moment/min/moment.min'],
@@ -329,7 +339,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
         useSass: true,
         useCompass: true
       }
-      props.bowerComponents = 'jquery#~1.9 underscore#~1.5.2 backbone#~1.1.0 ractive#~0.3.7 ractive-backbone#~0.1.0 unsemantic ' + props.bowerComponents;
+      props.bowerComponents = 'jquery#~1.9 underscore#~1.5.2 backbone#~1.1.0 ractive#~0.3.7 ractive-backbone#~0.1.0 ractive-events-tap#~0.1.0 unsemantic ' + props.bowerComponents;
     }
 
     // If inline use some default bower components
@@ -374,7 +384,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       var dependencies = [];
       props[i] = (props[i] !== undefined) ? props[i].trim() : '';
       props[i].split(' ').forEach(function(l) {
-        if (l.split(separators[i])[0]) {
+        if (l.split(separators[i])[0] && l.split(separators[i])[0] !== undefined) {
           dependencies.push({
             name: l.split(separators[i])[0],
             version: (l.split(separators[i])[1]) ? l.split(separators[i])[1] : '*'
