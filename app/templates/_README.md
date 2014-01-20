@@ -78,3 +78,38 @@ Deploying will push the relevant files up to Amazon's AWS S3 so that they can be
 ## Hacks
 
 *List any hacks used in this project, such as forked repos.  Link to pull request or repo and issue.*
+
+## About Us
+
+MinnData, the MinnPost data team, is Alan, Tom, and Kaeti and all the awesome contributors to open source projects we utilize.  See our work at [minnpost.com/data](http://minnpost.com/data).
+
+```
+
+                                                   .--.
+                                                   `.  \
+                                                     \  \
+                                                      .  \
+                                                      :   .
+                                                      |    .
+                                                      |    :
+                                                      |    |
+      ..._  ___                                       |    |
+     `."".`''''""--..___                              |    |
+     ,-\  \             ""-...__         _____________/    |
+     / ` " '                    `""""""""                  .
+     \                                                      L
+     (>                                                      \
+    /                                                         \
+    \_    ___..---.                                            L
+      `--'         '.                                           \
+                     .                                           \_
+                    _/`.                                           `.._
+                 .'     -.                                             `.
+                /     __.-Y     /''''''-...___,...--------.._            |
+               /   _."    |    /                ' .      \   '---..._    |
+              /   /      /    /                _,. '    ,/           |   |
+              \_,'     _.'   /              /''     _,-'            _|   |
+                      '     /               `-----''               /     |
+                      `...-'                                       `...-'
+
+```

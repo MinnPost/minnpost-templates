@@ -9,7 +9,7 @@ define('<%= projectName %>', ['underscore', 'helpers', 'routers'],
 
   // Constructor for app
   var App = function(options) {
-    this.options = options;
+    this.options = _.extend(this.defaultOptions, options);
     this.el = this.options.el;
     if (this.el) {
       this.$el = $(this.el);
@@ -19,16 +19,24 @@ define('<%= projectName %>', ['underscore', 'helpers', 'routers'],
   // Extend with helpers
   _.extend(App.prototype, helpers);
 
-  // Start function
-  App.prototype.start = function() {
-    // Create router
-    this.router = new routers.Router({
-      app: this
-    });
+  // Extend with custom methods
+  _.extend(App.prototype, {
+    // Start function
+    start = function() {
+      // Create router
+      this.router = new routers.Router({
+        app: this
+      });
 
-    // Start backbone history
-    this.router.start();
-  };
+      // Start backbone history
+      this.router.start();
+    },
+
+    // Default options
+    defaultOptions: {
+
+    }
+  });
 
   return App;
 });

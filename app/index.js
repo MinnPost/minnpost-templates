@@ -150,7 +150,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     },
     highcharts: {
       js: ['highcharts/highcharts'],
-      rname: 'highcharts',
+      rname: 'Highcharts',
       returns: 'Highcharts'
     },
     // Using a local copy of Mapbox does not play

@@ -11,6 +11,10 @@ require.config({
       deps: ['underscore', 'jquery'],
       exports: 'Backbone'
     },
+    'Highcharts': {
+      exports: 'Highcharts',
+      'deps': [ 'jquery']
+    },
     // Mapbox and requireJS don't really work, so we just let
     // the L be global
     'mapbox': {
