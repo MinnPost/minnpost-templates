@@ -128,7 +128,11 @@ module.exports = function(grunt) {
           baseUrl: 'js',
           mainConfigFile: 'js/config.js',
           out: 'dist/<%%= pkg.name %>.libs.js',
-          optimize: 'none'
+          optimize: 'none',
+          wrap: {
+            startFile: 'js/wrapper.start.js',
+            endFile: 'js/wrapper.end.js'
+          }
         }
       }
     },

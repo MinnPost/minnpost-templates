@@ -107,14 +107,7 @@
       provides a temporary hack around jQuery so we
       can use a newer version.
     -->
-    <script type="text/javascript">
-      // Hack around existing jQuery
-      if (typeof window.jQuery != 'undefined') {
-        window._jQuery = window.jQuery;
-        window._$ = window.$;
-      }
-    </script>
-
+    <script type="text/javascript" src="js/wrapper.start.js"></script>
     <script type="text/javascript" src="bower_components/requirejs/require.js"></script>
     <script type="text/javascript" src="js/config.js"></script>
 
@@ -132,13 +125,7 @@
       }
     </script>
 
-    <script type="text/javascript">
-      // Hack back in the original jQuery
-      if (typeof window._jQuery != 'undefined') {
-        window.jQuery = window._jQuery;
-        window.$ = window._$;
-      }
-    </script>
+    <script type="text/javascript" src="js/wrapper.end.js"></script>
   </div>
 
   <% } %>

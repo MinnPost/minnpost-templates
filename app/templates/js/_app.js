@@ -4,8 +4,8 @@
  * This pulls in all the parts
  * and creates the main object for the application.
  */
-define('<%= projectName %>', ['underscore', 'helpers', 'routers'],
-  function(_, helpers, routers) {
+define('<%= projectName %>', ['jquery', 'underscore', 'helpers', 'routers'],
+  function($, _, helpers, routers) {
 
   // Constructor for app
   var App = function(options) {
@@ -16,13 +16,10 @@ define('<%= projectName %>', ['underscore', 'helpers', 'routers'],
     }
   };
 
-  // Extend with helpers
-  _.extend(App.prototype, helpers);
-
   // Extend with custom methods
   _.extend(App.prototype, {
     // Start function
-    start = function() {
+    start: function() {
       // Create router
       this.router = new routers.Router({
         app: this

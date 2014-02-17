@@ -80,28 +80,6 @@
       </div>
     </div>
 
-
-    <!--
-      JS Files.
-
-      Utilize RequireJS to for better dependency management;
-      we manually include the config file to ensure the application
-      is available below.  And we manually start the application
-      below so that we can set certain options about where data
-      is coming from.
-
-      The bits around the inclusion of the libraries
-      provides a temporary hack around jQuery so we
-      can use a newer version.
-    -->
-    <script type="text/javascript">
-      // Hack around existing jQuery
-      if (typeof window.jQuery != 'undefined') {
-        window._jQuery = window.jQuery;
-        window._$ = window.$;
-      }
-    </script>
-
     <script type="text/javascript" src="dist/<%= projectName %>.libs.js"></script>
     <script type="text/javascript" src="dist/<%= projectName %>.latest.min.js"></script>
 
@@ -118,14 +96,6 @@
             app.start();
           });
         });
-      }
-    </script>
-
-    <script type="text/javascript">
-      // Hack back in the original jQuery
-      if (typeof window._jQuery != 'undefined') {
-        window.jQuery = window._jQuery;
-        window.$ = window._$;
       }
     </script>
   </div>

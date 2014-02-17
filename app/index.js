@@ -50,10 +50,10 @@ var MinnpostApplicationGenerator = module.exports = function MinnpostApplication
       callback: function() {
         // Put all the commands together
         var commands = 'echo "";';
-        if (typeof this.filteredComponentMap.leaflet != 'undefined') {
+        if (typeof this.filteredComponentMap.leaflet !== 'undefined') {
           commands += ' npm install -g jake; cd bower_components/leaflet/ && npm install && jake; cd -;';
         }
-        if (typeof this.filteredComponentMap['mapbox.js'] != 'undefined') {
+        if (typeof this.filteredComponentMap['mapbox.js'] !== 'undefined') {
           commands += ' cd bower_components/mapbox.js/ && npm install && make; cd -;';
         }
 
@@ -144,7 +144,6 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     leaflet: {
       js: ['leaflet/dist/leaflet'],
       css: ['leaflet/dist/leaflet'],
-      ie: ['leaflet/dist/leaflet.ie'],
       rname: 'Leaflet',
       returns: 'L'
     },
@@ -205,7 +204,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       return props.projectName.replace(/-/g, ' ').replace(/\w\S*/g, function(txt) {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
       });
-    },
+    }
   });
   // Description of project
   prompts.push({
@@ -221,57 +220,53 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     name: 'projectType',
     message: 'The type of project:',
     choices: [
-      { name: 'Full application', value: 'application' },
-      { name: '[inline] Leaflet map', value: 'leafletMap' },
-      { name: '[inline] Mapbox map', value: 'mapboxMap' },
-      { name: '[inline] Datatables table', value: 'datatablesTable' },
-      { name: '[inline] Highcharts chart', value: 'highchartsChart' },
-      { name: '[inline] Other', value: 'inlineOther' }
+      { name: 'Application (uses more HTML, intended for full page articles)', value: 'application' },
+      { name: 'Inline (uses widget approach, intended for within articles)', value: 'inline' }
     ]
   });
-  // Project defaults
+  // Features
   prompts.push({
-    type: 'confirm',
-    name: 'projectDefaults',
-    message: 'Use application project defaults (compass, default bower components, etc):',
-    default: true,
-    when: function(props) {
-      return props.projectType === 'application';
-    }
+    type: 'checkbox',
+    name: 'projectFeatures',
+    message: 'Application features (will include necessary libraries):',
+    choices: [
+      { name: 'Backbone', value: 'hasBackbone' },
+      { name: 'CSS grid', value: 'hasGrid' },
+      { name: 'Leaflet map', value: 'hasLeaflet' },
+      { name: 'Mapbox map', value: 'hasMapbox' },
+      { name: 'Datatable', value: 'hasDatatables' },
+      { name: 'CSV', value: 'hasCSVs' },
+      { name: 'Highcharts', value: 'hasHighcharts' },
+      { name: 'Dates', value: 'hasDates' },
+      { name: 'Form inputs', value: 'hasInputs' },
+      { name: 'jQuery', value: 'hasjQuery', checked: true },
+      { name: 'Ractive', value: 'hasRactive', checked: true }
+    ]
   });
   // Technologies needed
   prompts.push({
     type: 'checkbox',
     name: 'projectPrerequisites',
-    message: 'Preqequisite technologies that are needed:',
+    message: 'Preqequisite technologies that are needed (Node and Bower assumed):',
     choices: [
       { name: 'Compass', value: 'useCompass', checked: true },
       { name: 'Python', value: 'usePython' },
       { name: 'Ruby', value: 'useRuby' }
-    ],
-    when: function(props) {
-      return !props.projectDefaults;
-    }
+    ]
   });
   // Bower libraries
   prompts.push({
     type: 'input',
     name: 'bowerComponents',
-    message: 'Other Bower components (ex. library#1.2.3 other#~1.2.3):',
-    default: '',
-    when: function(props) {
-      return !props.projectDefaults;
-    }
+    message: 'Other Bower components (ex. library#1.2.3):',
+    default: ''
   });
   // Node libraries
   prompts.push({
     type: 'input',
     name: 'nodeModules',
     message: 'Node modules (ex. library@1.2.3 other@~1.2.3):',
-    default: '',
-    when: function(props) {
-      return !props.projectDefaults;
-    }
+    default: ''
   });
   // Ruby libraries
   prompts.push({
@@ -293,30 +288,15 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       return !props.projectDefaults && props.projectPrerequisites.indexOf('usePython') >= 0;
     }
   });
-  // Features
-  prompts.push({
-    type: 'checkbox',
-    name: 'projectFeatures',
-    message: 'Application features:',
-    choices: [
-      { name: 'Maps', value: 'hasMaps' },
-      { name: 'Dates', value: 'hasDates' },
-      { name: 'Form inputs', value: 'hasInputs' },
-      { name: 'Sticky horizontal menu', value: 'hasHMenu' }
-      // Sticky menu (vertical)
-    ],
-    when: function(props) {
-      return props.projectType === 'application';
-    }
-  });
 
   // Call prompt
   this.prompt(prompts, function(props) {
     var i;
     var thisYeoman = this;
+    var bowerFeatureMap = {};
 
     // Mark as inline or application
-    props.isInline = (props.projectType !== 'application');
+    props.isInline = (props.projectType === 'inline');
     props.isApplication = (props.projectType === 'application');
 
     // Change choice list to objects
@@ -333,50 +313,28 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       }
     });
 
-    // Handle the defualt prop
-    if (props.isApplication && props.projectDefaults === true) {
-      props.projectPrerequisites = {
-        useSass: true,
-        useCompass: true
-      }
-      props.bowerComponents = 'jquery#~1.9 underscore#~1.5.2 backbone#~1.1.0 ractive#~0.3.7 ractive-backbone#~0.1.0 ractive-events-tap#~0.1.0 unsemantic ' + props.bowerComponents;
-    }
-
-    // If inline use some default bower components
-    if (props.isInline) {
-      props.bowerComponents = 'jquery#~1.9 underscore#~1.5.2 ' + props.bowerComponents;
-    }
-
     // Handle project features
-    if (props.projectFeatures['hasMaps'] === true) {
-      props.bowerComponents += ' leaflet#~0.6.4';
-    }
-    if (props.projectFeatures['hasDates'] === true) {
-      props.bowerComponents += ' moment#~2.4.0';
-    }
-    if (props.projectFeatures['hasInputs'] === true) {
-      props.bowerComponents += ' Placeholders.js#~3.0.1';
-    }
-    if (props.projectFeatures['hasHMenu'] === true) {
-      props.bowerComponents += ' sticky-kit#~1.0.1';
-    }
-
-    // Handle project types
-    if (props.projectType === 'leafletMap') {
-      props.bowerComponents += ' leaflet#~0.6.4';
-    }
-    if (props.projectType === 'mapboxMap') {
-      props.bowerComponents += ' mapbox.js#~1.5.0';
-    }
-    if (props.projectType === 'datatablesTable') {
-      props.bowerComponents += ' datatables#~1.9.4 jquery-csv#*';
-    }
-    if (props.projectType === 'highchartsChart') {
-      props.bowerComponents += ' highcharts#~3.0.7';
+    bowerFeatureMap = {
+      'hasGrid': 'unsemantic',
+      'hasLeaflet': 'leaflet#~0.7.2',
+      'hasMapbox': 'mapbox.js#~1.6.1',
+      'hasDatatables': 'datatables#~1.9.4',
+      'hasCSVs': 'jquery-csv#*',
+      'hasHighcharts': 'highcharts#~3.0.9',
+      'hasDates': 'moment#~2.5.1',
+      'hasInputs': 'Placeholders.js#~3.0.1',
+      'hasjQuery': 'jquery#~1.11',
+      'hasRactive': 'ractive#~0.3.9 ractive-events-tap#~0.1.0',
+      'hasBackbone': 'backbone#~1.1.1'
+    };
+    for (var fi in props.projectFeatures) {
+      if (props.projectFeatures[fi] === true && bowerFeatureMap[fi]) {
+        props.bowerComponents += ' ' + bowerFeatureMap[fi];
+      }
     }
 
-    // Add requireJS manually as this is needed
-    props.bowerComponents += ' requirejs#~2.1.9 text#~2.0.10';
+    // Add requireJS and underscore manually as this is needed
+    props.bowerComponents += ' requirejs#~2.1.11 text#~2.0.10 underscore#~1.6.0';
 
     // Process library fields into a real object for
     // templates
@@ -448,7 +406,7 @@ MinnpostApplicationGenerator.prototype.data = function data() {
   this.mkdir('data');
   this.mkdir('data-processing');
 
-  if (this.projectType === 'datatablesTable') {
+  if (this.projectFeatures['hasCSVs'] === true) {
     this.copy('data/example.csv');
   }
 };
@@ -493,30 +451,42 @@ MinnpostApplicationGenerator.prototype.app = function app() {
   this.template('_package.json', 'package.json');
   this.template('_bower.json', 'bower.json');
 
+  // Common parts
+  this.template('js/_helpers.js', 'js/helpers.js');
+  this.copy('js/wrapper.start.js');
+  this.copy('js/wrapper.end.js');
+
   // Application files
   if (this.isApplication) {
     this.template('js/_config.js', 'js/config.js');
     this.template('js/_app.js', 'js/app.js');
-    this.template('js/_helpers.js', 'js/helpers.js');
-    this.copy('js/models.js');
-    this.copy('js/collections.js');
-    this.copy('js/views.js');
-    this.copy('js/routers.js');
+  }
+  else {
+    this.template('js/_app-inline.js', 'js/app.js');
+  }
+
+  // Ractive
+  if (this.projectFeatures['hasRactive'] === true) {
     this.template('js/templates/_application.mustache', 'js/templates/application.mustache');
     this.copy('js/templates/loading.mustache');
   }
   else {
-    this.template('js/_app-inline.js', 'js/app.js');
-    this.template('js/_helpers.js', 'js/helpers.js');
-    this.copy('js/wrapper.start.js');
-    this.copy('js/wrapper.end.js');
     this.template('js/templates/_application.underscore', 'js/templates/application.underscore');
     this.copy('js/templates/loading.mustache', 'js/templates/loading.underscore');
   }
 
-  if (this.projectType === 'datatablesTable') {
+  // Data tables
+  if (this.projectFeatures['hasDatatables'] === true) {
     this.copy('js/templates/datatables-filter-links.underscore');
     this.copy('js/datatables-plugins.js');
+  }
+
+  // Backbone
+  if (this.projectFeatures['hasBackbone'] === true) {
+    this.copy('js/models.js');
+    this.copy('js/collections.js');
+    this.copy('js/views.js');
+    this.copy('js/routers.js');
   }
 
   // Grunt stuff
@@ -531,7 +501,7 @@ MinnpostApplicationGenerator.prototype.app = function app() {
 MinnpostApplicationGenerator.prototype.images = function images() {
   this.copy('images/loader.gif');
 
-  if (this.projectType === 'datatablesTable') {
+  if (this.projectFeatures['hasDatatables'] === true) {
     this.directory('images/datatables');
   }
 };

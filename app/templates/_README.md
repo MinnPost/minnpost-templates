@@ -20,7 +20,7 @@ The following describes how the data was processed and is not necessarily needed
 
 ### Prerequisites
 
-All commands are assumed to on the [command line](http://en.wikipedia.org/wiki/Command-line_interface), often called the Terminal, unless otherwise noted.  The following will install technologies needed for the other steps and will only needed to be run once on your computer so there is a good chance you already have these technologies on your computer.
+All commands are assumed to be on the [command line](http://en.wikipedia.org/wiki/Command-line_interface), often called the Terminal, unless otherwise noted.  The following will install technologies needed for the other steps and will only needed to be run once on your computer so there is a good chance you already have these technologies on your computer.
 
 1. Install [Git](http://git-scm.com/).
    * On a Mac, install [Homebrew](http://brew.sh/), then do: `brew install git`
