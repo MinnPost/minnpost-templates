@@ -5,8 +5,8 @@
  * Ractive classes can be extended but we still need a number of
  * things at instantian, like templates
  */
-define('views', ['underscore', 'Ractive', 'helpers'],
-  function(_, Ractive, helpers) {
+define('views', ['jquery', 'underscore', 'Ractive', 'Ractive-Backbone', 'helpers'],
+  function($, _, Ractive, RactiveB, helpers) {
   var views = {};
 
   // Base view to extend from

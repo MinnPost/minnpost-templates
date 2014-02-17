@@ -98,7 +98,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     },
     underscore: {
       rname: 'underscore',
-      js: ['underscore/underscore-min'],
+      js: ['underscore/underscore'],
       returns: '_'
     },
     backbone: {
@@ -325,7 +325,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       'hasInputs': 'Placeholders.js#~3.0.1',
       'hasjQuery': 'jquery#~1.11',
       'hasRactive': 'ractive#~0.3.9 ractive-events-tap#~0.1.0',
-      'hasBackbone': 'backbone#~1.1.1'
+      'hasBackbone': 'backbone#~1.1.1 ractive-backbone#~0.1.0'
     };
     for (var fi in props.projectFeatures) {
       if (props.projectFeatures[fi] === true && bowerFeatureMap[fi]) {
@@ -455,15 +455,7 @@ MinnpostApplicationGenerator.prototype.app = function app() {
   this.template('js/_helpers.js', 'js/helpers.js');
   this.copy('js/wrapper.start.js');
   this.copy('js/wrapper.end.js');
-
-  // Application files
-  if (this.isApplication) {
-    this.template('js/_config.js', 'js/config.js');
-    this.template('js/_app.js', 'js/app.js');
-  }
-  else {
-    this.template('js/_app-inline.js', 'js/app.js');
-  }
+  this.template('js/_app.js', 'js/app.js')
 
   // Ractive
   if (this.projectFeatures['hasRactive'] === true) {

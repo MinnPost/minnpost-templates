@@ -4,16 +4,16 @@
 
   <%%= loading %>
 
-  <% if (projectType === 'leafletMap' || projectType === 'mapboxMap') { %>
+  <% if (projectFeatures['hasMapbox'] || projectFeatures['hasLeaflet']) { %>
   <div class="inline-map" id="<%= projectName %>-map"></div>
   <% } %>
-  <% if (projectType === 'highchartsChart') { %>
+  <% if (projectFeatures['hasHighcharts']) { %>
   <div class="highcharts-chart-wrapper cf">
     <div class="highcharts-chart-container minnpost-template-testing-chart">
     </div>
   </div>
   <% } %>
-  <% if (projectType === 'datatablesTable') { %>
+  <% if (projectFeatures['hasDatatables']) { %>
   <div class="datatables-table <%= projectName %>-table cf">
     <table></table>
   </div>
@@ -23,7 +23,7 @@
 <div class="footnote-container">
   <div class="footnote">
     <p>Notes about data here.</p>
-    <% if (projectFeatures.hasMaps || projectType === 'leafletMap' || projectType === 'mapboxMap') { %>
+    <% if (projectFeatures['hasMapbox'] || projectFeatures['hasLeaflet']) { %>
     <p>Some map data © OpenStreetMap contributors; licensed under the <a href="http://www.openstreetmap.org/copyright" target="_blank">Open Data Commons Open Database License</a>.  Some map design © MapBox; licensed according to the <a href="http://mapbox.com/tos/" target="_blank">MapBox Terms of Service</a>.  Location geocoding provided by <a href="http://www.mapquest.com/" target="_blank">Mapquest</a> and is not guaranteed to be accurate.</p>
     <% } %>
   </div>

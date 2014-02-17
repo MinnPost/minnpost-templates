@@ -1,10 +1,32 @@
 
 /**
- * Helpers to extend to an app.
+ * Helpers functions such as formatters or extensions
+ * to libraries.
  */
-define('helpers', ['jquery', 'underscore'<% if (isApplication) { %>, 'Backbone'<% } %>],
-  function($, _<% if (isApplication) { %>, Backbone<% } %>) {
+define('helpers', ['jquery', 'underscore'<% if (projectFeatures['hasBackbone'] === true) { %>, 'Backbone'<% } %>],
+  function($, _<% if (projectFeatures['hasBackbone'] === true) { %>, Backbone<% } %>) {
 
+
+  <% if (projectFeatures['hasBackbone'] === true) { %>
+  /**
+   * Override Backbone's ajax call to use JSONP by default as well
+   * as force a specific callback to ensure that server side
+   * caching is effective.
+   */
+  Backbone.ajax = function() {
+    var options = arguments;
+
+    if (options[0].dataTypeForce !== true) {
+      options[0].dataType = 'jsonp';
+      options[0].jsonpCallback = 'mpServerSideCachingHelper' +
+        _.hash(options[0].url);
+    }
+    return Backbone.$.ajax.apply(Backbone.$, options);
+  };
+  <% } %>
+
+
+  // Create object of methods to use
   return {
     /**
      * Formats number
@@ -66,24 +88,6 @@ define('helpers', ['jquery', 'underscore'<% if (isApplication) { %>, 'Backbone'<
       return match ? parseInt(match[2], 10) : false;
     },
 
-    <% if (isApplication) { %>
-    /**
-     * Override Backbone's ajax call to use JSONP by default as well
-     * as force a specific callback to ensure that server side
-     * caching is effective.
-     */
-    BackboneAJAX: function() {
-      var options = arguments;
-
-      if (options[0].dataTypeForce !== true) {
-        options[0].dataType = 'jsonp';
-        options[0].jsonpCallback = 'mpServerSideCachingHelper' +
-          _.hash(options[0].url);
-      }
-      return Backbone.$.ajax.apply(Backbone.$, options);
-    },
-    <% } %>
-
     /**
      * Wrapper for a JSONP request
      */
@@ -105,9 +109,9 @@ define('helpers', ['jquery', 'underscore'<% if (isApplication) { %>, 'Backbone'<
      *
      * Returns jQuery's defferred object.
      */
-    getLocalData: function(name) {
-      var thisApp = this;
-      var proxyPrefix = this.options.jsonpProxy;
+    getLocalData: function(name, options) {
+      var thisHelper = this;
+      var proxyPrefix = options.jsonpProxy;
       var useJSONP = false;
       var defers = [];
 
@@ -115,26 +119,26 @@ define('helpers', ['jquery', 'underscore'<% if (isApplication) { %>, 'Backbone'<
       name = (_.isArray(name)) ? name : [ name ];
 
       // If the data path is not relative, then use JSONP
-      if (this.options && this.options.dataPath.indexOf('http') === 0) {
+      if (options && options.dataPath.indexOf('http') === 0) {
         useJSONP = true;
       }
 
       // Go through each file and add to defers
       _.each(name, function(d) {
         var defer;
-        if (_.isUndefined(thisApp.data[d])) {
+        if (_.isUndefined(thisHelper.data[d])) {
 
           if (useJSONP) {
-            defer = this.jsonpRequest({
-              url: proxyPrefix + encodeURI(thisApp.options.dataPath + d + '.json')
+            defer = thisHelper.jsonpRequest({
+              url: proxyPrefix + encodeURI(options.dataPath + d + '.json')
             });
           }
           else {
-            defer = $.getJSON(thisApp.options.dataPath + d + '.json');
+            defer = $.getJSON(options.dataPath + d + '.json');
           }
 
           $.when(defer).done(function(data) {
-            thisApp.data[d] = data;
+            thisHelper.data[d] = data;
           });
           defers.push(defer);
         }

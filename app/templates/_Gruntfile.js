@@ -117,7 +117,7 @@ module.exports = function(grunt) {
           name: '<%= projectName %>',
           exclude: _.compact(_.flatten(_.pluck(_.filter(components, function(c) { return (c.js !== undefined); }), 'rname'))),
           baseUrl: 'js',
-          mainConfigFile: 'js/config.js',
+          mainConfigFile: 'js/app.js',
           out: 'dist/<%%= pkg.name %>.latest.js',
           optimize: 'none'
         }

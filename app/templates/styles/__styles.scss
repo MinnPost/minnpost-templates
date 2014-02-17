@@ -23,9 +23,15 @@ body .node-unpublished {
   margin: 0 auto;
   padding-top: 1em;
   font-family: $sans-serif-font;
-<% } else { %>
+  margin: 1em auto;
+<% } %>
+
+<% if (isInline) { %>
 .<%= projectName %>-inline-container.inline-processed {
   max-width: 640px;
+  margin: 0 auto;
+  padding-top: 1em;
+  font-family: $sans-serif-font;
   margin: 1em auto;
 <% } %>
 
@@ -77,14 +83,14 @@ body .node-unpublished {
     }
   }
 
-  <% if (projectType === 'leafletMap' || projectType === 'mapboxMap') { %>
+  <% if (projectFeatures['hasMapbox'] === true || projectFeatures['hasLeaflet'] === true) { %>
   .inline-map {
     width: 100%;
     height: 350px;
   }
   <% } %>
 
-  <% if (projectType === 'highchartsChart') { %>
+  <% if (projectFeatures['hasHighcharts'] === true) { %>
   .highcharts-chart-wrapper {
     width: 100%;
     height: 200px;
@@ -95,7 +101,7 @@ body .node-unpublished {
   }
   <% } %>
 
-  <% if (projectType === 'datatablesTable') { %>
+  <% if (projectFeatures['hasDatatables'] === true) { %>
   .datatables-table {
     font-family: $sans-serif-font;
 
