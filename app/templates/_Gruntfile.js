@@ -115,6 +115,7 @@ module.exports = function(grunt) {
       app: {
         options: {
           name: '<%= projectName %>',
+          // Exclude libraries
           exclude: _.compact(_.flatten(_.pluck(_.filter(components, function(c) { return (c.js !== undefined); }), 'rname'))),
           baseUrl: 'js',
           mainConfigFile: 'js/app.js',
@@ -124,9 +125,10 @@ module.exports = function(grunt) {
       },
       libs: {
         options: {
+          // Include libraries
           include: _.compact(_.flatten(_.pluck(_.filter(components, function(c) { return (c.js !== undefined); }), 'rname'))),
           baseUrl: 'js',
-          mainConfigFile: 'js/config.js',
+          mainConfigFile: 'js/app.js',
           out: 'dist/<%%= pkg.name %>.libs.js',
           optimize: 'none',
           wrap: {
