@@ -22,8 +22,8 @@ All commands are assumed to on the [command line](http://en.wikipedia.org/wiki/C
 
 Get the code for this project and install the necessary dependency libraries and packages.
 
-1. Check out this code with [Git](http://git-scm.com/): `git clone https://github.com/MinnPost/minnpost-template-application.git`
-1. Go into the template directory: `cd minnpost-template-application`
+1. Check out this code with [Git](http://git-scm.com/): `git clone https://github.com/MinnPost/minnpost-templats.git`
+1. Go into the template directory: `cd minnpost-templates`
 1. Install NodeJS packages: `npm install`
 1. Link this code base so Yeoman can see it: `npm link`
 
@@ -35,9 +35,9 @@ Get the code for this project and install the necessary dependency libraries and
         * Use **hyphens** instead of spaces or underscores
         * Prefix the repository with **`minnpost-`** or **`minnpost-inline-`**.
     * For re-usable libraries, follow naming conventions that are most appropriate given the technologies used (language and distribution system), such as NPM and Node, Python and PIP, etc.
-1. Checkout your new repository or make a new directory like: `mkdir ../minnpost-sweet-new-app && cd ../minnpost-sweet-new-app`
-1. Currently the link process does not provide a nicely usable Yeoman generator name, so use the following to copy the full name of the generator, which will look like the path to where you put the template code (i.e. `Users:name:something:minnpost-templates`): `yo --help`
-1. Start the template process; use the path copied above: `yo <Users:name:something:minnpost-templates>`
+1. Checkout your new repository with `git clone` or make a new directory like with `mkdir ../minnpost-sweet-new-app`.
+1. Go into the new directory: `cd ../minnpost-sweet-new-app`
+1. Start Yeoman with `yo` and choose the appropriate template which should end with `minnpost-templates`.
 1. Answer questions.  The template will create the necessary files in your current directory.
 1. Though it should get run automatically for you, you may have to run `npm install && bower install` manually.
 

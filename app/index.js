@@ -30,15 +30,6 @@ var getMinnPostResources = function(done) {
   });
 };
 
-// Exec output
-var execOutput = function(error, stdout, stderr) {
-  console.log('stdout: ' + stdout);
-  console.log('stderr: ' + stderr);
-  if (error !== null) {
-    console.log('exec error: ' + error);
-  }
-};
-
 // Generator object
 var MinnpostApplicationGenerator = module.exports = function MinnpostApplicationGenerator(args, options, config) {
   yeoman.generators.Base.apply(this, arguments);
@@ -48,17 +39,19 @@ var MinnpostApplicationGenerator = module.exports = function MinnpostApplication
       skipInstall: options['skip-install'],
       skipMessage: options['skip-install-message'],
       callback: function() {
-        // Put all the commands together
-        var commands = 'echo "";';
+        var command;
+
+        // Build Leaflet
         if (typeof this.filteredComponentMap.leaflet !== 'undefined') {
-          commands += ' npm install -g jake; cd bower_components/leaflet/ && npm install && jake; cd -;';
+          command = 'npm install -g jake; cd bower_components/leaflet/ && npm install && jake; cd -;';
+          console.log('IMPORTANT! Leaflet does not come built, run the following: ');
+          console.log(command);
         }
         if (typeof this.filteredComponentMap['mapbox.js'] !== 'undefined') {
-          commands += ' cd bower_components/mapbox.js/ && npm install && make; cd -;';
+          command = 'cd bower_components/mapbox.js/ && npm install && make; cd -;';
+          console.log('IMPORTANT! MApbox does not come built, run the following: ');
+          console.log(command);
         }
-
-        console.log('Some finishing touches...');
-        exec(commands, execOutput);
       }.bind(this)
     });
   });
@@ -79,103 +72,10 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     return (input) ? true : 'Please provide a value';
   };
 
-  // Map of resource for library parts, keyed by their bower
-  // package name.  rname is the requireJS module name.  For files
-  // leave off the extension name.  Order matters
-  var componentMap = {
-    requirejs: {
-      rname: 'requirejs',
-      js: ['requirejs/require']
-    },
-    text: {
-      rname: 'text',
-      js: ['text/text']
-    },
-    jquery: {
-      rname: 'jquery',
-      js: ['jquery/jquery.min'],
-      returns: '$'
-    },
-    underscore: {
-      rname: 'underscore',
-      js: ['underscore/underscore'],
-      returns: '_'
-    },
-    backbone: {
-      rname: 'Backbone',
-      js: ['backbone/backbone-min'],
-      returns: 'Backbone'
-    },
-    ractive: {
-      rname: 'Ractive',
-      js: ['ractive/build/Ractive-legacy.min'],
-      returns: 'Ractive'
-    },
-    'ractive-backbone': {
-      rname: 'Ractive-Backbone',
-      js: ['ractive-backbone/Ractive-Backbone.min'],
-      returns: 'RactiveBackbone'
-    },
-    'ractive-events-tap': {
-      rname: 'Ractive-events-tap',
-      js: ['ractive-events-tap/Ractive-events-tap.min'],
-      returns: 'RactiveEventsTap'
-    },
-    'ractive-events-hover': {
-      rname: 'Ractive-events-hover',
-      js: ['ractive-events-tap/Ractive-events-hover.min'],
-      returns: 'RactiveEventsHover'
-    },
-    moment: {
-      rname: 'moment',
-      js: ['moment/min/moment.min'],
-      returns: 'moment'
-    },
-    'Placeholder.js': {
-      rname: 'placeholder',
-      js: ['Placeholder.js/lib/adapters/placeholders.jquery'],
-      returns: 'placeholder'
-    },
-    unsemantic: {
-      css: ['unsemantic/assets/stylesheets/unsemantic-grid-responsive-tablet'],
-      ie: ['unsemantic/assets/stylesheets/ie'],
-      rname: 'unsemantic'
-    },
-    leaflet: {
-      js: ['leaflet/dist/leaflet'],
-      css: ['leaflet/dist/leaflet'],
-      rname: 'Leaflet',
-      returns: 'L'
-    },
-    highcharts: {
-      js: ['highcharts/highcharts'],
-      rname: 'Highcharts',
-      returns: 'Highcharts'
-    },
-    // Using a local copy of Mapbox does not play
-    // nice with requireJS optimizer.  But, the current
-    // workflow in place is not meant for remote
-    // resources.
-    // TODO: Fix this
-    'mapbox.js': {
-      js: ['mapbox.js/dist/mapbox'],
-      css: ['mapbox.js/dist/mapbox'],
-      images: ['mapbox.js/dist/images'],
-      rname: 'mapbox',
-      returns: 'L'
-    },
-    datatables: {
-      js: ['datatables/media/js/jquery.dataTables'],
-      css: ['datatables/media/css/jquery.dataTables'],
-      rname: 'datatables',
-      returns: 'dataTable'
-    },
-    'jquery-csv': {
-      js: ['jquery-csv/src/jquery.csv'],
-      rname: 'jqueryCSV',
-      returns: 'jqueryCSV'
-    }
-  };
+  // Bower map is a map of packages and paths to the resources we will be
+  // using.  This will be attached to the bower.json for the project
+  // so that it can be tracked as well.
+  var componentMap = JSON.parse(this.readFileAsString(path.join(__dirname, 'bower-map.json')));
 
   // Yeoman greet the user.
   console.log(this.yeoman);
@@ -315,17 +215,16 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
 
     // Handle project features
     bowerFeatureMap = {
-      'hasGrid': 'unsemantic',
       'hasLeaflet': 'leaflet#~0.7.2',
-      'hasMapbox': 'mapbox.js#~1.6.1',
+      'hasMapbox': 'mapbox.js#~1.6.2',
       'hasDatatables': 'datatables#~1.9.4',
       'hasCSVs': 'jquery-csv#*',
-      'hasHighcharts': 'highcharts#~3.0.9',
-      'hasDates': 'moment#~2.5.1',
-      'hasInputs': 'Placeholders.js#~3.0.1',
-      'hasjQuery': 'jquery#~1.11',
-      'hasRactive': 'ractive#~0.3.9 ractive-events-tap#~0.1.0',
-      'hasBackbone': 'backbone#~1.1.1 ractive-backbone#~0.1.0'
+      'hasHighcharts': 'highcharts.com#*',
+      'hasDates': 'moment#~2.6.0',
+      'hasInputs': 'Placeholders.js#~3.0.2',
+      'hasjQuery': 'jquery#~1.11.0',
+      'hasRactive': 'ractive#~0.4.0 ractive-events-tap#~0.1.1',
+      'hasBackbone': 'backbone#~1.1.2 ractive-backbone#~0.1.0'
     };
     for (var fi in props.projectFeatures) {
       if (props.projectFeatures[fi] === true && bowerFeatureMap[fi]) {
@@ -333,8 +232,8 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       }
     }
 
-    // Add requireJS and underscore manually as this is needed
-    props.bowerComponents += ' requirejs#~2.1.11 text#~2.0.10 underscore#~1.6.0';
+    // Add constant dependencies
+    props.bowerComponents += ' requirejs#~2.1.11 almond#~0.2.9 text#~2.0.12 underscore#~1.6.0 minnpost-styles#*';
 
     // Process library fields into a real object for
     // templates
@@ -406,7 +305,7 @@ MinnpostApplicationGenerator.prototype.data = function data() {
   this.mkdir('data');
   this.mkdir('data-processing');
 
-  if (this.projectFeatures['hasCSVs'] === true) {
+  if (this.projectFeatures.hasCSVs === true) {
     this.copy('data/example.csv');
   }
 };
@@ -452,13 +351,14 @@ MinnpostApplicationGenerator.prototype.app = function app() {
   this.template('_bower.json', 'bower.json');
 
   // Common parts
+  this.copy('js/build/wrapper.start.js');
+  this.copy('js/build/wrapper.end.js');
+  this.template('js/_config.js', 'js/config.js');
   this.template('js/_helpers.js', 'js/helpers.js');
-  this.copy('js/wrapper.start.js');
-  this.copy('js/wrapper.end.js');
-  this.template('js/_app.js', 'js/app.js')
+  this.template('js/_app.js', 'js/app.js');
 
   // Ractive
-  if (this.projectFeatures['hasRactive'] === true) {
+  if (this.projectFeatures.hasRactive === true) {
     this.template('js/templates/_application.mustache', 'js/templates/application.mustache');
     this.copy('js/templates/loading.mustache');
   }
@@ -467,14 +367,8 @@ MinnpostApplicationGenerator.prototype.app = function app() {
     this.copy('js/templates/loading.mustache', 'js/templates/loading.underscore');
   }
 
-  // Data tables
-  if (this.projectFeatures['hasDatatables'] === true) {
-    this.copy('js/templates/datatables-filter-links.underscore');
-    this.copy('js/datatables-plugins.js');
-  }
-
   // Backbone
-  if (this.projectFeatures['hasBackbone'] === true) {
+  if (this.projectFeatures.hasBackbone === true) {
     this.copy('js/models.js');
     this.copy('js/collections.js');
     this.copy('js/views.js');
@@ -483,19 +377,11 @@ MinnpostApplicationGenerator.prototype.app = function app() {
 
   // Grunt stuff
   this.template('_Gruntfile.js', 'Gruntfile.js');
-
-  // Create a JSON file of the enabled components so
-  // that it can be reused in multiple places
-  this.write('bower_map.json', JSON.stringify(this.filteredComponentMap, null, '  '));
 };
 
 // Process images
 MinnpostApplicationGenerator.prototype.images = function images() {
   this.copy('images/loader.gif');
-
-  if (this.projectFeatures['hasDatatables'] === true) {
-    this.directory('images/datatables');
-  }
 };
 
 // Process HTML

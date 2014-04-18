@@ -15,6 +15,6 @@
   },
   "dependencies": {<% bowerComponents.forEach(function(m, i) { %>
     "<%= m.name %>": "<%= m.version %>"<% if (i < bowerComponents.length - 1) { %>,<% } %><% }) %>
-  }
+  },
+  "dependencyMap": <%= JSON.stringify(filteredComponentMap, null, '  ') %>
 }
-

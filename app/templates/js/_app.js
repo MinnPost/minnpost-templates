@@ -5,84 +5,18 @@
  * and creates the main object for the application.
  */
 
-/**
- * RequireJS config which maps out where files are and shims
- * any non-compliant libraries.
- */
-require.config({
-  shim: {
-    <% if (projectFeatures['hasBackbone'] === true) { %>
-    'Backbone': {
-      deps: ['underscore', 'jquery'],
-      exports: 'Backbone'
-    },
-    <% } %>
-    <% if (projectFeatures['hasHighcharts'] === true) { %>
-    'Highcharts': {
-      exports: 'Highcharts',
-      'deps': [ 'jquery']
-    },
-    <% } %>
-    <% if (projectFeatures['hasMapbox'] === true) { %>
-    // Mapbox and requireJS don't really work, so we just let
-    // the L be global
-    'mapbox': {
-      exports: 'mapbox'
-    },
-    <% } %>
-  },
-  baseUrl: 'js',
-  paths: {
-    <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].js) { %>
-    '<%= filteredComponentMap[c].rname %>': '../bower_components/<%= filteredComponentMap[c].js[0] %>',<% }} %>
-    <% if (projectFeatures['hasDatatables'] === true) { %>
-    'datatablesPlugins': 'datatables-plugins',<% } %>
-    '<%= projectName %>': 'app'
-  }
-});
-
-
-<% var appDeps = '';  var appReturns = ''; var templateExt = (projectFeatures['hasRactive'] === true) ? 'mustache' : 'underscore'; %>
-<% if (projectFeatures['hasBackbone'] === true) {
-  appDeps += "'Backbone', ";
-  appReturns += "Backbone, ";
-} %>
-<% if (projectFeatures['hasRactive'] === true) {
-  appDeps += "'Ractive', 'Ractive-events-tap', ";
-  appReturns += "Ractive, RactiveEventsTap, ";
-} %>
-<% if (projectFeatures['hasLeaflet'] === true) {
-  appDeps += "'Leaflet', ";
-  appReturns += "L, ";
-} %>
-<% if (projectFeatures['hasMapbox'] === true) {
-  appDeps += "'mapbox', ";
-  appReturns += "mapbox, ";
-} %>
-<% if (projectFeatures['hasHighcharts'] === true) {
-  appDeps += "'Highcharts', ";
-  appReturns += "Highcharts, ";
-} %>
-<% if (projectFeatures['hasCSVs'] === true) {
-  appDeps += "'jqueryCSV', 'text!../data/example.csv', ";
-  appReturns += "jCSV, tExampleCSV, ";
-} %>
-<% if (projectFeatures['hasDatatables'] === true) {
-  appDeps += "'datatables', 'datatablesPlugins', ";
-  appReturns += "datatables, datatablesPlugins, ";
-} %>
-<% if (projectFeatures['hasBackbone'] !== true) {
-  appDeps += "'text!templates/application." + templateExt + "', 'text!templates/loading." + templateExt + "', ";
-  appReturns += "tApplication, tLoading ";
-} %>
+<% var templateExt = (projectFeatures.hasRactive === true) ? 'mustache' : 'underscore'; %>
 
 // Create main application
 define('<%= projectName %>', [
-  'jquery', 'underscore', 'helpers',
-  <%= appDeps.replace(/, $/, '') %>
+  <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].js && filteredComponentMap[c].returns) { %>'<%= filteredComponentMap[c].rname %>', <% }} %>
+  <%= (projectFeatures.hasCSVs === true) ? "'text!../data/example.csv', " : "" %>
+  'text!templates/application.<%= templateExt %>',
+  'text!templates/loading.<%= templateExt %>'
 ], function(
-    $, _, helpers,
-    <%= appReturns.replace(/, $/, '') %>
+  <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].js && filteredComponentMap[c].returns) { %><%= filteredComponentMap[c].returns %>, <% }} %>
+  <%= (projectFeatures.hasCSVs === true) ? "tExampleCSV, " : "" %>
+  tApplication, tLoading
   ) {
 
   // Constructor for app
@@ -434,8 +368,8 @@ define('<%= projectName %>', [
 
       // If local read in the bower map and add css
       if (this.options.isLocal) {
-        $.getJSON('bower_map.json', function(data) {
-          callback.apply([data], thisApp);
+        $.getJSON('bower.json', function(data) {
+          callback.apply([data.dependencyMap], thisApp);
         });
       }
       else {

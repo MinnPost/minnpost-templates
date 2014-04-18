@@ -8,12 +8,10 @@
 module.exports = function(grunt) {
   var _ = grunt.util._;
 
-  /**
-   * Maintain list of libraries here.
-   *
-   * Order matters for build.
-   */
-  var components = grunt.file.readJSON('bower_map.json');
+  // Bower has an extra, custom section to manage where files are.  Order of
+  // list matters.
+  var bower = grunt.file.readJSON('bower.json');
+  var components = bower.dependencyMap;
 
   // Project configuration.  Many values are directly read from
   // package.json.
@@ -132,8 +130,8 @@ module.exports = function(grunt) {
           out: 'dist/<%%= pkg.name %>.libs.js',
           optimize: 'none',
           wrap: {
-            startFile: 'js/wrapper.start.js',
-            endFile: 'js/wrapper.end.js'
+            startFile: 'js/build/wrapper.start.js',
+            endFile: 'js/build/wrapper.end.js'
           }
         }
       }
@@ -150,8 +148,8 @@ module.exports = function(grunt) {
           out: 'dist/<%%= pkg.name %>.latest.js',
           optimize: 'none',
           wrap: {
-            startFile: 'js/wrapper.start.js',
-            endFile: 'js/wrapper.end.js'
+            startFile: 'js/build/wrapper.start.js',
+            endFile: 'js/build/wrapper.end.js'
           }
         }
       }

@@ -1,0 +1,102 @@
+{
+  "example (should be bower identifier, order matter for build)": {
+    "rname": "name-used-for reference-in-RequireJS (some modules expect dependencies with specific case)",
+    "js": ["paths/to/js/files in bower_components without .js"],
+    "css": ["paths/to/css/files in bower_components without .css"],
+    "ie": ["paths/to/ie/specific/css/files in bower_components without .css"],
+    "returns": "varName that gets return when used in define([name], function(varName))"
+  },
+  "requirejs": {
+    "rname": "requirejs",
+    "js": ["requirejs/require"]
+  },
+  "almond": {
+    "rname": "almond",
+    "js": ["almond/almond"]
+  },
+  "text": {
+    "rname": "text",
+    "js": ["text/text"]
+  },
+  "jquery": {
+    "rname": "jquery",
+    "js": ["jquery/dist/jquery"],
+    "returns": "$"
+  },
+  "underscore": {
+    "rname": "underscore",
+    "js": ["underscore/underscore"],
+    "returns": "_"
+  },
+  "backbone": {
+    "rname": "backbone",
+    "js": ["backbone/backbone"],
+    "returns": "Backbone"
+  },
+  "ractive": {
+    "rname": "ractive",
+    "js": ["ractive/ractive"],
+    "returns": "Ractive"
+  },
+  "ractive-backbone": {
+    "rname": "ractive-backbone",
+    "js": ["ractive-backbone/Ractive-Backbone"],
+    "returns": "RactiveBackbone"
+  },
+  "ractive-events-tap": {
+    "rname": "ractive-events-tap",
+    "js": ["ractive-events-tap/ractive-events-tap"],
+    "returns": "RactiveEventsTap"
+  },
+  "ractive-events-hover": {
+    "rname": "ractive-events-hover",
+    "js": ["ractive-events-tap/ractive-events-hover"],
+    "returns": "RactiveEventsHover"
+  },
+  "moment": {
+    "rname": "moment",
+    "js": ["moment/moment"],
+    "returns": "moment"
+  },
+  "Placeholder.js": {
+    "rname": "placeholder",
+    "js": ["Placeholder.js/lib/adapters/placeholders.jquery"],
+    "returns": "placeholder"
+  },
+  "leaflet": {
+    "rname": "leafet",
+    "js": ["leaflet/dist/leaflet-src"],
+    "css": ["leaflet/dist/leaflet"],
+    "images": ["leaflet/dist/images"],
+    "returns": "L"
+  },
+  "highcharts": {
+    "rname": "highcharts",
+    "js": ["highcharts/highcharts.src"],
+    "returns": "Highcharts"
+  },
+  "mapbox.js": {
+    "rname": "mapbox",
+    "js": ["mapbox.js/dist/mapbox.uncompressed"],
+    "css": ["mapbox.js/dist/mapbox.uncompressed"],
+    "images": ["mapbox.js/dist/images"],
+    "returns": "L"
+  },
+  "datatables": {
+    "rname": "datatables",
+    "js": ["datatables/media/js/jquery.dataTables"],
+    "css": ["datatables/media/css/jquery.dataTables"],
+    "images": ["datatables/media/images"],
+    "returns": "dataTable"
+  },
+  "jquery-csv": {
+    "rname": "jqueryCSV",
+    "js": ["jquery-csv/src/jquery.csv"],
+    "returns": "jqueryCSV"
+  },
+  "minnpost-styles": {
+    "rname": "mp-styles",
+    "css": ["minnpost-styles/dist/minnpost-styles"],
+    "sass": ["minnpost-styles/styles/main"]
+  }
+}

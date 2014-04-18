@@ -60,7 +60,7 @@
     </style>
     <!--[if lte IE 8]>
       <style type="text/css">
-        <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].css) { filteredComponentMap[c].ie.forEach(function(f) { %>
+        <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].ie) { filteredComponentMap[c].ie.forEach(function(f) { %>
         @import url('bower_components/<%= f %>.css');<% })}} %>
         <% if (projectPrerequisites.useSass || projectPrerequisites.useCompass) { %>
         @import url('.tmp/css/main.ie.css');<% } else { %>
@@ -73,23 +73,25 @@
       container ensures that the application acts like
       the MinnPost site as much as possible.
     -->
-    <div class="interactive-container">
-      <noscript>
-        <p>This application requires Javascript which is used to make your web browser more interactive.  If this message does not go away, please consider enabling Javascript.  Here are <a href="http://www.enable-javascript.com/" target="_blank">instructions on how to enable JavaScript in your web browser</a>.</p>
-      </noscript>
+    <div class="mp">
+      <div class="minnpost-page-container">
+        <noscript>
+          <p>This application requires Javascript which is used to make your web browser more interactive.  If this message does not go away, please consider enabling Javascript.  Here are <a href="http://www.enable-javascript.com/" target="_blank">instructions on how to enable JavaScript in your web browser</a>.</p>
+        </noscript>
 
-      <!--[if lte IE 7]>
-        <div class="ie-upgrade-note">
-          <h4>Consider upgrading your browser</h4>
-          <p>Your <strong>Internet Browser</strong> is the application you use to navigate webpages on the internet.  You are currently using an older version of Internet Explorer.  This application may not be full-featured because you are using such an old browser.</p>
+        <!--[if lte IE 7]>
+          <div class="ie-upgrade-note">
+            <h4>Consider upgrading your browser</h4>
+            <p>Your <strong>Internet Browser</strong> is the application you use to navigate webpages on the internet.  You are currently using an older version of Internet Explorer.  This application may not be full-featured because you are using such an old browser.</p>
 
-          <p><a href="http://browsehappy.com/" target="_blank">Click here to find out about upgrading to a newer browsers</a>.</p>
+            <p><a href="http://browsehappy.com/" target="_blank">Click here to find out about upgrading to a newer browsers</a>.</p>
 
-          <p>If you cannot install new applications on your computer (because it is not allowed at work, for example), consider using <a href="http://www.google.com/chromeframe" target="_blank">Google's Chrome Frame</a> for Internet Explorer.</p>
+            <p>If you cannot install new applications on your computer (because it is not allowed at work, for example), consider using <a href="http://www.google.com/chromeframe" target="_blank">Google's Chrome Frame</a> for Internet Explorer.</p>
+          </div>
+        <![endif]-->
+
+        <div id="<%= projectName %>-container" class="<% if (isInline) { %>minnpost-article-container<% } else { %>minnpost-full-container<% } %>">
         </div>
-      <![endif]-->
-
-      <div id="<%= projectName %>-container" class="<%= projectName %>-application-container">
       </div>
     </div>
 
@@ -107,9 +109,9 @@
       provides a temporary hack around jQuery so we
       can use a newer version.
     -->
-    <script type="text/javascript" src="js/wrapper.start.js"></script>
+    <script type="text/javascript" src="js/build/wrapper.start.js"></script>
     <script type="text/javascript" src="bower_components/requirejs/require.js"></script>
-    <script type="text/javascript" src="js/app.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
 
     <script type="text/javascript">
       if (!window.requireTestMode) {
@@ -125,7 +127,7 @@
       }
     </script>
 
-    <script type="text/javascript" src="js/wrapper.end.js"></script>
+    <script type="text/javascript" src="js/build/wrapper.end.js"></script>
   </div>
 
   <% } %>
