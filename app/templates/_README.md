@@ -67,6 +67,33 @@ Get the code for this project and install the necessary dependency libraries and
     * Embedded version with local build: http://localhost:<%= serverPort %>/?mpDeployment=build&mpEmbed=true
     * Embedded version with S3 build: http://localhost:<%= serverPort %>/?mpDeployment=deploy&mpEmbed=true
 
+### Developing
+
+Development will depend on what libraries are used.  But here are a few common parts.
+
+* `js/app.js` is the main application and will contain the top logic.
+
+Adding libraries is not difficult, but there are a few steps.
+
+1. User bower to install the appropriate library: `bower install library --save`
+1. Add the appropriate reference in `js/config.js` so that RequireJS knows about it.
+1. Add an entry in the `dependencyMap` object in `bower.json`.  This is used to automatically collect resources in the build process.  Here is an example:
+
+```
+"library (should be bower identifier, order matter for build)": {
+  "rname": "name-used-for-reference-in-RequireJS (some modules expect dependencies with specific case, if you don't know, just use the library name from above)",
+  "js": ["paths/to/js/files in bower_components without .js, like jquery/jquery"],
+  "css": ["paths/to/css/files in bower_components without .css"],
+  "ie": ["paths/to/ie/specific/css/files in bower_components without .css"],
+  "returns": "varName that gets return when used in define([name], function(varName))"
+}
+```
+
+
+### Testing
+
+Unfortunately there are no tests at the moment.
+
 ### Build
 
 To build or compile all the assets together for easy and efficient deployment, do the following.  It will create all the files in the `dist/` folder.
