@@ -32,7 +32,6 @@ define('<%= projectName %>', [
   _.extend(App.prototype, {
     // Start function
     start: function() {
-
       <% if (projectFeatures['hasBackbone'] === true) { %>
       // Override backbone's ajax request for use with JSONP
       // which is not preferred but we have to support
@@ -45,9 +44,7 @@ define('<%= projectName %>', [
       });
       // Start backbone history
       this.router.start();
-      <% } %>
-
-      <% if (projectFeatures['hasBackbone'] !== true && projectFeatures['hasRactive'] === true) { %>
+      <% } else if (projectFeatures['hasBackbone'] !== true && projectFeatures['hasRactive'] === true) { %>
       // Create main application view
       this.mainView = new Ractive({
         el: this.$el,
@@ -59,8 +56,7 @@ define('<%= projectName %>', [
           loading: tLoading
         }
       });
-      <% } %>
-      <% if (projectFeatures['hasBackbone'] !== true && projectFeatures['hasRactive'] !== true) { %>
+      <% } else if (projectFeatures['hasBackbone'] !== true && projectFeatures['hasRactive'] !== true) { %>
       // Create main application view
       this.$content.html(_.template(tApplication, {
         data: {
@@ -70,6 +66,13 @@ define('<%= projectName %>', [
       }));
       <% } %>
 
+      // This should be removed and is just included for helpfulness
+      this.makeExamples();
+    },
+
+    // Make some example depending on what parts were asked for in the
+    // templating process.  Remove, rename, or alter this.
+    makeExamples: function() {
       <% if (projectFeatures['hasHighCharts'] === true) { %>
       <% } %>
 
@@ -86,7 +89,6 @@ define('<%= projectName %>', [
         map.invalidateSize();
       }, 500);
       <% } %>
-
     },
 
     // Default options

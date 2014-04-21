@@ -5,7 +5,7 @@ var path = require('path');
 var yeoman = require('yeoman-generator');
 var request = require('request');
 var cheerio = require('cheerio');
-var exec = require('child_process').exec;
+var _ = require('lodash');
 
 // Helper functions
 var getMinnPostResources = function(done) {
@@ -67,7 +67,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
   var done = this.async();
   var directory = process.cwd().split('/')[process.cwd().split('/').length - 1];
   var prompts = [];
-  var separators = { bowerComponents: '#', nodeModules: '@', rubyGems: '@', pythonDependencies: '@'};
+  var separators = { bowerComponents: '#', nodeModules: '@', rubyGems: '@', pythonDependencies: '@' };
   var validateRequired = function(input) {
     return (input) ? true : 'Please provide a value';
   };
@@ -129,7 +129,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       { name: 'Highcharts', value: 'hasHighcharts' },
       { name: 'Dates', value: 'hasDates' },
       { name: 'Form inputs', value: 'hasInputs' },
-      { name: 'jQuery', value: 'hasjQuery', checked: true },
+      { name: 'Navigation menu', value: 'hasNav' },
       { name: 'Ractive', value: 'hasRactive', checked: true }
     ]
   });
@@ -199,54 +199,77 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       }
     });
 
-    // Handle project features
+    // Handle project features.  There are bower components to install,
+    // as well as extra components that are sub components of others.
     bowerFeatureMap = {
-      'hasLeaflet': 'leaflet#~0.7.2',
-      'hasMapbox': 'mapbox.js#~1.6.2',
-      'hasDatatables': 'datatables#~1.9.4',
-      'hasCSVs': 'jquery-csv#*',
-      'hasHighcharts': 'highcharts.com#*',
-      'hasDates': 'moment#~2.6.0',
-      'hasInputs': 'Placeholders.js#~3.0.2',
-      'hasjQuery': 'jquery#~1.11.0',
-      'hasRactive': 'ractive#~0.4.0 ractive-events-tap#~0.1.1',
-      'hasBackbone': 'backbone#~1.1.2 ractive-backbone#~0.1.0'
+      'hasLeaflet': {
+        lib: 'leaflet#~0.7.2',
+        extras: 'mpMaps'
+      },
+      'hasMapbox': {
+        lib: 'mapbox.js#~1.6.2',
+        extras: 'mpMaps'
+      },
+      'hasDatatables': {
+        lib: 'datatables#~1.9.4',
+        extras: 'mpDatatables'
+      },
+      'hasNav': {
+        extras: 'mpNav'
+      },
+      'hasCSVs': { lib: 'jquery-csv#*' },
+      'hasHighcharts': {
+        lib: 'highcharts.com#*',
+        extras: 'mpHighcharts'
+      },
+      'hasDates': { lib: 'moment#~2.6.0' },
+      'hasInputs': { lib: 'Placeholders.js#~3.0.2' },
+      'hasRactive': { lib: 'ractive#~0.4.0 ractive-events-tap#~0.1.1' },
+      'hasBackbone': { lib: 'backbone#~1.1.2 ractive-backbone#~0.1.0' }
     };
-    for (var fi in props.projectFeatures) {
-      if (props.projectFeatures[fi] === true && bowerFeatureMap[fi]) {
-        props.bowerComponents += ' ' + bowerFeatureMap[fi];
-      }
-    }
+    // List of components to install
+    _.each(props.projectFeatures, function(p, pi) {
+      props.bowerComponents += (p === true && bowerFeatureMap[pi] && bowerFeatureMap[pi].lib) ?
+        ' ' + bowerFeatureMap[pi].lib : '';
+    });
+    // List of components to include but not install (multiple includes per library)
+    props.bowerComponentsInclude = '';
+    _.each(props.projectFeatures, function(p, pi) {
+      props.bowerComponentsInclude += (p === true && bowerFeatureMap[pi] && bowerFeatureMap[pi].extras) ?
+        ' ' + bowerFeatureMap[pi].extras : '';
+    });
 
     // Add constant dependencies
-    props.bowerComponents += ' requirejs#~2.1.11 almond#~0.2.9 text#~2.0.12 underscore#~1.6.0 minnpost-styles#*';
+    props.bowerComponents += ' requirejs#~2.1.11 almond#~0.2.9 text#~2.0.12 underscore#~1.6.0 jquery#~1.11.0 minnpost-styles#master';
+    // Add constant includes
+    props.bowerComponentsInclude += ' mpColors mpFormatters';
 
-    // Process library fields into a real object for
-    // templates
-    for (i in separators) {
+    // Process library fields into a real object for templating
+    _.each(separators, function(s, prop) {
       var dependencies = [];
-      props[i] = (props[i] !== undefined) ? props[i].trim() : '';
-      props[i].split(' ').forEach(function(l) {
-        if (l.split(separators[i])[0] && l.split(separators[i])[0] !== undefined) {
+      props[prop] = (props[prop] !== undefined) ? props[prop].trim() : '';
+      props[prop].split(' ').forEach(function(l) {
+        if (l.split(s)[0] && l.split(s)[0] !== undefined) {
           dependencies.push({
-            name: l.split(separators[i])[0],
-            version: (l.split(separators[i])[1]) ? l.split(separators[i])[1] : '*'
+            name: l.split(s)[0],
+            version: (l.split(s)[1]) ? l.split(s)[1] : '*'
           });
         }
       });
-      props[i] = dependencies;
-    }
+      props[prop] = dependencies;
+    });
 
-    // Add componenet map and provide filtered version
+    // Add componenet map to props and and provide filtered version
+    // of the map for inclusion (this combines installed and extra libs)
     props.componentMap = componentMap;
-    props.filteredComponentMap = {};
-    for (i in componentMap) {
-      props.bowerComponents.forEach(function(b) {
-        if (i === b.name) {
-          props.filteredComponentMap[i] = componentMap[i];
-        }
-      });
-    }
+    props.filteredComponentMap = _.map(_.filter(
+      _.union(_.pluck(props.bowerComponents, 'name'), props.bowerComponentsInclude.trim().split(' ')),
+      function(c, ci) {
+        return _.keys(props.componentMap).indexOf(c) !== -1;
+    }),
+      function(c, ci) {
+        return props.componentMap[c];
+    });
 
     // Determine what kind of templates we are using
     props.templateExt = (props.projectFeatures.hasRactive === true) ? 'mustache' : 'underscore';

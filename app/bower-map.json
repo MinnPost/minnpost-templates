@@ -95,8 +95,38 @@
     "returns": "jqueryCSV"
   },
   "minnpost-styles": {
-    "rname": "mp-styles",
+    "rname": "mpStyles",
     "css": ["minnpost-styles/dist/minnpost-styles"],
     "sass": ["minnpost-styles/styles/main"]
+  },
+  "mpColors": {
+    "rname": "mpColors",
+    "js": ["minnpost-styles/dist/minnpost-styles.colors"],
+    "returns": "mpColors"
+  },
+  "mpDatatables": {
+    "rname": "mpDatatables",
+    "js": ["minnpost-styles/dist/minnpost-styles.datatables"],
+    "returns": "mpDatatables"
+  },
+  "mpFormatters": {
+    "rname": "mpFormatters",
+    "js": ["minnpost-styles/dist/minnpost-styles.formatters"],
+    "returns": "mpFormatters"
+  },
+  "mpHighcharts": {
+    "rname": "mpHighcharts",
+    "js": ["minnpost-styles/dist/minnpost-styles.highcharts"],
+    "returns": "mpHighcharts"
+  },
+  "mpMaps": {
+    "rname": "mpMaps",
+    "js": ["minnpost-styles/dist/minnpost-styles.maps"],
+    "returns": "mpMaps"
+  },
+  "mpNav": {
+    "rname": "mpNav",
+    "js": ["minnpost-styles/dist/minnpost-styles.nav"],
+    "returns": "mpNav"
   }
 }

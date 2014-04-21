@@ -77,7 +77,7 @@ Adding libraries is not difficult, but there are a few steps.
 
 1. User bower to install the appropriate library: `bower install library --save`
 1. Add the appropriate reference in `js/config.js` so that RequireJS knows about it.
-1. Add an entry in the `dependencyMap` object in `bower.json`.  This is used to automatically collect resources in the build process.  Here is an example:
+1. Add an entry in the `dependencyMap` object in `bower.json`.  This is used to automatically collect resources in the build process.  It is possible, like with `minnpost-styles` that multiple entries will need to be made, one ber `.js` file.  Here is an example:
 
 ```
 // Should be bower identifier.  Order matters for build, meaning that any dependencies should come first.

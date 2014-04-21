@@ -23,7 +23,8 @@
   "dependencies": {
     "yeoman-generator": "~0.13.0",
     "cheerio": "~0.12.3",
-    "request": "~2.27.0"
+    "request": "~2.27.0",
+    "lodash": "~2.4.1"
   },
   "devDependencies": {
     "mocha": "~1.12.0"
