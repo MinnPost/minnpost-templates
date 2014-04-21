@@ -1,14 +1,9 @@
 /**
  * Models
  */
-define('models', ['underscore', 'Backbone', 'helpers'],
-  function(_, Backbone, helpers) {
+define('models', ['underscore', 'Backbone'],
+  function(_, Backbone) {
   var models = {};
-
-  // Override backbone's ajax request for use with JSONP
-  // which is not preferred but we have to support
-  // older browsers
-  Backbone.ajax = helpers.BackboneAJAX;
 
   // Base model
   models.Base = Backbone.Model.extend({

@@ -1,15 +1,25 @@
-<div class="mp">
+<div class="application-container">
   <div class="message-container"></div>
 
   <div class="content-container">
 
     <h3><%= projectTitle %></h3>
 
-    {{^noData}}
-      <div class="loading-block"></div>
-    {{/noData}}
+    <div class="loading-block"></div>
 
-    <p>Welcome to your new MinnPost application, built from the MinnPost Templating system.</p>
+    <p>Welcome to your new MinnPost application, built from the MinnPost Templating system.  Make sure to use the <a href="http://code.minnpost.com/minnpost-styles/">MinnPost Style Guide</a> for all your styling needs.</p>
+
+    <% if (projectFeatures['hasMapbox'] || projectFeatures['hasLeaflet']) { %>
+    <div class="map" id="<%= projectName %>-map"></div>
+    <% } %>
+    <% if (projectFeatures['hasHighcharts']) { %>
+    <div class="chart" id="<%= projectName %>-chart"></div>
+    <% } %>
+    <% if (projectFeatures['hasDatatables']) { %>
+    <div class="datatable" id="#<%= projectName %>-datatable">
+      <table></table>
+    </div>
+    <% } %>
 
   </div>
 

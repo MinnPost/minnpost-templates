@@ -49,7 +49,7 @@ var MinnpostApplicationGenerator = module.exports = function MinnpostApplication
         }
         if (typeof this.filteredComponentMap['mapbox.js'] !== 'undefined') {
           command = 'cd bower_components/mapbox.js/ && npm install && make; cd -;';
-          console.log('IMPORTANT! MApbox does not come built, run the following: ');
+          console.log('IMPORTANT! Mapbox does not come built, run the following: ');
           console.log(command);
         }
       }.bind(this)
@@ -113,16 +113,6 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     message: 'A short description of the project:',
     validate: validateRequired,
     default: ''
-  });
-  // The type of project
-  prompts.push({
-    type: 'list',
-    name: 'projectType',
-    message: 'The type of project:',
-    choices: [
-      { name: 'Application (uses more HTML, intended for full page articles)', value: 'application' },
-      { name: 'Inline (uses widget approach, intended for within articles)', value: 'inline' }
-    ]
   });
   // Features
   prompts.push({
@@ -195,10 +185,6 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     var thisYeoman = this;
     var bowerFeatureMap = {};
 
-    // Mark as inline or application
-    props.isInline = (props.projectType === 'inline');
-    props.isApplication = (props.projectType === 'application');
-
     // Change choice list to objects
     ['projectPrerequisites', 'projectFeatures'].forEach(function(p) {
       var newProp = {};
@@ -261,6 +247,9 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
         }
       });
     }
+
+    // Determine what kind of templates we are using
+    props.templateExt = (props.projectFeatures.hasRactive === true) ? 'mustache' : 'underscore';
 
     // Make a server port
     props.serverPort = 8800 + Math.floor(Math.random() * 100);
@@ -333,11 +322,9 @@ MinnpostApplicationGenerator.prototype.styles = function styles() {
     this.template('styles/__styles.scss', 'styles/_styles.scss');
     this.template('styles/__mixins.scss', 'styles/_mixins.scss');
     this.template('styles/_main.scss', 'styles/main.scss');
-    this.template('styles/_main.ie.scss', 'styles/main.ie.scss');
   }
   else {
     this.template('styles/_styles.css', 'styles/styles.css');
-    this.template('styles/_styles.ie.css', 'styles/styles.ie.css');
   }
 };
 
@@ -363,7 +350,7 @@ MinnpostApplicationGenerator.prototype.app = function app() {
     this.copy('js/templates/loading.mustache');
   }
   else {
-    this.template('js/templates/_application.underscore', 'js/templates/application.underscore');
+    this.template('js/templates/_application.mustache', 'js/templates/application.underscore');
     this.copy('js/templates/loading.mustache', 'js/templates/loading.underscore');
   }
 
@@ -387,6 +374,4 @@ MinnpostApplicationGenerator.prototype.images = function images() {
 // Process HTML
 MinnpostApplicationGenerator.prototype.html = function html() {
   this.template('_index.html', 'index.html');
-  this.template('_index-build.html', 'index-build.html');
-  this.template('_index-deploy.html', 'index-deploy.html');
 };

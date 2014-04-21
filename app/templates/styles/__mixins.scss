@@ -5,9 +5,3 @@
 /**
  * Easily make cross brower inline block.
  */
-@mixin inline-block() {
-  display:-moz-inline-stack;
-  display:inline-block;
-  zoom:1;
-  *display:inline;
-}

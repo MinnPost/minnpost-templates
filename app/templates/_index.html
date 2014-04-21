@@ -19,26 +19,11 @@
   <%= js %> <% }) %>
 
 </head>
-<% if (isApplication) { %>
 <body class="not-front logged-in page-node node-type-article one-sidebar sidebar-right section-data">
-<% } else { %>
-<body class="not-front page-node node-type-article one-sidebar sidebar-right">
-<% } %>
-
-  <% if (isInline) { %>
-  <div class="node-body fieldlayout node-field-body">
-  <% } %>
 
   <!-- =========================================================
     START: Embeddable
     == ========================================================= -->
-  <% if (isInline) { %>
-  <div class="<%= projectName %>-inline-container"></div>
-  <script type="text/javascript" src="js/wrapper.start.js"></script>
-  <script type="text/javascript" src="bower_components/requirejs/require.js"></script>
-  <script type="text/javascript" src="js/app.js"></script>
-  <script type="text/javascript" src="js/wrapper.end.js"></script>
-  <% } else { %>
 
   <!--
     For raw HTML fields, keep these classes
@@ -76,10 +61,10 @@
     <div class="mp">
       <div class="minnpost-page-container">
         <noscript>
-          <p>This application requires Javascript which is used to make your web browser more interactive.  If this message does not go away, please consider enabling Javascript.  Here are <a href="http://www.enable-javascript.com/" target="_blank">instructions on how to enable JavaScript in your web browser</a>.</p>
+          <p class="noscript-note">This application requires Javascript which is used to make your web browser more interactive.  If this message does not go away, please consider enabling Javascript.  Here are <a href="http://www.enable-javascript.com/" target="_blank">instructions on how to enable JavaScript in your web browser</a>.</p>
         </noscript>
 
-        <!--[if lte IE 7]>
+        <!--[if lte IE 8]>
           <div class="ie-upgrade-note">
             <h4>Consider upgrading your browser</h4>
             <p>Your <strong>Internet Browser</strong> is the application you use to navigate webpages on the internet.  You are currently using an older version of Internet Explorer.  This application may not be full-featured because you are using such an old browser.</p>
@@ -90,54 +75,20 @@
           </div>
         <![endif]-->
 
-        <div id="<%= projectName %>-container" class="<% if (isInline) { %>minnpost-article-container<% } else { %>minnpost-full-container<% } %>">
-        </div>
+        <div class="<%= projectName %>-container minnpost-full-container"></div>
       </div>
     </div>
 
-
-    <!--
-      JS Files.
-
-      Utilize RequireJS to for better dependency management;
-      we manually include the config file to ensure the application
-      is available below.  And we manually start the application
-      below so that we can set certain options about where data
-      is coming from.
-
-      The bits around the inclusion of the libraries
-      provides a temporary hack around jQuery so we
-      can use a newer version.
-    -->
     <script type="text/javascript" src="js/build/wrapper.start.js"></script>
     <script type="text/javascript" src="bower_components/requirejs/require.js"></script>
     <script type="text/javascript" src="js/config.js"></script>
-
-    <script type="text/javascript">
-      if (!window.requireTestMode) {
-        // Get application and start
-        require(['jquery', '<%= projectName %>'], function($, App) {
-          $(document).ready(function() {
-            var app = new App({
-              el: '#<%= projectName %>-container'
-            });
-            app.start();
-          });
-        });
-      }
-    </script>
-
+    <script type="text/javascript" src="js/app.js"></script>
     <script type="text/javascript" src="js/build/wrapper.end.js"></script>
   </div>
 
-  <% } %>
   <!-- =========================================================
     END: Embeddable
     == ========================================================= -->
-
-  <% if (isInline) { %>
-  </div>
-  <% } %>
 
 </body>
 </html>

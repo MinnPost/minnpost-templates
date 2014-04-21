@@ -1,14 +1,9 @@
 /**
  * Collections
  */
-define('collections', ['underscore', 'Backbone', 'helpers', 'models'],
-  function(_, Backbone, helpers, models) {
+define('collections', ['underscore', 'Backbone', 'models'],
+  function(_, Backbone, models) {
   var collections = {};
-
-  // Override backbone's ajax request for use with JSONP
-  // which is not preferred but we have to support
-  // older browsers
-  Backbone.ajax = helpers.BackboneAJAX;
 
   // Base collection
   collections.Base = Backbone.Collection.extend({

@@ -73,7 +73,7 @@ To build or compile all the assets together for easy and efficient deployment, d
 Deploying will push the relevant files up to Amazon's AWS S3 so that they can be easily referenced on the MinnPost site.  This is specific to MinnPost, and your deployment might be different.
 
 1. Run: `grunt deploy`
-<% if (isInline) { %>1. This will output a bit of HTML to embed in your article.<% } %>
+1. This will output a bit of HTML to if you want to use the project as an embed.
 
 ## Hacks
 
