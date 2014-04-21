@@ -130,16 +130,20 @@ define('<%= projectName %>', [
 
     // Determine paths.  A bit hacky.
     determinePaths: function() {
+      var query;
+      this.options.deployment = 'deploy';
+
       if (window.location.host.indexOf('localhost') !== -1) {
-        this.options.paths = this.options.availablePaths.local;
-        this.options.isLocal = true;
-        if (window.location.pathname.indexOf('build') !== -1) {
-          this.options.paths = this.options.availablePaths.build;
+        this.options.deployment = 'local';
+
+        // Check if a query string forces something
+        query = helpers.parseQueryString();
+        if (_.isObject(query) && _.isString(query.mpDeployment)) {
+          this.options.deployment = query.mpDeployment;
         }
       }
-      else {
-        this.options.paths = this.options.availablePaths.deploy;
-      }
+
+      this.options.paths = this.options.availablePaths[this.options.deployment];
     },
 
     // Get local assests, if needed
@@ -147,7 +151,7 @@ define('<%= projectName %>', [
       var thisApp = this;
 
       // If local read in the bower map
-      if (this.options.isLocal) {
+      if (this.options.deployment === 'local') {
         $.getJSON('bower.json', function(data) {
           callback.apply(thisApp, [data.dependencyMap]);
         });

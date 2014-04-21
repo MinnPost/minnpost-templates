@@ -90,5 +90,26 @@ define('helpers', ['jquery', 'underscore'<% if (projectFeatures.hasBackbone === 
     return $.when.apply($, defers);
   };
 
+  /**
+   * Reads query string and turns into object.
+   */
+  helpers.parseQueryString = function() {
+    var assoc  = {};
+    var decode = function(s) {
+      return decodeURIComponent(s.replace(/\+/g, " "));
+    };
+    var queryString = location.search.substring(1);
+    var keyValues = queryString.split('&');
+
+    _.each(keyValues, function(v, vi) {
+      var key = v.split('=');
+      if (key.length > 1) {
+        assoc[decode(key[0])] = decode(key[1]);
+      }
+    });
+
+    return assoc;
+  };
+
   return helpers;
 });

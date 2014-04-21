@@ -12,6 +12,14 @@ module.exports = function(grunt) {
   // list matters.
   var bower = grunt.file.readJSON('bower.json');
   var components = bower.dependencyMap;
+  var componentParts = {
+    js: _.map(_.compact(_.flatten(_.pluck(components, 'js'))), function(c) {
+      return 'bower_components/' + c + '.js'; }),
+    css: _.map(_.compact(_.flatten(_.pluck(components, 'css'))), function(c) {
+      return 'bower_components/' + c + '.css'; }),
+    ie: _.map(_.compact(_.flatten(_.pluck(components, 'ie'))), function(c) {
+      return 'bower_components/' + c + '.css'; })
+  };
 
   // Project configuration.  Many values are directly read from
   // package.json.
@@ -32,6 +40,7 @@ module.exports = function(grunt) {
         '<%%= "\\n\\n" %>'
     },
     components: components,
+    componentParts: componentParts,
 
     // Clean up the distribution fold
     clean: {
@@ -68,9 +77,10 @@ module.exports = function(grunt) {
       dist: {
         options: {
           environment: 'production',
-          outputStyle: 'compressed',
+          outputStyle: 'expanded',
           relativeAssets: false,
-          cssDir: '.tmp/dist_css'
+          cssDir: '.tmp/dist_css',
+          generatedImagesDir: '.tmp/dist_css/images'
         }
       },
       dev: {
@@ -115,7 +125,7 @@ module.exports = function(grunt) {
     requirejs: {
       app: {
         options: {
-          name: '<%= projectName %>.app',
+          name: '<%%= pkg.name %>',
           // Exclude libraries
           exclude: _.compact(_.flatten(_.pluck(_.filter(components, function(c) { return (c.js !== undefined); }), 'rname'))),
           baseUrl: 'js',
@@ -126,9 +136,9 @@ module.exports = function(grunt) {
       },
       libs: {
         options: {
-          name: '<%= projectName %>.app.lib',
           // Include just libraries
           include: _.compact(_.flatten(_.pluck(_.filter(components, function(c) { return (c.js !== undefined); }), 'rname'))),
+          exclude: ['requirejs'],
           baseUrl: 'js',
           mainConfigFile: 'js/config.js',
           out: 'dist/<%%= pkg.name %>.libs.js',
@@ -141,8 +151,9 @@ module.exports = function(grunt) {
       },
       embed: {
         options: {
-          name: '<%= projectName %>.embed',
+          name: '<%%= pkg.name %>',
           include: ['almond'],
+          exclude: ['requirejs'],
           baseUrl: 'js',
           mainConfigFile: 'js/config.js',
           out: 'dist/<%%= pkg.name %>.embed.latest.js',
@@ -164,12 +175,12 @@ module.exports = function(grunt) {
       },
       // JS version
       js: {
-        src: ['dist/<%%= pkg.name %>.latest.js'],
+        src: ['<%%= requirejs.app.options.out %>'],
         dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.js'
       },
       jsEmbed: {
-        src: ['dist/<%%= pkg.name %>.embed.latest.js'],
-        dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.embed.latest.js'
+        src: ['<%%= requirejs.embed.options.out %>'],
+        dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.embed.js'
       },
       // CSS
       css: {
@@ -182,15 +193,15 @@ module.exports = function(grunt) {
       },
       cssLatest: {
         src: ['<%%= concat.css.src %>'],
-        dest: 'dist/<%%= pkg.name %>.latest.css'
+        dest: 'dist/<%= pkg.name %>.latest.css'
       },
       // CSS Libs
       cssLibs: {
-        src: ['<%%= _.map(_.compact(_.flatten(_.pluck(components, "css"))), function(c) { return "bower_components/" + c + ".css"; }) %>'],
-        dest: 'dist/<%%= pkg.name %>.libs.css'
+        src: ['<%%= _.isEmpty(componentParts.css) ? ["nofile"] : componentParts.css %>'],
+        dest: 'dist/<%= pkg.name %>.libs.css'
       },
       cssIeLibs: {
-        src: ['<%%= _.map(_.compact(_.flatten(_.pluck(components, "ie"))), function(c) { return "bower_components/" + c + ".css"; }) %>'],
+        src: ['<%%= _.isEmpty(componentParts.ie) ? ["nofile"] : componentParts.ie %>'],
         dest: 'dist/<%%= pkg.name %>.libs.ie.css'
       }
     },
@@ -200,27 +211,34 @@ module.exports = function(grunt) {
       options: {
         banner: '<%%= meta.banner %>'
       },
-      dist: {
+      js: {
         src: ['<%%= concat.js.dest %>'],
         dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.min.js'
       },
-      distEmbed: {
-        src: ['<%%= concat.js.jsEmbed %>'],
+      jsEmbed: {
+        src: ['<%%= concat.jsEmbed.dest %>'],
         dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.embed.min.js'
       },
-      distLatest: {
+      jsLatest: {
         options: {
           banner: '<%%= meta.bannerLatest %>'
         },
         src: ['<%%= concat.js.dest %>'],
         dest: 'dist/<%%= pkg.name %>.latest.min.js'
       },
-      distLatestEmbed: {
+      jsLatestEmbed: {
         options: {
           banner: '<%%= meta.bannerLatest %>'
         },
-        src: ['<%%= concat.js.jsEmbed %>'],
-        dest: 'dist/<%%= pkg.name %>.embed.latest.min.js'
+        src: ['<%%= concat.jsEmbed.dest %>'],
+        dest: 'dist/<%%= pkg.name %>.latest.embed.min.js'
+      },
+      jsLibs: {
+        options: {
+          banner: ''
+        },
+        src: ['dist/<%%= pkg.name %>.libs.js'],
+        dest: 'dist/<%%= pkg.name %>.libs.min.js'
       }
     },
 
@@ -241,16 +259,19 @@ module.exports = function(grunt) {
         src: ['<%%= concat.css.dest %>'],
         dest: 'dist/<%%= pkg.name %>.latest.min.css'
       },
-      cssIe: {
-        src: ['<%%= concat.cssIe.dest %>'],
-        dest: 'dist/<%%= pkg.name %>.<%%= pkg.version %>.min.ie.css'
-      },
-      cssIeLatest: {
+      cssLibs: {
         options: {
-          banner: '<%%= meta.bannerLatest %>'
+          banner: ''
         },
-        src: ['<%%= concat.cssIe.dest %>'],
-        dest: 'dist/<%%= pkg.name %>.latest.min.ie.css'
+        src: ['<%%= concat.cssLibs.dest %>'],
+        dest: 'dist/<%%= pkg.name %>.libs.min.css'
+      },
+      cssIeLibs: {
+        options: {
+          banner: ''
+        },
+        src: ['<%%= concat.cssIeLibs.dest %>'],
+        dest: 'dist/<%%= pkg.name %>.libs.min.ie.css'
       }
     },
 

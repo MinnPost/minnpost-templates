@@ -35,23 +35,6 @@
     node-body fieldlayout node-field-body
   -->
   <div class="node-body fieldlayout node-field-body">
-    <!-- Application and libraries CSS -->
-    <style type="text/css">
-      <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].css) { filteredComponentMap[c].css.forEach(function(f) { %>
-      @import url('bower_components/<%= f %>.css');<% })}} %>
-      <% if (projectPrerequisites.useSass || projectPrerequisites.useCompass) { %>
-      @import url('.tmp/css/main.css');<% } else { %>
-      @import url('styles/styles.css');<% } %>
-    </style>
-    <!--[if lte IE 8]>
-      <style type="text/css">
-        <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].ie) { filteredComponentMap[c].ie.forEach(function(f) { %>
-        @import url('bower_components/<%= f %>.css');<% })}} %>
-        <% if (projectPrerequisites.useSass || projectPrerequisites.useCompass) { %>
-        @import url('.tmp/css/main.ie.css');<% } else { %>
-        @import url('styles/styles.ie.css');<% } %>
-      </style>
-    <![endif]-->
 
     <!--
       This is the HTML that will be output.  This
@@ -65,7 +48,7 @@
         </noscript>
 
         <!--[if lte IE 8]>
-          <div class="ie-upgrade-note">
+          <div class="browser-upgrade-note">
             <h4>Consider upgrading your browser</h4>
             <p>Your <strong>Internet Browser</strong> is the application you use to navigate webpages on the internet.  You are currently using an older version of Internet Explorer.  This application may not be full-featured because you are using such an old browser.</p>
 
