@@ -2,6 +2,8 @@
 
 <%= projectDescription || '*Description goes here*' %>
 
+You can see this project in action at *published story link goes here*.
+
 *Unless otherwise noted, MinnPost projects on [Github](https://github.com/minnpost) are story-driven and meant for transparency sake and not focused on re-use.  For a list of our more reusable projects, go to [code.minnpost.com](http://code.minnpost.com).*
 
 ## Data
@@ -14,7 +16,7 @@
 
 The following describes how the data was processed and is not necessarily needed to run or install the application, but more included for reference, transparency, and development.
 
-*Describe data processing here, include commands.  Put data processing scripts or configurations in the ```data-processing``` folder.*
+*Describe data processing here, include commands, or document any manual steps taken.  Put data processing scripts or configurations in the ```data-processing``` folder.*
 
 ## Development and running locally
 
@@ -55,12 +57,15 @@ Get the code for this project and install the necessary dependency libraries and
 <% if (typeof filteredComponentMap.leaflet != 'undefined') { %>1. Because Leaflet comes unbuilt, we need to build it: `cd bower_components/leaflet/ && npm install && jake; cd -;`<% } %>
 <% if (typeof filteredComponentMap['mapbox.js'] != 'undefined') { %>1. Because Mapbox comes unbuilt, we need to build it: `cd bower_components/mapbox.js/ && npm install && make; cd -;`<% } %>
 
-### Running
+### Running locally
 
 1. Run: `grunt server`
     * This will run a local webserver for development and you can view the application in your web browser at [http://localhost:<%= serverPort %>](http://localhost:<%= serverPort %>).
-    * Utilize `index.html` for development, while `index-deploy.html` is used for the deployed version, and `index-build.html` is used to test the build before deployment.
-    * The server runs `grunt watch` which will watch for linting JS files and compiling SASS.  If you have your own webserver, feel free to use that with just this command.
+1. By default, running a local server will show you the local development version.  But there are other builds that you can view by changing the query parameters.  Do note that you may have to run the build and deploy things for things to work normally.
+    * Local build: http://localhost:<%= serverPort %>/?mpDeployment=build
+    * Build deployed on S3: http://localhost:<%= serverPort %>/?mpDeployment=deploy
+    * Embedded version with local build: http://localhost:<%= serverPort %>/?mpDeployment=build&mpEmbed=true
+    * Embedded version with S3 build: http://localhost:<%= serverPort %>/?mpDeployment=deploy&mpEmbed=true
 
 ### Build
 
@@ -73,7 +78,13 @@ To build or compile all the assets together for easy and efficient deployment, d
 Deploying will push the relevant files up to Amazon's AWS S3 so that they can be easily referenced on the MinnPost site.  This is specific to MinnPost, and your deployment might be different.
 
 1. Run: `grunt deploy`
-1. This will output a bit of HTML to if you want to use the project as an embed.
+    * This will output a bit of HTML to if you want to use the project as an embed.
+
+There are to main ways to include the necessary HTML in a page in order to run the project.
+
+1. Copy the relevant parts from `index.html`.
+    * This has the benefit of showing messages to users that have older browsers or have Javascript turned off.  This also uses the build that separates out the third-party libraries that are used and are less likely to change; this gains a bit of performance for users.
+1. Copy the embed output from `grunt deploy`.
 
 ## Hacks
 
