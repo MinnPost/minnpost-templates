@@ -193,12 +193,12 @@ module.exports = function(grunt) {
       },
       cssLatest: {
         src: ['<%%= concat.css.src %>'],
-        dest: 'dist/<%= pkg.name %>.latest.css'
+        dest: 'dist/<%%= pkg.name %>.latest.css'
       },
       // CSS Libs
       cssLibs: {
         src: ['<%%= _.isEmpty(componentParts.css) ? ["nofile"] : componentParts.css %>'],
-        dest: 'dist/<%= pkg.name %>.libs.css'
+        dest: 'dist/<%%= pkg.name %>.libs.css'
       },
       cssIeLibs: {
         src: ['<%%= _.isEmpty(componentParts.ie) ? ["nofile"] : componentParts.ie %>'],

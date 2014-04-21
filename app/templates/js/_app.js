@@ -97,24 +97,34 @@ define('<%= projectName %>', [
       availablePaths: {
         local: {
           <% if (projectPrerequisites.useCompass) { %>
-          css: '.tmp/css/main.css',
-          ie: '.tmp/css/main.ie.css',<% } else { %>
-          css: 'styles/styles.css',
-          ie: 'styles/styles.ie.css',<% } %>
+          css: ['.tmp/css/main.css'],<% } else { %>
+          css: ['styles/styles.css'],<% } %>
           images: 'images/',
           data: 'data/'
         },
         build: {
-          css: 'dist/<%= projectName %>.latest.css',
-          ie: 'dist/<%= projectName %>.latest.ie.css',
+          css: [
+            'dist/<%= projectName %>.libs.min.css',
+            'dist/<%= projectName %>.latest.min.css'
+          ],
+          ie: [
+            'dist/<%= projectName %>.libs.min.ie.css',
+            'dist/<%= projectName %>.latest.min.ie.css'
+          ],
           images: 'dist/images/',
           data: 'dist/data/'
         },
         deploy: {
-          css: 'https://s3.amazonaws.com/data.minnpost/projects-inline/<%= projectName %>/<%= projectName %>.latest.css',
-          ie: 'https://s3.amazonaws.com/data.minnpost/projects-inline/<%= projectName %>/<%= projectName %>.latest.ie.css',
-          images: 'https://s3.amazonaws.com/data.minnpost/projects-inline/<%= projectName %>/<%= projectName %>/images/',
-          data: 'https://s3.amazonaws.com/data.minnpost/projects-inline/<%= projectName %>/<%= projectName %>/data/'
+          css: [
+            'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.libs.min.css',
+            'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.latest.min.css'
+          ],
+          ie: [
+            'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.libs.min.ie.css',
+            'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.latest.min.ie.css'
+          ],
+          images: 'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>/images/',
+          data: 'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>/data/'
         }
       }
     },
@@ -182,9 +192,13 @@ define('<%= projectName %>', [
       }
 
       // Get main CSS
-      $('head').append('<link rel="stylesheet" href="' + this.options.paths.css + '" type="text/css" />');
+      _.each(this.options.paths.css, function(c, ci) {
+        $('head').append('<link rel="stylesheet" href="' + c + '" type="text/css" />');
+      });
       if (isIE) {
-        $('head').append('<link rel="stylesheet" href="' + this.options.paths.ie + '" type="text/css" />');
+        _.each(this.options.paths.ie, function(c, ci) {
+          $('head').append('<link rel="stylesheet" href="' + c + '" type="text/css" />');
+        });
       }
 
       // Add a processed class

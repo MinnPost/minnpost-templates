@@ -337,9 +337,12 @@ MinnpostApplicationGenerator.prototype.app = function app() {
   this.template('_package.json', 'package.json');
   this.template('_bower.json', 'bower.json');
 
-  // Common parts
+  // Build parts
   this.copy('js/build/wrapper.start.js');
   this.copy('js/build/wrapper.end.js');
+  this.copy('js/build/deployment.js');
+
+  // App parts
   this.template('js/_config.js', 'js/config.js');
   this.template('js/_helpers.js', 'js/helpers.js');
   this.template('js/_app.js', 'js/app.js');

@@ -1,7 +1,9 @@
+# Specific for common MinnPost projects
 node_modules/
 components/
 bower_components/
-!dist
+!dist/
+!js/build
 dist/data.js
 dist/templates.js
 
@@ -9,6 +11,7 @@ dist/templates.js
 # General git ignores
 .sass-cache
 .tmp
+tmp/
 .DS_Store
 *.psd
 *.[oa]
