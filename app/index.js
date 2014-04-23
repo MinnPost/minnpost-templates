@@ -242,7 +242,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     // Add constant dependencies
     props.bowerComponents += ' requirejs#~2.1.11 almond#~0.2.9 text#~2.0.12 underscore#~1.6.0 jquery#~1.11.0 minnpost-styles#master';
     // Add constant includes
-    props.bowerComponentsInclude += ' mpColors mpFormatters';
+    props.bowerComponentsInclude += ' mpConfig mpFormatters';
 
     // Process library fields into a real object for templating
     _.each(separators, function(s, prop) {

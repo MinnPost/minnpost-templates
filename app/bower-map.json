@@ -64,7 +64,7 @@
     "returns": "placeholder"
   },
   "leaflet": {
-    "rname": "leafet",
+    "rname": "leaflet",
     "js": ["leaflet/dist/leaflet-src"],
     "css": ["leaflet/dist/leaflet"],
     "images": ["leaflet/dist/images"],
@@ -99,10 +99,10 @@
     "css": ["minnpost-styles/dist/minnpost-styles"],
     "sass": ["minnpost-styles/styles/main"]
   },
-  "mpColors": {
-    "rname": "mpColors",
-    "js": ["minnpost-styles/dist/minnpost-styles.colors"],
-    "returns": "mpColors"
+  "mpConfig": {
+    "rname": "mpConfig",
+    "js": ["minnpost-styles/dist/minnpost-styles.config"],
+    "returns": "mpConfig"
   },
   "mpDatatables": {
     "rname": "mpDatatables",

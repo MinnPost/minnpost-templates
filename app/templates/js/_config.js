@@ -5,9 +5,14 @@
 require.config({
   shim: {
     <% if (projectFeatures.hasHighcharts === true) { %>
-    'Highcharts': {
+    'highcharts': {
       exports: 'Highcharts',
-      'deps': [ 'jquery']
+      deps: ['jquery']
+    },
+    <% } %>
+    <% if (projectFeatures.hasHighcharts === true) { %>
+    'datatables': {
+      deps: ['jquery']
     },
     <% } %>
     <% if (projectFeatures.hasMapbox === true) { %>
