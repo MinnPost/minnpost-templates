@@ -118,6 +118,61 @@ define('<%= projectName %>', [
       <% } %>
 
       <% if (projectFeatures['hasDatatables'] === true) { %>
+      var sampleCSVData = [];
+      var tableColumns = {};
+      var options = {};
+      var i;
+      var row;
+      var $dataTable;
+
+      // Make some data
+      for (i = 0; i < 55; i++) {
+        row = [];
+        row.push(_.sample(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']));
+        row.push(_.random(1, 12) + '/' + _.random(1, 28) + '/' + _.random(1975, 2014));
+        row.push((_.random(1000, 10000) / 100).toString());
+        row.push(_.random(10000, 100000).toString());
+        row.push(_.sample(['lastA', 'lastB', 'lastC', 'lastD', 'lastE', 'lastF', 'lastG', 'lastH', 'lastI', 'lastJ', 'lastK']));
+        row.push(_.sample(['firstA', 'firstB', 'firstC', 'firstD', 'firstE', 'firstF', 'firstG', 'firstH', 'firstI', 'firstJ', 'firstK']));
+        sampleCSVData.push(row);
+      }
+
+      // Define specific about how the columns work.
+      tableColumns = $.extend(true, {}, {
+        0: { sTitle: 'Thing' },
+        1: { sTitle: 'Date' },
+        // Makes it so that the last name column sorts on
+        // both last and first name
+        4: {
+          sTitle: 'Last',
+          aDataSort: [4, 5]
+        },
+        5: {
+          sTitle: 'First',
+          bSortable: false
+        },
+        3: {
+          sTitle: 'Number',
+          bSearchable: false,
+          mRender: function(data, type, full) {
+            return mpFormatters.integer(parseFloat(data));
+          }
+        },
+        2: {
+          sTitle: 'Money',
+          sClass: 'money',
+          bSearchable: false,
+          mRender: function(data, type, full) {
+            return mpFormatters.currency(parseFloat(data));
+          }
+        }
+      });
+      options = $.extend(true, {}, {
+        aaData: sampleCSVData,
+        aoColumns: _.values(tableColumns)
+      }, options);
+
+      mpDatatables.makeTable(this.$('.datatable-example'), options);
       <% } %>
 
       <% if (projectFeatures['hasMapbox'] === true) { %>

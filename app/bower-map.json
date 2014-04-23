@@ -90,8 +90,6 @@
   "datatables": {
     "rname": "datatables",
     "js": ["datatables/media/js/jquery.dataTables"],
-    "css": ["datatables/media/css/jquery.dataTables"],
-    "images": ["datatables/media/images"],
     "returns": "dataTable"
   },
   "jquery-csv": {
