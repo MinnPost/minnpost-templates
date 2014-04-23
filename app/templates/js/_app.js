@@ -228,6 +228,7 @@ define('<%= projectName %>', [
         },
         build: {
           css: [
+            '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css',
             'dist/<%= projectName %>.libs.min.css',
             'dist/<%= projectName %>.latest.min.css'
           ],
@@ -245,7 +246,6 @@ define('<%= projectName %>', [
             'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.latest.min.css'
           ],
           ie: [
-            '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css',
             'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.libs.min.ie.css',
             'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.latest.min.ie.css'
           ],

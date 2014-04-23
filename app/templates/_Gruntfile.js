@@ -197,11 +197,11 @@ module.exports = function(grunt) {
       },
       // CSS Libs
       cssLibs: {
-        src: ['<%%= _.isEmpty(componentParts.css) ? ["nofile"] : componentParts.css %>'],
+        src: _.isEmpty(componentParts.css) ? ['nofile'] : componentParts.css,
         dest: 'dist/<%%= pkg.name %>.libs.css'
       },
       cssIeLibs: {
-        src: ['<%%= _.isEmpty(componentParts.ie) ? ["nofile"] : componentParts.ie %>'],
+        src: _.isEmpty(componentParts.ie) ? ['nofile'] : componentParts.ie,
         dest: 'dist/<%%= pkg.name %>.libs.ie.css'
       }
     },
