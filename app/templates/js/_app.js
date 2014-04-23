@@ -240,10 +240,12 @@ define('<%= projectName %>', [
         },
         deploy: {
           css: [
+            '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css',
             'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.libs.min.css',
             'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.latest.min.css'
           ],
           ie: [
+            '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css',
             'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.libs.min.ie.css',
             'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.latest.min.ie.css'
           ],
@@ -304,12 +306,14 @@ define('<%= projectName %>', [
         _.each(map, function(c, ci) {
           if (c.css) {
             _.each(c.css, function(s, si) {
-              $('head').append('<link rel="stylesheet" href="bower_components/' + s + '.css" type="text/css" />');
+              s = (s.match(/^(http|\/\/)/)) ? s : 'bower_components/' + s + '.css';
+              $('head').append('<link rel="stylesheet" href="' + s + '" type="text/css" />');
             });
           }
           if (c.ie && isIE) {
             _.each(c.ie, function(s, si) {
-              $('head').append('<link rel="stylesheet" href="bower_components/' + s + '.css" type="text/css" />');
+              s = (s.match(/^(http|\/\/)/)) ? s : 'bower_components/' + s + '.css';
+              $('head').append('<link rel="stylesheet" href="' + s + '" type="text/css" />');
             });
           }
         });

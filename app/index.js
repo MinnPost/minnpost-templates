@@ -191,6 +191,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     var i;
     var thisYeoman = this;
     var bowerFeatureMap = {};
+    var components;
 
     // Change choice list to objects
     ['projectPrerequisites', 'projectFeatures'].forEach(function(p) {
@@ -267,15 +268,16 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     });
 
     // Add componenet map to props and and provide filtered version
-    // of the map for inclusion (this combines installed and extra libs)
+    // of the map for inclusion (this combines installed and extra libs).
+    // Note that this is combined in this way to preserve order which is
+    // important for our build process.
+    var components = _.union(_.pluck(props.bowerComponents, 'name'), props.bowerComponentsInclude.trim().split(' '));
     props.componentMap = componentMap;
-    props.filteredComponentMap = _.map(_.filter(
-      _.union(_.pluck(props.bowerComponents, 'name'), props.bowerComponentsInclude.trim().split(' ')),
-      function(c, ci) {
-        return _.keys(props.componentMap).indexOf(c) !== -1;
-    }),
-      function(c, ci) {
-        return props.componentMap[c];
+    props.filteredComponentMap = {};
+    _.each(props.componentMap, function(c, ci) {
+      if (components.indexOf(ci) !== -1) {
+        props.filteredComponentMap[ci] = c
+      }
     });
 
     // Determine what kind of templates we are using
