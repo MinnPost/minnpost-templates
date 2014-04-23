@@ -9,13 +9,13 @@
 define('<%= projectName %>', [
   <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].js && filteredComponentMap[c].returns) { %>'<%= filteredComponentMap[c].rname %>', <% }} %>
   'helpers',
-  <%= (projectFeatures.hasCSVs === true) ? "'text!../data/example.csv', " : "" %>
+  <%= (projectFeatures.hasCSVs) ? "'text!../data/example.csv', " : "" %>
   'text!templates/application.<%= templateExt %>',
   'text!templates/loading.<%= templateExt %>'
 ], function(
   <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].js && filteredComponentMap[c].returns) { %><%= filteredComponentMap[c].returns %>, <% }} %>
   helpers,
-  <%= (projectFeatures.hasCSVs === true) ? "tExampleCSV, " : "" %>
+  <%= (projectFeatures.hasCSVs) ? "tExampleCSV, " : "" %>
   tApplication, tLoading
   ) {
 
@@ -35,7 +35,7 @@ define('<%= projectName %>', [
     start: function() {
       var thisApp = this;
 
-      <% if (projectFeatures['hasBackbone'] === true) { %>
+      <% if (projectFeatures.hasBackbone) { %>
       // Override backbone's ajax request for use with JSONP
       // which is not preferred but we have to support
       // older browsers
@@ -47,7 +47,7 @@ define('<%= projectName %>', [
       });
       // Start backbone history
       this.router.start();
-      <% } else if (projectFeatures['hasBackbone'] !== true && projectFeatures['hasRactive'] === true) { %>
+      <% } else if (!projectFeatures.hasBackbone && projectFeatures.hasRactive) { %>
       // Create main application view
       this.mainView = new Ractive({
         el: this.$el,
@@ -59,7 +59,7 @@ define('<%= projectName %>', [
           loading: tLoading
         }
       });
-      <% } else if (projectFeatures['hasBackbone'] !== true && projectFeatures['hasRactive'] !== true) { %>
+      <% } else if (!projectFeatures.hasBackbone && !projectFeatures.hasRactive) { %>
       // Create main application view
       this.$content.html(_.template(tApplication, {
         data: {
@@ -89,7 +89,7 @@ define('<%= projectName %>', [
     // Make some example depending on what parts were asked for in the
     // templating process.  Remove, rename, or alter this.
     makeExamples: function() {
-      <% if (projectFeatures.hasHighcharts === true) { %>
+      <% if (projectFeatures.hasHighcharts) { %>
       var exampleData = [{
         name: 'Example',
         data: [ 6 , 11, 32, 110, 235, 369, 640, 1005, 1436, 2063, 3057, 4618, 6444, 9822, 15468, 20434, 24126, 27387, 29459, 31056, 31982, 32040, 31233, 29224, 27342, 26662, 26956, 27912, 28999, 28965, 27826, 25579, 25722, 24826, 24605, 24304, 23464, 23708, 24099, 24357, 24237, 24401, 24344, 23586, 22380, 21004, 17287, 14747, 13076, 12555, 12144, 11009, 10950, 10871, 10824, 10577, 10527, 10475, 10421, 10358, 10295, 10104 ]
@@ -117,7 +117,7 @@ define('<%= projectName %>', [
       ));
       <% } %>
 
-      <% if (projectFeatures['hasDatatables'] === true) { %>
+      <% if (projectFeatures.hasDatatables) { %>
       var sampleCSVData = [];
       var tableColumns = {};
       var options = {};
@@ -175,15 +175,40 @@ define('<%= projectName %>', [
       mpDatatables.makeTable(this.$('.datatable-example'), options);
       <% } %>
 
-      <% if (projectFeatures['hasMapbox'] === true) { %>
-      <% } %>
-      <% if (projectFeatures['hasLeaflet'] === true) { %>
-      // Due to how Leaflet animates and (probably) how the CSS
-      // is pulled in dynamically, the map gets offset, so we wait
-      // just a moment and invalidate the size to reset the map
-      window.setTimeout(function() {
-        map.invalidateSize();
-      }, 500);
+      <% if (projectFeatures.hasMapbox || projectFeatures.hasLeaflet) { %>
+      var markerMap = mpMaps.makeLeafletMap('example-markers-features-map');
+      var tooltipControl = new mpMaps.TooltipControl();
+      markerMap.setZoom(9);
+      markerMap.addControl(tooltipControl);
+
+      // Markers
+      var iconCinema = mpMaps.makeMakiIcon('cinema', 'm');
+      var iconBlank = mpMaps.makeMakiIcon('', 's', '222222');
+      L.marker(mpMaps.minneapolisPoint, { icon: iconCinema })
+        .addTo(markerMap).bindPopup('Minneapolis', {
+          closeButton: false
+        });
+      L.marker(mpMaps.stPaulPoint, { icon: iconBlank })
+        .addTo(markerMap).bindPopup('St. Paul', {
+          closeButton: false
+        });
+
+      // GeoJSON example
+      $.getJSON('http://boundaries.minnpost.com/1.0/boundary/27-county-2010/?callback=?', function(data) {
+        if (data.simple_shape) {
+          L.geoJson(data.simple_shape, {
+            style: mpMaps.mapStyle,
+            onEachFeature: function(feature, layer) {
+              layer.on('mouseover', function(e) {
+                tooltipControl.update('Hennepin County');
+              });
+              layer.on('mouseout', function(e) {
+                tooltipControl.hide();
+              });
+            }
+          }).addTo(markerMap);
+        }
+      });
       <% } %>
     },
     <% } %>

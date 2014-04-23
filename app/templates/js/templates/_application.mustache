@@ -21,8 +21,11 @@
     <% } %>
 
     <% if (projectFeatures.hasMapbox || projectFeatures.hasLeaflet) { %>
-    <div class="map" id="<%= projectName %>-map"></div>
+    <div class="component-label">Map example</div>
+    <div class="caption">Here is an awesome, concise caption.</div>
+    <div class="map" id="example-markers-features-map"></div>
     <% } %>
+
     <% if (projectFeatures.hasDatatables) { %>
     <div class="component-label">Datatables example</div>
     <div class="caption">Here is an awesome, concise caption.  This example could use some filter links.</div>
