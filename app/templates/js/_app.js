@@ -24,6 +24,7 @@ define('<%= projectName %>', [
     this.options = _.extend(this.defaultOptions, options);
     this.el = this.options.el;
     this.$el = $(this.el);
+    this.$ = function(selector) { return this.$el.find(selector); };
     this.$content = this.$el.find('.content-container');
     this.loadApp();
   };
@@ -32,6 +33,8 @@ define('<%= projectName %>', [
   _.extend(App.prototype, {
     // Start function
     start: function() {
+      var thisApp = this;
+
       <% if (projectFeatures['hasBackbone'] === true) { %>
       // Override backbone's ajax request for use with JSONP
       // which is not preferred but we have to support
@@ -66,14 +69,52 @@ define('<%= projectName %>', [
       }));
       <% } %>
 
-      // This should be removed and is just included for helpfulness
-      this.makeExamples();
+      <% if (includeExamples) { %>
+      // Run examples.  Please remove for real application.
+      //
+      // Because of how Ractive initializes and how Highcharts work
+      // there is an inconsitency of when the container for the chart
+      // is ready and when highcharts loads the chart.  So, we put a bit of
+      // of a pause.
+      //
+      // In production, intializing a chart should be tied to data which
+      // can be used with a Ractive observer.
+      //
+      // This should not happen with underscore templates.
+      _.delay(function() { thisApp.makeExamples(); }, 400);
+      <% } %>
     },
 
+    <% if (includeExamples) { %>
     // Make some example depending on what parts were asked for in the
     // templating process.  Remove, rename, or alter this.
     makeExamples: function() {
-      <% if (projectFeatures['hasHighCharts'] === true) { %>
+      <% if (projectFeatures.hasHighcharts === true) { %>
+      var exampleData = [{
+        name: 'Example',
+        data: [ 6 , 11, 32, 110, 235, 369, 640, 1005, 1436, 2063, 3057, 4618, 6444, 9822, 15468, 20434, 24126, 27387, 29459, 31056, 31982, 32040, 31233, 29224, 27342, 26662, 26956, 27912, 28999, 28965, 27826, 25579, 25722, 24826, 24605, 24304, 23464, 23708, 24099, 24357, 24237, 24401, 24344, 23586, 22380, 21004, 17287, 14747, 13076, 12555, 12144, 11009, 10950, 10871, 10824, 10577, 10527, 10475, 10421, 10358, 10295, 10104 ]
+      }];
+
+      // Line chart
+      mpHighcharts.makeChart(this.$('.chart-line-example'),
+        $.extend(true, {}, mpHighcharts.lineOptions, {
+          colors: _.sample(_.values(mpConfig['colors-data']), 3),
+          series: exampleData,
+          legend: { enabled: false },
+          yAxis: {
+            title: { enabled: false }
+          }
+        }
+      ));
+
+      // Column chart
+      mpHighcharts.makeChart(this.$('.chart-column-example'),
+        $.extend(true, {}, mpHighcharts.columnOptions, {
+          colors: _.sample(_.values(mpConfig['colors-data']), 3),
+          series: exampleData,
+          legend: { enabled: false }
+        }
+      ));
       <% } %>
 
       <% if (projectFeatures['hasDatatables'] === true) { %>
@@ -90,6 +131,7 @@ define('<%= projectName %>', [
       }, 500);
       <% } %>
     },
+    <% } %>
 
     // Default options
     defaultOptions: {

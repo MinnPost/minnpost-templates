@@ -9,16 +9,25 @@
 
     <p>Welcome to your new MinnPost application, built from the MinnPost Templating system.  Make sure to use the <a href="http://code.minnpost.com/minnpost-styles/">MinnPost Style Guide</a> for all your styling needs.</p>
 
-    <% if (projectFeatures['hasMapbox'] || projectFeatures['hasLeaflet']) { %>
+    <% if (includeExamples) { %>
+    <% if (projectFeatures.hasHighcharts) { %>
+    <div class="component-label">Line chart example</div>
+    <div class="caption">Here is an awesome, concise caption.</div>
+    <div class="chart chart-line-example"></div>
+
+    <div class="component-label">Column chart example</div>
+    <div class="caption">Here is an awesome, concise caption.</div>
+    <div class="chart chart-column-example"></div>
+    <% } %>
+
+    <% if (projectFeatures.hasMapbox || projectFeatures.hasLeaflet) { %>
     <div class="map" id="<%= projectName %>-map"></div>
     <% } %>
-    <% if (projectFeatures['hasHighcharts']) { %>
-    <div class="chart" id="<%= projectName %>-chart"></div>
-    <% } %>
-    <% if (projectFeatures['hasDatatables']) { %>
+    <% if (projectFeatures.hasDatatables) { %>
     <div class="datatable" id="#<%= projectName %>-datatable">
-      <table></table>
+      <table class="striped"></table>
     </div>
+    <% } %>
     <% } %>
 
   </div>

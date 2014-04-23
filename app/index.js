@@ -178,6 +178,13 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       return !props.projectDefaults && props.projectPrerequisites.indexOf('usePython') >= 0;
     }
   });
+  // Include examples
+  prompts.push({
+    type: 'confirm',
+    name: 'includeExamples',
+    message: 'Include examples for features:',
+    default: 'y'
+  });
 
   // Call prompt
   this.prompt(prompts, function(props) {
@@ -219,7 +226,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       },
       'hasCSVs': { lib: 'jquery-csv#*' },
       'hasHighcharts': {
-        lib: 'highcharts.com#*',
+        lib: 'highcharts.com#~3.0.9',
         extras: 'mpHighcharts'
       },
       'hasDates': { lib: 'moment#~2.6.0' },

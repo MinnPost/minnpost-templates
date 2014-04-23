@@ -70,9 +70,14 @@
     "images": ["leaflet/dist/images"],
     "returns": "L"
   },
-  "highcharts": {
+  "highcharts-other": {
     "rname": "highcharts",
     "js": ["highcharts/highcharts.src"],
+    "returns": "Highcharts"
+  },
+  "highcharts.com": {
+    "rname": "highcharts",
+    "js": ["highcharts.com/js/highcharts.src"],
     "returns": "Highcharts"
   },
   "mapbox.js": {
