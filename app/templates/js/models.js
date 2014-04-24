@@ -1,7 +1,7 @@
 /**
  * Models
  */
-define('models', ['underscore', 'Backbone'],
+define('models', ['underscore', 'backbone'],
   function(_, Backbone) {
   var models = {};
 

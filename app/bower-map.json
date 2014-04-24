@@ -40,7 +40,7 @@
   },
   "ractive-backbone": {
     "rname": "ractive-backbone",
-    "js": ["ractive-backbone/Ractive-Backbone"],
+    "js": ["ractive-backbone/ractive-adaptors-backbone"],
     "returns": "RactiveBackbone"
   },
   "ractive-events-tap": {

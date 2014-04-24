@@ -232,7 +232,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       'hasDates': { lib: 'moment#~2.6.0' },
       'hasInputs': { lib: 'Placeholders.js#~3.0.2' },
       'hasRactive': { lib: 'ractive#~0.4.0 ractive-events-tap#~0.1.1' },
-      'hasBackbone': { lib: 'backbone#~1.1.2 ractive-backbone#~0.1.0' }
+      'hasBackbone': { lib: 'backbone#~1.1.2 ractive-backbone#master' }
     };
     // List of components to install
     _.each(props.projectFeatures, function(p, pi) {

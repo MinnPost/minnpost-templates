@@ -2,7 +2,7 @@
  * Routers
  */
 define('routers', [
-  'underscore', 'Backbone', 'Ractive', 'Ractive-Backbone',
+  'underscore', 'backbone', 'ractive', 'ractive-backbone',
   'models', 'collections', 'views',
   'text!templates/application.mustache',
   'text!templates/loading.mustache'
@@ -30,7 +30,7 @@ define('routers', [
         partials: {
           loading: tLoading
         },
-        adaptors: [ 'Backbone' ]
+        adapt: [ 'Backbone' ]
       });
     },
 

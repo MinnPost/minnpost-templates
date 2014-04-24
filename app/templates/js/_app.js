@@ -9,12 +9,14 @@
 define('<%= projectName %>', [
   <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].js && filteredComponentMap[c].returns) { %>'<%= filteredComponentMap[c].rname %>', <% }} %>
   'helpers',
+  <%= (projectFeatures.hasBackbone) ? "'routers', " : "" %>
   <%= (projectFeatures.hasCSVs) ? "'text!../data/example.csv', " : "" %>
   'text!templates/application.<%= templateExt %>',
   'text!templates/loading.<%= templateExt %>'
 ], function(
   <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].js && filteredComponentMap[c].returns) { %><%= filteredComponentMap[c].returns %>, <% }} %>
   helpers,
+  <%= (projectFeatures.hasBackbone) ? "routers, " : "" %>
   <%= (projectFeatures.hasCSVs) ? "tExampleCSV, " : "" %>
   tApplication, tLoading
   ) {
@@ -36,11 +38,6 @@ define('<%= projectName %>', [
       var thisApp = this;
 
       <% if (projectFeatures.hasBackbone) { %>
-      // Override backbone's ajax request for use with JSONP
-      // which is not preferred but we have to support
-      // older browsers
-      Backbone.ajax = helpers.BackboneAJAX;
-
       // Create router
       this.router = new routers.Router({
         app: this
@@ -330,7 +327,7 @@ define('<%= projectName %>', [
       }
 
       // Add a processed class
-      this.$el.addClass('inline-processed');
+      this.$el.addClass('processed');
     }
   });
 

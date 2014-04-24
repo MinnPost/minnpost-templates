@@ -8,23 +8,23 @@ define('helpers', ['jquery', 'underscore'<% if (projectFeatures.hasBackbone === 
 
   var helpers = {};
 
-  <% if (projectFeatures.hasBackbone === true) { %>
   /**
    * Override Backbone's ajax call to use JSONP by default as well
    * as force a specific callback to ensure that server side
    * caching is effective.
    */
-  Backbone.ajax = function() {
-    var options = arguments;
+  helpers.overrideBackboneAJAX = function() {
+    Backbone.ajax = function() {
+      var options = arguments;
 
-    if (options[0].dataTypeForce !== true) {
-      options[0].dataType = 'jsonp';
-      options[0].jsonpCallback = 'mpServerSideCachingHelper' +
-        _.hash(options[0].url);
-    }
-    return Backbone.$.ajax.apply(Backbone.$, options);
+      if (options[0].dataTypeForce !== true) {
+        options[0].dataType = 'jsonp';
+        options[0].jsonpCallback = 'mpServerSideCachingHelper' +
+          _.hash(options[0].url);
+      }
+      return Backbone.$.ajax.apply(Backbone.$, options);
+    };
   };
-  <% } %>
 
   /**
    * Returns version of MSIE.
