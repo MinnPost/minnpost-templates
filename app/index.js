@@ -121,7 +121,6 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     message: 'Application features (will include necessary libraries):',
     choices: [
       { name: 'Backbone', value: 'hasBackbone' },
-      { name: 'CSS grid', value: 'hasGrid' },
       { name: 'Leaflet map', value: 'hasLeaflet' },
       { name: 'Mapbox map', value: 'hasMapbox' },
       { name: 'Datatable', value: 'hasDatatables' },
