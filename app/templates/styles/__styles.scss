@@ -8,7 +8,7 @@ body .node-unpublished {
 }
 
 // Wrap everything for specificity
-.mp #<%= projectName %>-container {
+.mp .<%= projectName %>-container {
 
   .application-container {
     padding-top: 1em;

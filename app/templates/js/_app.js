@@ -246,8 +246,8 @@ define('<%= projectName %>', [
             'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.libs.min.ie.css',
             'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.latest.min.ie.css'
           ],
-          images: 'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>/images/',
-          data: 'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>/data/'
+          images: 'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/images/',
+          data: 'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/data/'
         }
       }
     },
