@@ -399,9 +399,14 @@ MinnpostApplicationGenerator.prototype.app = function app() {
   this.template('_Gruntfile.js', 'Gruntfile.js');
 };
 
+// Process makefile
+MinnpostApplicationGenerator.prototype.makefile = function makefile() {
+  this.copy('Makefile');
+};
+
 // Process images
 MinnpostApplicationGenerator.prototype.images = function images() {
-  this.copy('images/loader.gif');
+  this.mkdir('images');
 };
 
 // Process HTML
