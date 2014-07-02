@@ -2,6 +2,10 @@
  * Main styles for: <%= projectName %>
  */
 
+// Variables
+$space: 1em;
+
+
 // This makes the unpublished background not as annoying
 body .node-unpublished {
   background-repeat: no-repeat;

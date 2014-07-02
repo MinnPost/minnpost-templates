@@ -323,7 +323,9 @@ MinnpostApplicationGenerator.prototype.license = function license() {
 // Process data and data processing
 MinnpostApplicationGenerator.prototype.data = function data() {
   this.mkdir('data');
-  this.mkdir('data-processing');
+  this.mkdir('data/original');
+  this.mkdir('data/build');
+  this.mkdir('data/processing');
 
   if (this.projectFeatures.hasCSVs === true) {
     this.copy('data/example.csv');
@@ -349,7 +351,6 @@ MinnpostApplicationGenerator.prototype.styles = function styles() {
   this.mkdir('styles');
   if (this.projectPrerequisites.useCompass) {
     this.mkdir('.tmp/css');
-    this.template('styles/__variables.scss', 'styles/_variables.scss');
     this.template('styles/__styles.scss', 'styles/_styles.scss');
     this.template('styles/__mixins.scss', 'styles/_mixins.scss');
     this.template('styles/_main.scss', 'styles/main.scss');
@@ -381,11 +382,9 @@ MinnpostApplicationGenerator.prototype.app = function app() {
   // Ractive
   if (this.projectFeatures.hasRactive === true) {
     this.template('js/templates/_application.mustache', 'js/templates/application.mustache');
-    this.copy('js/templates/loading.mustache');
   }
   else {
     this.template('js/templates/_application.mustache', 'js/templates/application.underscore');
-    this.copy('js/templates/loading.mustache', 'js/templates/loading.underscore');
   }
 
   // Backbone

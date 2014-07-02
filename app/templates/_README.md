@@ -2,21 +2,13 @@
 
 <%= projectDescription || '*Description goes here*' %>
 
-You can see this project in action at *published story link goes here*.
+You can see this project in action at *[published story link goes here]()*.
 
 *Unless otherwise noted, MinnPost projects on [Github](https://github.com/minnpost) are story-driven and meant for transparency sake and not focused on re-use.  For a list of our more reusable projects, go to [code.minnpost.com](http://code.minnpost.com).*
 
 ## Data
 
-*Describe the data sources here.  Use links and URLs to show where the data came from.  Put small sized originals or modified data sources in the ```data``` folder*
-
-*For larger data sources that may need to be processed, provide instructions on how to download.  For instance:  ```cd data && wget blah.txt```.  Also, make sure to put an entry in the ```.gitignore```.*
-
-## Data processing
-
-The following describes how the data was processed and is not necessarily needed to run or install the application, but more included for reference, transparency, and development.
-
-*Describe data processing here, include commands, or document any manual steps taken.  Put data processing scripts or configurations in the ```data-processing``` folder.*
+*Describe the data sources here.  Use links and URLs to show where the data came from.  Put small sized originals or modified data sources in the ```data/original``` folder and ensure to update the `.gitignore` file*
 
 ## Development and running locally
 
@@ -40,7 +32,7 @@ All commands are assumed to be on the [command line](http://en.wikipedia.org/wik
     1. `cd .env && source bin/activiate; cd -;` <% } %>
 <% if (projectPrerequisites.useCompass) { %>1. Install [Sass](http://sass-lang.com/): `gem install sass`
    * On a Mac do: `sudo gem install sass`
-   1. Install [Compass](http://compass-style.org/): `gem install compass`
+1. Install [Compass](http://compass-style.org/): `gem install compass`
    * On a Mac do: `sudo gem install compass`<% } %>
 <% if (typeof filteredComponentMap.leaflet != 'undefined') { %>1. Because Leaflet comes unbuilt, we need to build it with Jake: `npm install -g jake`<% } %>
 
@@ -56,6 +48,12 @@ Get the code for this project and install the necessary dependency libraries and
 <% if (projectPrerequisites.usePython) { %>1. Install python packages: `pip install -r requirements.txt` <% } %>
 <% if (typeof filteredComponentMap.leaflet != 'undefined') { %>1. Because Leaflet comes unbuilt, we need to build it: `cd bower_components/leaflet/ && npm install && jake; cd -;`<% } %>
 <% if (typeof filteredComponentMap['mapbox.js'] != 'undefined') { %>1. Because Mapbox comes unbuilt, we need to build it: `cd bower_components/mapbox.js/ && npm install && make; cd -;`<% } %>
+
+### Data processing
+
+The `Makefile` runs tasks such as downloading sources and converting data.
+
+1. Run: `make`
 
 ### Running locally
 
@@ -97,7 +95,6 @@ Adding libraries is not difficult, but there are a few steps.
 }
 ```
 
-
 ### Testing
 
 Unfortunately there are no tests at the moment.
@@ -119,7 +116,7 @@ There are to main ways to include the necessary HTML in a page in order to run t
 
 1. Copy the relevant parts from `index.html`.
     * This has the benefit of showing messages to users that have older browsers or have Javascript turned off.  This also uses the build that separates out the third-party libraries that are used and are less likely to change; this gains a bit of performance for users.
-1. Copy the embed output from `grunt deploy`.
+1. Copy the embed output from `grunt deploy` (still in development).
 
 ## Hacks
 

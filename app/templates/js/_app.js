@@ -11,14 +11,13 @@ define('<%= projectName %>', [
   'helpers',
   <%= (projectFeatures.hasBackbone) ? "'routers', " : "" %>
   <%= (projectFeatures.hasCSVs) ? "'text!../data/example.csv', " : "" %>
-  'text!templates/application.<%= templateExt %>',
-  'text!templates/loading.<%= templateExt %>'
+  'text!templates/application.<%= templateExt %>'
 ], function(
   <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].js && filteredComponentMap[c].returns) { %><%= filteredComponentMap[c].returns %>, <% }} %>
   helpers,
   <%= (projectFeatures.hasBackbone) ? "routers, " : "" %>
   <%= (projectFeatures.hasCSVs) ? "tExampleCSV, " : "" %>
-  tApplication, tLoading
+  tApplication
   ) {
 
   // Constructor for app
@@ -50,19 +49,15 @@ define('<%= projectName %>', [
         el: this.$el,
         template: tApplication,
         data: {
-
         },
         partials: {
-          loading: tLoading
         }
       });
       <% } else if (!projectFeatures.hasBackbone && !projectFeatures.hasRactive) { %>
       // Create main application view
       this.$content.html(_.template(tApplication, {
         data: {
-
-        },
-        loading: _.template(tLoading, {})
+        }
       }));
       <% } %>
 
