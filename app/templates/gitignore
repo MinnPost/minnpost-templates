@@ -1,14 +1,20 @@
-# Specific for common MinnPost projects
-node_modules/
-components/
-bower_components/
-!dist/
-!js/build
+# Data sources and builds (except for non-dowloadable sources)
+data/original
+data/build
+# !data/original/foia-data.csv
+
+# Unnecssary dist parts
 dist/data.js
 dist/templates.js
 
+# Get around common ignores
+!dist/
+!js/build
 
 # General git ignores
+node_modules/
+components/
+bower_components/
 .sass-cache
 .tmp
 tmp/
