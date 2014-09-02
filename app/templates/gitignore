@@ -1,6 +1,6 @@
 # Data sources and builds (except for non-dowloadable sources)
-data/original
-data/build
+data/original/*
+data/build/*
 # !data/original/foia-data.csv
 
 # Unnecssary dist parts

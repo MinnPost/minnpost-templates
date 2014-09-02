@@ -3,6 +3,5 @@
  */
 <% if (projectPrerequisites.useCompass) { %>@import "compass";<% } %>
 <% if (!projectPrerequisites.useCompass && projectPrerequisites.useSass) { %>@import "sass";<% } %>
-@import "_variables";
 @import "_mixins";
 @import "_styles";

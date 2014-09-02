@@ -17,9 +17,9 @@ You can see this project in action at *[published story link goes here]()*.
 All commands are assumed to be on the [command line](http://en.wikipedia.org/wiki/Command-line_interface), often called the Terminal, unless otherwise noted.  The following will install technologies needed for the other steps and will only needed to be run once on your computer so there is a good chance you already have these technologies on your computer.
 
 1. Install [Git](http://git-scm.com/).
-   * On a Mac, install [Homebrew](http://brew.sh/), then do: `brew install git`
+    * On a Mac, install [Homebrew](http://brew.sh/), then do: `brew install git`
 1. Install [NodeJS](http://nodejs.org/).
-   * On a Mac, do: `brew install node`
+    * On a Mac, do: `brew install node`
 1. Optionally, for development, install [Grunt](http://gruntjs.com/): `npm install -g grunt-cli`
 1. Install [Bower](http://bower.io/): `npm install -g bower`
 <% if (projectPrerequisites.useRuby || projectPrerequisites.useSass) { %>1. Install [Ruby](http://www.ruby-lang.org/en/downloads/), though it is probably already installed on your system.
@@ -31,9 +31,9 @@ All commands are assumed to be on the [command line](http://en.wikipedia.org/wik
     1. `virtualenv .env`
     1. `cd .env && source bin/activiate; cd -;` <% } %>
 <% if (projectPrerequisites.useCompass) { %>1. Install [Sass](http://sass-lang.com/): `gem install sass`
-   * On a Mac do: `sudo gem install sass`
+    * On a Mac do: `sudo gem install sass`
 1. Install [Compass](http://compass-style.org/): `gem install compass`
-   * On a Mac do: `sudo gem install compass`<% } %>
+    * On a Mac do: `sudo gem install compass`<% } %>
 <% if (typeof filteredComponentMap.leaflet != 'undefined') { %>1. Because Leaflet comes unbuilt, we need to build it with Jake: `npm install -g jake`<% } %>
 
 ### Get code and install packages
