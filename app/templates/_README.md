@@ -59,6 +59,7 @@ The `Makefile` runs tasks such as downloading sources and converting data.
 
 1. Run: `grunt server`
     * This will run a local webserver for development and you can view the application in your web browser at [http://localhost:<%= serverPort %>](http://localhost:<%= serverPort %>).
+    * This will also run [BrowserSync](http://www.browsersync.io/) so any development changes will appear in the browser automatically; note that compiling SASS can take a few seconds.
 1. By default, running a local server will show you the local development version.  But there are other builds that you can view by changing the query parameters.  Do note that you may have to run the build and deploy things for things to work normally.
     * Local build: http://localhost:<%= serverPort %>/?mpDeployment=build
     * Build deployed on S3: http://localhost:<%= serverPort %>/?mpDeployment=deploy

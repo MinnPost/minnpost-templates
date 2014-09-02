@@ -8,8 +8,8 @@
 module.exports = function(grunt) {
   var _ = grunt.util._;
 
-  // Bower has an extra, custom section to manage where files are.  Order of
-  // list matters.
+  // Bower has an custom section, 'dependencyMap' to manage which files
+  // we actually want to include.  Order of list matters.
   var bower = grunt.file.readJSON('bower.json');
   var components = bower.dependencyMap;
   var componentParts = {
@@ -311,14 +311,21 @@ module.exports = function(grunt) {
         ]
       }
     },
-    // HTTP Server
-    connect: {
-      server: {
-        options: {
-          port: <%= serverPort %>
-        }
+
+    // Browser sync and server
+    browserSync: {
+      bsFiles: {
+        src: ['<%= jshint.files %>', 'js/templates/**/*', 'styles/**/*.css', '.tmp/**/*.css']
+      },
+      options: {
+        server: {
+          baseDir: './'
+        },
+        watchTask: true,
+        port: <%= serverPort %>
       }
     },
+
     // Watches files for changes and performs task
     watch: {
       files: ['<%%= jshint.files %>'<% if (projectPrerequisites.useCompass) { %>, 'styles/*.scss'<% } %>],
@@ -334,9 +341,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-browser-sync');
   grunt.loadNpmTasks('grunt-s3');
 
   // Custom task to output embed code when deploy is run, if the project is Inline
@@ -354,10 +361,10 @@ module.exports = function(grunt) {
   // Watch tasks
   <% if (projectPrerequisites.useCompass) { %>
   grunt.registerTask('watcher', ['jshint', 'compass:dev']);
-  grunt.registerTask('server', ['jshint', 'compass:dev', 'connect', 'watch']);
+  grunt.registerTask('server', ['jshint', 'compass:dev', 'browserSync', 'watch']);
   <% } else { %>
   grunt.registerTask('watcher', ['jshint']);
-  grunt.registerTask('server', ['connect', 'watch']);
+  grunt.registerTask('server', ['browserSync', 'watch']);
   <% } %>
 
   // Deploy tasks
