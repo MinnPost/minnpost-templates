@@ -26,7 +26,6 @@ define('<%= projectName %>', [
     this.el = this.options.el;
     this.$el = $(this.el);
     this.$ = function(selector) { return this.$el.find(selector); };
-    this.$content = this.$el.find('.content-container');
     this.loadApp();
   };
 
