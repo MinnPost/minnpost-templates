@@ -20,7 +20,7 @@
       if (key.length > 1) {
         assoc[decode(key[0])] = decode(key[1]);
       }
-    };
+    }
 
     return assoc;
   };
@@ -43,10 +43,11 @@
     }
     // Embed with deploy
     else if (mpEmbed && mpDeployment === 'deploy') {
-      addScript('https://s3.amazonaws.com/data.minnpost/projects/' + projectName + '/' + projectName + '.latest.embed.min.js');
+      addScript('//s3.amazonaws.com/data.minnpost/projects/' + projectName + '/' + projectName + '.latest.embed.min.js');
     }
     // No embed local
     else if (!mpEmbed && mpDeployment === 'local') {
+      addScript('js/build/wrapper.start.js');
       addScript('bower_components/requirejs/require.js');
       addScript('js/config.js');
       addScript('js/app.js');
@@ -59,8 +60,8 @@
     }
     // No embed deploy (default)
     else if (!mpEmbed && (!mpDeployment || mpDeployment === 'deploy')) {
-      addScript('https://s3.amazonaws.com/data.minnpost/projects/' + projectName + '/' + projectName + '.libs.min.js');
-      addScript('https://s3.amazonaws.com/data.minnpost/projects/' + projectName + '/' + projectName + '.latest.min.js');
+      addScript('//s3.amazonaws.com/data.minnpost/projects/' + projectName + '/' + projectName + '.libs.min.js');
+      addScript('//s3.amazonaws.com/data.minnpost/projects/' + projectName + '/' + projectName + '.latest.min.js');
     }
   };
 })();

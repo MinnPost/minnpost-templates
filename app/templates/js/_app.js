@@ -185,7 +185,7 @@ define('<%= projectName %>', [
         });
 
       // GeoJSON example
-      $.getJSON('http://boundaries.minnpost.com/1.0/boundary/27-county-2010/?callback=?', function(data) {
+      $.getJSON('//boundaries.minnpost.com/1.0/boundary/27-county-2010/?callback=?', function(data) {
         if (data.simple_shape) {
           L.geoJson(data.simple_shape, {
             style: mpMaps.mapStyle,
@@ -233,15 +233,15 @@ define('<%= projectName %>', [
         deploy: {
           css: [
             '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css',
-            'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.libs.min.css',
-            'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.latest.min.css'
+            '//s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.libs.min.css',
+            '//s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.latest.min.css'
           ],
           ie: [
-            'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.libs.min.ie.css',
-            'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.latest.min.ie.css'
+            '//s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.libs.min.ie.css',
+            '//s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.latest.min.ie.css'
           ],
-          images: 'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/images/',
-          data: 'https://s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/data/'
+          images: '//s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/images/',
+          data: '//s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/data/'
         }
       }
     },

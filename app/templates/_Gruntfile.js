@@ -51,13 +51,13 @@ module.exports = function(grunt) {
     jshint: {
       options: {
         curly: true,
-        //es3: true,
         forin: true,
         latedef: true,
-        //maxlen: 80,
-        indent: 2
+        indent: 2,
+        // For document.write in deployment.js
+        evil: true
       },
-      files: ['Gruntfile.js', 'js/*.js', 'data-processing/*.js']
+      files: ['Gruntfile.js', 'js/**/*.js', 'data-processing/**/*.js']
     },
 
     <% if (projectPrerequisites.useCompass) { %>
