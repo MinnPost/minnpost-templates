@@ -34,7 +34,6 @@ All commands are assumed to be on the [command line](http://en.wikipedia.org/wik
     * On a Mac do: `sudo gem install sass`
 1. Install [Compass](http://compass-style.org/): `gem install compass`
     * On a Mac do: `sudo gem install compass`<% } %>
-<% if (typeof filteredComponentMap.leaflet != 'undefined') { %>1. Because Leaflet comes unbuilt, we need to build it with Jake: `npm install -g jake`<% } %>
 
 ### Get code and install packages
 
@@ -46,8 +45,6 @@ Get the code for this project and install the necessary dependency libraries and
 1. Install Bower components: `bower install`
 <% if (projectPrerequisites.useRuby) { %>1. Install Ruby gems: `bundle install`<% } %>
 <% if (projectPrerequisites.usePython) { %>1. Install python packages: `pip install -r requirements.txt` <% } %>
-<% if (typeof filteredComponentMap.leaflet != 'undefined') { %>1. Because Leaflet comes unbuilt, we need to build it: `cd bower_components/leaflet/ && npm install && jake; cd -;`<% } %>
-<% if (typeof filteredComponentMap['mapbox.js'] != 'undefined') { %>1. Because Mapbox comes unbuilt, we need to build it: `cd bower_components/mapbox.js/ && npm install && make; cd -;`<% } %>
 
 ### Data processing
 
