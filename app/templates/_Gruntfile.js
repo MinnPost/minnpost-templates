@@ -315,7 +315,7 @@ module.exports = function(grunt) {
     // Browser sync and server
     browserSync: {
       bsFiles: {
-        src: ['<%= jshint.files %>', 'js/templates/**/*', 'styles/**/*.css', '.tmp/**/*.css']
+        src: ['<%%= jshint.files %>', 'js/templates/**/*', 'styles/**/*.css', '.tmp/**/*.css']
       },
       options: {
         server: {
