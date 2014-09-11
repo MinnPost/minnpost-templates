@@ -19,6 +19,7 @@ define('<%= projectName %>', [
   <%= (projectFeatures.hasCSVs) ? "tExampleCSV, " : "" %>
   tApplication
   ) {
+  'use strict';
 
   // Constructor for app
   var App = function(options) {

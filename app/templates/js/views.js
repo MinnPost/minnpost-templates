@@ -7,6 +7,7 @@
  */
 define('views', ['jquery', 'underscore', 'ractive', 'ractive-backbone'],
   function($, _, Ractive, RactiveB) {
+  'use strict';
   var views = {};
 
   // Base view to extend from

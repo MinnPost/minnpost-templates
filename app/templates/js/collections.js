@@ -3,6 +3,7 @@
  */
 define('collections', ['underscore', 'backbone', 'models'],
   function(_, Backbone, models) {
+  'use strict';
   var collections = {};
 
   // Base collection

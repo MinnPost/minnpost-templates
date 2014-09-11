@@ -9,6 +9,7 @@ define('routers', [
 ], function(_, Backbone, Ractive, RactiveBackbone,
     models, collections, views,
     tApplication, tLoading) {
+  'use strict';
   var routers = {};
 
   // Base model

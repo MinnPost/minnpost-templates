@@ -5,7 +5,7 @@
  */
 define('helpers', ['jquery', 'underscore'<% if (projectFeatures.hasBackbone === true) { %>, 'Backbone'<% } %>],
   function($, _<% if (projectFeatures.hasBackbone === true) { %>, Backbone<% } %>) {
-
+  'use strict';
   var helpers = {};
 
   /**

@@ -3,6 +3,7 @@
  */
 define('models', ['underscore', 'backbone'],
   function(_, Backbone) {
+  'use strict';
   var models = {};
 
   // Base model
