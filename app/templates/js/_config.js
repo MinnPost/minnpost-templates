@@ -3,6 +3,15 @@
  * any non-compliant libraries.
  */
 require.config({
+  // Hack around jQuery
+  map: {
+    '*': {
+      'jquery': 'jquery-noconflict'
+    },
+    'jquery-noconflict': {
+      'jquery': 'jquery'
+    }
+  },
   shim: {
     <% if (projectFeatures.hasHighcharts === true) { %>
     'highcharts': {
@@ -27,6 +36,7 @@ require.config({
   paths: {
     <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].js) { %>
     '<%= filteredComponentMap[c].rname %>': '../bower_components/<%= filteredComponentMap[c].js[0] %>',<% }} %>
+    'jquery-noconflict': 'build/jquery-noconflict',
     '<%= projectName %>': 'app'
   }
 });

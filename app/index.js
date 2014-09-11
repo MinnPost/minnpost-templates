@@ -39,7 +39,7 @@ var MinnpostApplicationGenerator = module.exports = function MinnpostApplication
       skipInstall: options['skip-install'],
       skipMessage: options['skip-install-message'],
       callback: function() {
-        
+
       }.bind(this)
     });
   });
@@ -361,6 +361,7 @@ MinnpostApplicationGenerator.prototype.app = function app() {
   this.copy('js/build/wrapper.start.js');
   this.copy('js/build/wrapper.end.js');
   this.copy('js/build/deployment.js');
+  this.copy('js/build/jquery-noconflict.js');
 
   // App parts
   this.template('js/_config.js', 'js/config.js');
