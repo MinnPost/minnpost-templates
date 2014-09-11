@@ -39,19 +39,7 @@ var MinnpostApplicationGenerator = module.exports = function MinnpostApplication
       skipInstall: options['skip-install'],
       skipMessage: options['skip-install-message'],
       callback: function() {
-        var command;
-
-        // Build Leaflet
-        if (typeof this.filteredComponentMap.leaflet !== 'undefined') {
-          command = 'npm install -g jake; cd bower_components/leaflet/ && npm install && jake; cd -;';
-          console.log('IMPORTANT! Leaflet does not come built, run the following: ');
-          console.log(command);
-        }
-        if (typeof this.filteredComponentMap['mapbox.js'] !== 'undefined') {
-          command = 'cd bower_components/mapbox.js/ && npm install && make; cd -;';
-          console.log('IMPORTANT! Mapbox does not come built, run the following: ');
-          console.log(command);
-        }
+        
       }.bind(this)
     });
   });
@@ -210,15 +198,15 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     // as well as extra components that are sub components of others.
     bowerFeatureMap = {
       'hasLeaflet': {
-        lib: 'leaflet#~0.7.2',
+        lib: 'leaflet#~0.7.3',
         extras: 'mpMaps'
       },
       'hasMapbox': {
-        lib: 'mapbox.js#~1.6.2',
+        lib: 'mapbox.js#~2.1.0',
         extras: 'mpMaps'
       },
       'hasDatatables': {
-        lib: 'datatables#~1.9.4',
+        lib: 'datatables#~1.10.2',
         extras: 'mpDatatables'
       },
       'hasNav': {
@@ -226,13 +214,13 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       },
       'hasCSVs': { lib: 'jquery-csv#*' },
       'hasHighcharts': {
-        lib: 'highcharts.com#~3.0.9',
+        lib: 'highcharts.com#~4.0.4',
         extras: 'mpHighcharts'
       },
-      'hasDates': { lib: 'moment#~2.6.0' },
+      'hasDates': { lib: 'moment#~2.8.3' },
       'hasInputs': { lib: 'Placeholders.js#~3.0.2' },
-      'hasRactive': { lib: 'ractive#~0.4.0 ractive-events-tap#~0.1.1' },
-      'hasBackbone': { lib: 'backbone#~1.1.2 ractive-backbone#master' }
+      'hasRactive': { lib: 'ractive#~0.5.6 ractive-events-tap#~0.1.1' },
+      'hasBackbone': { lib: 'backbone#~1.1.2 ractive-backbone#~0.1.1' }
     };
     // List of components to install
     _.each(props.projectFeatures, function(p, pi) {
@@ -247,7 +235,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     });
 
     // Add constant dependencies
-    props.bowerComponents += ' requirejs#~2.1.11 almond#~0.2.9 text#~2.0.12 underscore#~1.6.0 jquery#~1.11.0 minnpost-styles#master';
+    props.bowerComponents += ' requirejs#~2.1.15 almond#~0.3.0 text#~2.0.12 underscore#~1.7.0 jquery#~1.11.1 minnpost-styles#master';
     // Add constant includes
     props.bowerComponentsInclude += ' mpConfig mpFormatters';
 

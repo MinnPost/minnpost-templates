@@ -35,7 +35,7 @@
   },
   "ractive": {
     "rname": "ractive",
-    "js": ["ractive/ractive"],
+    "js": ["ractive/ractive-legacy"],
     "returns": "Ractive"
   },
   "ractive-backbone": {
@@ -82,9 +82,9 @@
   },
   "mapbox.js": {
     "rname": "mapbox",
-    "js": ["mapbox.js/dist/mapbox.uncompressed"],
-    "css": ["mapbox.js/dist/mapbox.uncompressed"],
-    "images": ["mapbox.js/dist/images"],
+    "js": ["mapbox.js/mapbox.uncompressed"],
+    "css": ["mapbox.js/mapbox.uncompressed"],
+    "images": ["mapbox.js/images"],
     "returns": "L"
   },
   "datatables": {
