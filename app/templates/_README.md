@@ -20,7 +20,7 @@ All commands are assumed to be on the [command line](http://en.wikipedia.org/wik
     * On a Mac, install [Homebrew](http://brew.sh/), then do: `brew install git`
 1. Install [NodeJS](http://nodejs.org/).
     * On a Mac, do: `brew install node`
-1. Optionally, for development, install [Grunt](http://gruntjs.com/): `npm install -g grunt-cli`
+1. Install [Grunt](http://gruntjs.com/): `npm install -g grunt-cli`
 1. Install [Bower](http://bower.io/): `npm install -g bower`
 <% if (projectPrerequisites.useRuby || projectPrerequisites.useSass) { %>1. Install [Ruby](http://www.ruby-lang.org/en/downloads/), though it is probably already installed on your system.
 1. Install [Bundler](http://gembundler.com/): `gem install bundler`<% } %>
@@ -58,10 +58,10 @@ The `Makefile` runs tasks such as downloading sources and converting data.
     * This will run a local webserver for development and you can view the application in your web browser at [http://localhost:<%= serverPort %>](http://localhost:<%= serverPort %>).
     * This will also run [BrowserSync](http://www.browsersync.io/) so any development changes will appear in the browser automatically; note that compiling SASS can take a few seconds.
 1. By default, running a local server will show you the local development version.  But there are other builds that you can view by changing the query parameters.  Do note that you may have to run the build and deploy things for things to work normally.
-    * Local build: http://localhost:<%= serverPort %>/?mpDeployment=build
-    * Build deployed on S3: http://localhost:<%= serverPort %>/?mpDeployment=deploy
-    * Embedded version with local build: http://localhost:<%= serverPort %>/?mpDeployment=build&mpEmbed=true
-    * Embedded version with S3 build: http://localhost:<%= serverPort %>/?mpDeployment=deploy&mpEmbed=true
+    * Local build: [localhost:<%= serverPort %>/?mpDeployment=build](http://localhost:<%= serverPort %>/?mpDeployment=build)
+    * Build deployed on S3: [localhost:<%= serverPort %>/?mpDeployment=deploy](http://localhost:<%= serverPort %>/?mpDeployment=deploy)
+    * Embedded version with local build: [localhost:<%= serverPort %>/?mpDeployment=build&mpEmbed=true](http://localhost:<%= serverPort %>/?mpDeployment=build&mpEmbed=true)
+    * Embedded version with S3 build: [localhost:<%= serverPort %>/?mpDeployment=deploy&mpEmbed=true](http://localhost:<%= serverPort %>/?mpDeployment=deploy&mpEmbed=true)
 
 ### Developing
 
