@@ -1,7 +1,7 @@
 /**
  * Collections
  */
-define('collections', ['underscore', 'backbone', 'models'],
+define(['underscore', 'backbone', 'models'],
   function(_, Backbone, models) {
   'use strict';
   var collections = {};

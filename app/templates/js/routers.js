@@ -1,7 +1,7 @@
 /**
  * Routers
  */
-define('routers', [
+define([
   'underscore', 'backbone', 'ractive', 'ractive-backbone',
   'models', 'collections', 'views',
   'text!templates/application.mustache',
