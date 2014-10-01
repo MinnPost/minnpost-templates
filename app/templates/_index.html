@@ -59,7 +59,9 @@
           </div>
         <![endif]-->
 
-        <div class="<%= projectName %>-container minnpost-full-container"></div>
+        <div class="<%= projectName %>-container minnpost-full-container">
+          <div style="text-align: center; padding: 1em">Loading...</div>
+        </div>
       </div>
     </div>
 
@@ -68,7 +70,8 @@
       //<![CDATA[
       window._trackJs = {
         token: '39ecc28b4f344805a47e8e4f56ae353c',
-        application: '<%= projectName %>'
+        application: '<%= projectName %>',
+        enabled: (window.mpMakeDeployment) ? false : true
       }
       //]]>
     </script>

@@ -108,7 +108,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     name: 'projectFeatures',
     message: 'Application features (will include necessary libraries):',
     choices: [
-      { name: 'Backbone', value: 'hasBackbone' },
+      { name: 'Complex modeling', value: 'hasModeling' },
       { name: 'Leaflet map', value: 'hasLeaflet' },
       { name: 'Mapbox map', value: 'hasMapbox' },
       { name: 'Datatable', value: 'hasDatatables' },
@@ -219,8 +219,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
       },
       'hasDates': { lib: 'moment#~2.8.3' },
       'hasInputs': { lib: 'Placeholders.js#~3.0.2' },
-      'hasRactive': { lib: 'ractive#~0.5.6 ractive-events-tap#~0.1.1' },
-      'hasBackbone': { lib: 'backbone#~1.1.2 ractive-backbone#~0.1.1' }
+      'hasRactive': { lib: 'ractive#~0.5.6 ractive-events-tap#~0.1.1 ractive-backbone#~0.1.1' }
     };
     // List of components to install
     _.each(props.projectFeatures, function(p, pi) {
@@ -235,7 +234,7 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
     });
 
     // Add constant dependencies
-    props.bowerComponents += ' requirejs#~2.1.15 almond#~0.3.0 text#~2.0.12 underscore#~1.7.0 jquery#~1.11.1 minnpost-styles#master';
+    props.bowerComponents += ' requirejs#~2.1.15 almond#~0.3.0 text#~2.0.12 underscore#~1.7.0 jquery#~1.11.1 backbone#~1.1.2 rgrove-lazyload minnpost-styles#master';
     // Add constant includes
     props.bowerComponentsInclude += ' mpConfig mpFormatters';
 
@@ -364,6 +363,7 @@ MinnpostApplicationGenerator.prototype.app = function app() {
   this.copy('js/build/jquery-noconflict.js');
 
   // App parts
+  this.copy('js/base.js', 'js/base.js');
   this.template('js/_config.js', 'js/config.js');
   this.template('js/_helpers.js', 'js/helpers.js');
   this.template('js/_app.js', 'js/app.js');
@@ -376,11 +376,10 @@ MinnpostApplicationGenerator.prototype.app = function app() {
     this.template('js/templates/_application.mustache', 'js/templates/application.underscore');
   }
 
-  // Backbone
-  if (this.projectFeatures.hasBackbone === true) {
+  // Modeling
+  if (this.projectFeatures.hasModeling === true) {
     this.copy('js/models.js');
     this.copy('js/collections.js');
-    this.copy('js/views.js');
     this.copy('js/routers.js');
   }
 

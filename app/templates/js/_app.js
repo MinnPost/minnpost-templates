@@ -6,34 +6,30 @@
  */
 
 // Create main application
-define('<%= projectName %>', [
+require([
   <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].js && filteredComponentMap[c].returns) { %>'<%= filteredComponentMap[c].rname %>', <% }} %>
-  'helpers',
-  <%= (projectFeatures.hasBackbone) ? "'routers', " : "" %>
+  'helpers', 'base',
+  <%= (projectFeatures.hasModeling) ? "'routers', " : "" %>
   <%= (projectFeatures.hasCSVs) ? "'text!../data/example.csv', " : "" %>
   'text!templates/application.<%= templateExt %>'
 ], function(
   <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].js && filteredComponentMap[c].returns) { %><%= filteredComponentMap[c].returns %>, <% }} %>
-  helpers,
+  helpers, Base,
   <%= (projectFeatures.hasBackbone) ? "routers, " : "" %>
   <%= (projectFeatures.hasCSVs) ? "tExampleCSV, " : "" %>
   tApplication
   ) {
   'use strict';
 
-  // Constructor for app
-  var App = function(options) {
-    this.options = _.extend(this.defaultOptions, options);
-    this.el = this.options.el;
-    this.$el = $(this.el);
-    this.$ = function(selector) { return this.$el.find(selector); };
-    this.loadApp();
-  };
+  // Create new class for app
+  var App = Base.BaseApp.extend({
 
-  // Extend with custom methods
-  _.extend(App.prototype, {
-    // Start function
-    start: function() {
+    defaults: {
+      name: 'minnpost-2014-follow-the-money',
+      el: '.minnpost-2014-follow-the-money-container'
+    },
+
+    initialize: function() {
       var thisApp = this;
 
       <% if (projectFeatures.hasBackbone) { %>
@@ -204,137 +200,8 @@ define('<%= projectName %>', [
       <% } %>
     },
     <% } %>
-
-    // Default options
-    defaultOptions: {
-      projectName: '<%= projectName %>',
-      remoteProxy: null,
-      el: '.<%= projectName %>-container',
-      availablePaths: {
-        local: {
-          <% if (projectPrerequisites.useCompass) { %>
-          css: ['.tmp/css/main.css'],<% } else { %>
-          css: ['styles/styles.css'],<% } %>
-          images: 'images/',
-          data: 'data/'
-        },
-        build: {
-          css: [
-            '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css',
-            'dist/<%= projectName %>.libs.min.css',
-            'dist/<%= projectName %>.latest.min.css'
-          ],
-          ie: [
-            'dist/<%= projectName %>.libs.min.ie.css',
-            'dist/<%= projectName %>.latest.min.ie.css'
-          ],
-          images: 'dist/images/',
-          data: 'dist/data/'
-        },
-        deploy: {
-          css: [
-            '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css',
-            '//s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.libs.min.css',
-            '//s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.latest.min.css'
-          ],
-          ie: [
-            '//s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.libs.min.ie.css',
-            '//s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/<%= projectName %>.latest.min.ie.css'
-          ],
-          images: '//s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/images/',
-          data: '//s3.amazonaws.com/data.minnpost/projects/<%= projectName %>/data/'
-        }
-      }
-    },
-
-    // Load up app
-    loadApp: function() {
-      this.determinePaths();
-      this.getLocalAssests(function(map) {
-        this.renderAssests(map);
-        this.start();
-      });
-    },
-
-    // Determine paths.  A bit hacky.
-    determinePaths: function() {
-      var query;
-      this.options.deployment = 'deploy';
-
-      if (window.location.host.indexOf('localhost') !== -1) {
-        this.options.deployment = 'local';
-
-        // Check if a query string forces something
-        query = helpers.parseQueryString();
-        if (_.isObject(query) && _.isString(query.mpDeployment)) {
-          this.options.deployment = query.mpDeployment;
-        }
-      }
-
-      this.options.paths = this.options.availablePaths[this.options.deployment];
-    },
-
-    // Get local assests, if needed
-    getLocalAssests: function(callback) {
-      var thisApp = this;
-
-      // If local read in the bower map
-      if (this.options.deployment === 'local') {
-        $.getJSON('bower.json', function(data) {
-          callback.apply(thisApp, [data.dependencyMap]);
-        });
-      }
-      else {
-        callback.apply(this, []);
-      }
-    },
-
-    // Rendering tasks
-    renderAssests: function(map) {
-      var isIE = (helpers.isMSIE() && helpers.isMSIE() <= 8);
-
-      // Add CSS from bower map
-      if (_.isObject(map)) {
-        _.each(map, function(c, ci) {
-          if (c.css) {
-            _.each(c.css, function(s, si) {
-              s = (s.match(/^(http|\/\/)/)) ? s : 'bower_components/' + s + '.css';
-              $('head').append('<link rel="stylesheet" href="' + s + '" type="text/css" />');
-            });
-          }
-          if (c.ie && isIE) {
-            _.each(c.ie, function(s, si) {
-              s = (s.match(/^(http|\/\/)/)) ? s : 'bower_components/' + s + '.css';
-              $('head').append('<link rel="stylesheet" href="' + s + '" type="text/css" />');
-            });
-          }
-        });
-      }
-
-      // Get main CSS
-      _.each(this.options.paths.css, function(c, ci) {
-        $('head').append('<link rel="stylesheet" href="' + c + '" type="text/css" />');
-      });
-      if (isIE) {
-        _.each(this.options.paths.ie, function(c, ci) {
-          $('head').append('<link rel="stylesheet" href="' + c + '" type="text/css" />');
-        });
-      }
-
-      // Add a processed class
-      this.$el.addClass('processed');
-    }
   });
 
-  return App;
-});
-
-
-/**
- * Run application
- */
-require(['jquery', '<%= projectName %>'], function($, App) {
-  $(document).ready(function() {
-    var app = new App();
-  });
+  // Create instance and return
+  return new App({});
 });

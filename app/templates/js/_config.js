@@ -30,13 +30,15 @@ require.config({
     'mapbox': {
       exports: 'mapbox'
     },
-    <% } %>
+    <% } %> {
+    'lazyload': {
+      exports: 'LazyLoad'
+    }
   },
   baseUrl: 'js',
   paths: {
     <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].js) { %>
     '<%= filteredComponentMap[c].rname %>': '../bower_components/<%= filteredComponentMap[c].js[0] %>',<% }} %>
-    'jquery-noconflict': 'build/jquery-noconflict',
-    '<%= projectName %>': 'app'
+    'jquery-noconflict': 'build/jquery-noconflict'
   }
 });

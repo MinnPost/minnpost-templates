@@ -33,6 +33,11 @@
     "js": ["backbone/backbone"],
     "returns": "Backbone"
   },
+  "rgrove-lazyload": {
+    "rname": "lazyload",
+    "js": ["rgrove-lazyload/lazyload"],
+    "returns": "Lazyload"
+  },
   "ractive": {
     "rname": "ractive",
     "js": ["ractive/ractive-legacy"],
