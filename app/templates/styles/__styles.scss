@@ -2,9 +2,6 @@
  * Main styles for: <%= projectName %>
  */
 
-// Variables
-$space: 1em;
-
 
 // This makes the unpublished background not as annoying
 body .node-unpublished {
@@ -15,11 +12,21 @@ body .node-unpublished {
 .mp .<%= projectName %>-container {
 
   .application-container {
-    padding-top: 1em;
+    padding-top: 3em;
   }
 
 
-  // Custom breakpoints
-  @media screen and (max-width: 768px) {
+  // Default responsive points
+  // $responsive-points: (
+  //   ("all", 0px),
+  //   ("small", 420px),
+  //   ("medium", 640px),
+  //   ("large", 960px),
+  //   ("xlarge", 1200px)
+  // ) !default;
+
+  // Medium breakpoint
+  @media screen and (max-width: nth(nth($responsive-points, 3), 2)) {
+
   }
 }
