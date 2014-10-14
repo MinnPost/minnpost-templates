@@ -357,10 +357,7 @@ MinnpostApplicationGenerator.prototype.app = function app() {
   this.template('_bower.json', 'bower.json');
 
   // Build parts
-  this.copy('js/build/wrapper.start.js');
-  this.copy('js/build/wrapper.end.js');
-  this.copy('js/build/deployment.js');
-  this.copy('js/build/jquery-noconflict.js');
+  this.directory('js/build/');
 
   // App parts
   this.copy('js/base.js', 'js/base.js');
@@ -382,6 +379,10 @@ MinnpostApplicationGenerator.prototype.app = function app() {
     this.copy('js/collections.js');
     this.copy('js/routers.js');
   }
+
+  // Tests
+  this.directory('tests');
+  this.copy('travis.yml', '.travis.yml');
 
   // Grunt stuff
   this.template('_Gruntfile.js', 'Gruntfile.js');

@@ -6,6 +6,8 @@ You can see this project in action at *[published story link goes here]()*.
 
 *Unless otherwise noted, MinnPost projects on [Github](https://github.com/minnpost) are story-driven and meant for transparency sake and not focused on re-use.  For a list of our more reusable projects, go to [code.minnpost.com](http://code.minnpost.com).*
 
+[![Build Status](https://travis-ci.org/MinnPost/<%= projectName %>.svg?branch=master)](https://travis-ci.org/MinnPost/<%= projectName %>)
+
 ## Data
 
 *Describe the data sources here.  Use links and URLs to show where the data came from.  Put small sized originals or modified data sources in the ```data/original``` folder and ensure to update the `.gitignore` file*
@@ -95,7 +97,9 @@ Adding libraries is not difficult, but there are a few steps.
 
 ### Testing
 
-Unfortunately there are no tests at the moment.
+There are basic QUnit tests in the `tests` folder.
+
+1. Run with: `grunt test`
 
 ### Build
 
@@ -122,7 +126,7 @@ There are to main ways to include the necessary HTML in a page in order to run t
 
 ## About Us
 
-MinnData, the MinnPost data team, is Alan, Tom, and Kaeti and all the awesome contributors to open source projects we utilize.  See our work at [minnpost.com/data](http://minnpost.com/data).
+MinnData, the MinnPost data team, is Alan and Tom aided by MinnPost reports and editors and all the awesome contributors to open source projects we utilize.  See our work at [minnpost.com/data](http://minnpost.com/data).
 
 ```
 

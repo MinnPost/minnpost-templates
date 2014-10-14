@@ -57,7 +57,7 @@ module.exports = function(grunt) {
         // For document.write in deployment.js
         evil: true
       },
-      files: ['Gruntfile.js', 'js/**/*.js', 'data-processing/**/*.js']
+      files: ['Gruntfile.js', 'js/**/*.js', 'tests/**/*.js', 'data-processing/**/*.js']
     },
 
     <% if (projectPrerequisites.useCompass) { %>
@@ -125,7 +125,7 @@ module.exports = function(grunt) {
     requirejs: {
       app: {
         options: {
-          name: '<%%= pkg.name %>',
+          name: 'app',
           // Exclude libraries
           exclude: _.compact(_.flatten(_.pluck(_.filter(components, function(c) { return (c.js !== undefined); }), 'rname'))),
           baseUrl: 'js',
@@ -151,7 +151,7 @@ module.exports = function(grunt) {
       },
       embed: {
         options: {
-          name: '<%%= pkg.name %>',
+          name: 'app',
           include: ['almond'],
           exclude: ['requirejs'],
           baseUrl: 'js',
@@ -330,6 +330,26 @@ module.exports = function(grunt) {
     watch: {
       files: ['<%%= jshint.files %>'<% if (projectPrerequisites.useCompass) { %>, 'styles/*.scss'<% } %>],
       tasks: 'watcher'
+    },
+
+    // Testing with Qunit, connect is used for standalone testing
+    qunit: {
+      main: {
+        options: {
+          timeout: 10000,
+          urls: [
+            'http://localhost:<%%= connect.server.options.port %>/tests/index.html'
+          ]
+        }
+      }
+    },
+    connect: {
+      server: {
+        options: {
+          port: 8999,
+          useAvailablePort: true
+        }
+      }
     }
   });
 
@@ -343,6 +363,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-browser-sync');
   grunt.loadNpmTasks('grunt-s3');
 
@@ -357,6 +379,9 @@ module.exports = function(grunt) {
 
   // Default build task
   grunt.registerTask('default', ['jshint', <% if (projectPrerequisites.useCompass) { %>'compass:dist', <% } %>'clean', 'copy', 'requirejs', 'concat', 'cssmin', 'uglify']);
+
+  // Testing
+  grunt.registerTask('test', ['connect', 'qunit']);
 
   // Watch tasks
   <% if (projectPrerequisites.useCompass) { %>
