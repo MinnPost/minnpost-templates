@@ -35,6 +35,11 @@ var MinnpostApplicationGenerator = module.exports = function MinnpostApplication
   yeoman.generators.Base.apply(this, arguments);
 
   this.on('end', function () {
+    // Manually install bower and npm to use force on bower
+    this.bowerInstall(null, { force: true });
+    this.npmInstall(null, null);
+
+    /*
     this.installDependencies({
       skipInstall: options['skip-install'],
       skipMessage: options['skip-install-message'],
@@ -42,6 +47,7 @@ var MinnpostApplicationGenerator = module.exports = function MinnpostApplication
 
       }.bind(this)
     });
+    */
   });
 
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
@@ -362,7 +368,6 @@ MinnpostApplicationGenerator.prototype.app = function app() {
   // App parts
   this.copy('js/base.js', 'js/base.js');
   this.template('js/_config.js', 'js/config.js');
-  this.template('js/_helpers.js', 'js/helpers.js');
   this.template('js/_app.js', 'js/app.js');
 
   // Ractive
