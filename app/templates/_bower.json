@@ -16,5 +16,8 @@
   "dependencies": {<% bowerComponents.forEach(function(m, i) { %>
     "<%= m.name %>": "<%= m.version %>"<% if (i < bowerComponents.length - 1) { %>,<% } %><% }) %>
   },
+  "devDependencies": {
+    "qunit": "~1.15.0"
+  },
   "dependencyMap": <%= JSON.stringify(filteredComponentMap, null, '  ') %>
 }

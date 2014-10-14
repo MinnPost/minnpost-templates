@@ -3,8 +3,8 @@
  */
 
 // Create main application
-define(['jquery', 'underscore', 'backbone', 'lazyload', 'helpers', 'text!../bower.json'],
-  function($, _, Backbone, Lazyload, helpers, bower) {
+define(['jquery', 'underscore', 'backbone', 'lazyload', 'mpFormatters', 'text!../bower.json'],
+  function($, _, Backbone, Lazyload, formatters, bower) {
   'use strict';
 
   var Base = {};
@@ -40,6 +40,7 @@ define(['jquery', 'underscore', 'backbone', 'lazyload', 'helpers', 'text!../bowe
 
     // Default options
     baseDefaults: {
+      jsonpProxy: '//mp-jsonproxy.herokuapp.com/proxy?url=',
       availablePaths: {
         local: {
           css: ['.tmp/css/main.css'],
@@ -83,7 +84,7 @@ define(['jquery', 'underscore', 'backbone', 'lazyload', 'helpers', 'text!../bowe
         this.options.deployment = 'local';
 
         // Check if a query string forces something
-        query = helpers.parseQueryString();
+        query = this.parseQueryString();
         if (_.isObject(query) && _.isString(query.mpDeployment)) {
           this.options.deployment = query.mpDeployment;
         }
@@ -128,7 +129,102 @@ define(['jquery', 'underscore', 'backbone', 'lazyload', 'helpers', 'text!../bowe
 
     // Make path
     makePath: function(path) {
-      return path.replace('[[[PROJECT_NAME]]]', this.name, 'g');
+      path = path.split('[[[PROJECT_NAME]]]').join(this.name);
+      if (this.options.basePath && !path.match(/^(http|\/\/)/)) {
+        path = this.options.basePath + path;
+      }
+      return path;
+    },
+
+    // Override Backbone's ajax call to use JSONP by default as well
+    // as force a specific callback to ensure that server side
+    // caching is effective.
+    overrideBackboneAJAX: function() {
+      Backbone.ajax = function() {
+        var options = arguments[0];
+        if (options.dataTypeForce !== true) {
+          return this.jsonpRequest(options);
+        }
+        return Backbone.$.ajax.apply(Backbone.$, [options]);
+      };
+    },
+
+    // Unfortunately we need this more often than we should
+    isMSIE: function() {
+      var match = /(msie) ([\w.]+)/i.exec(navigator.userAgent);
+      return match ? parseInt(match[2], 10) : false;
+    },
+
+    // Read query string
+    parseQueryString: function() {
+      var assoc  = {};
+      var decode = function(s) {
+        return decodeURIComponent(s.replace(/\+/g, " "));
+      };
+      var queryString = location.search.substring(1);
+      var keyValues = queryString.split('&');
+
+      _.each(keyValues, function(v, vi) {
+        var key = v.split('=');
+        if (key.length > 1) {
+          assoc[decode(key[0])] = decode(key[1]);
+        }
+      });
+
+      return assoc;
+    },
+
+    // Wrapper for a JSONP request, the first set of options are for
+    // the AJAX request, while the other are from the application.
+    //
+    // JSONP is hackish, but there are still data sources and
+    // services that we don't have control over that don't fully
+    // support CORS
+    jsonpRequest: function(options) {
+      options.dataType = 'jsonp';
+
+      // If no callback, use proxy
+      if (this.options.jsonpProxy && options.url.indexOf('callback=') === -1) {
+        options.jsonpCallback = 'mpServerSideCachingHelper' +
+          formatters.hash(options.url);
+        options.url = this.options.jsonpProxy + encodeURIComponent(options.url) +
+          '&callback=' + options.jsonpCallback;
+        options.cache = true;
+      }
+
+      return $.ajax.apply($, [options]);
+    },
+
+
+    // Project data source handling for data files that are not
+    // embedded in the application itself.  For development, we can call
+    // the data directly from the JSON file, but for production
+    // we want to proxy for JSONP.
+    //
+    // Takes single or array of paths to data, relative to where
+    // the data source should be.
+    //
+    // Returns jQuery's defferred object.
+    dataRequest: function(datas) {
+      var thisApp = this;
+      var useJSONP = false;
+      var defers = [];
+      datas = (_.isArray(name)) ? datas : [ datas ];
+
+      // If the data path is not relative, then use JSONP
+      if (this.options.paths.data.indexOf('http') === 0) {
+        useJSONP = true;
+      }
+
+      // Go through each file and add to defers
+      _.each(datas, function(d) {
+        var defer = (useJSONP) ?
+          thisApp.jsonpRequest(thisApp.options.paths.data + d) :
+          $.getJSON(thisApp.options.paths.data + d);
+        defers.push(defer);
+      });
+
+      return $.when.apply($, defers);
     },
 
     // Empty initializer

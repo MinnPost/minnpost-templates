@@ -13,6 +13,7 @@ require.config({
 // Base class
 require(['base'], function(Base) {
   'use strict';
+  var timeOut = 10000;
   QUnit.start();
 
   // Create new class for app
@@ -45,7 +46,7 @@ require(['base'], function(Base) {
     var t = setTimeout(function() {
       assert.ok(false, 'Timeout reached for CSS Loaded event.');
       QUnit.start();
-    }, 5000);
+    }, timeOut);
 
 
     app.on('cssLoaded', function() {
@@ -66,7 +67,7 @@ require(['base'], function(Base) {
     var t = setTimeout(function() {
       assert.ok(false, 'Timeout reached for Base JSONP requests.');
       QUnit.start();
-    }, 9000);
+    }, timeOut);
 
     app.jsonpRequest({
       url: testEndpoint

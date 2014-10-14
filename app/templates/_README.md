@@ -100,6 +100,7 @@ Adding libraries is not difficult, but there are a few steps.
 There are basic QUnit tests in the `tests` folder.
 
 1. Run with: `grunt test`
+1. OR for more descriptive tests, go to `tests/index.html` in the browser.
 
 ### Build
 

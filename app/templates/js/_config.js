@@ -30,7 +30,7 @@ require.config({
     'mapbox': {
       exports: 'mapbox'
     },
-    <% } %> {
+    <% } %>
     'lazyload': {
       exports: 'LazyLoad'
     }

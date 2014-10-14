@@ -8,13 +8,13 @@
 // Create main application
 require([
   <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].js && filteredComponentMap[c].returns) { %>'<%= filteredComponentMap[c].rname %>', <% }} %>
-  'helpers', 'base',
+  'base',
   <%= (projectFeatures.hasModeling) ? "'routers', " : "" %>
   <%= (projectFeatures.hasCSVs) ? "'text!../data/example.csv', " : "" %>
   'text!templates/application.<%= templateExt %>'
 ], function(
   <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].js && filteredComponentMap[c].returns) { %><%= filteredComponentMap[c].returns %>, <% }} %>
-  helpers, Base,
+  Base,
   <%= (projectFeatures.hasBackbone) ? "routers, " : "" %>
   <%= (projectFeatures.hasCSVs) ? "tExampleCSV, " : "" %>
   tApplication
@@ -25,8 +25,8 @@ require([
   var App = Base.BaseApp.extend({
 
     defaults: {
-      name: 'minnpost-2014-follow-the-money',
-      el: '.minnpost-2014-follow-the-money-container'
+      name: '<%= projectName %>',
+      el: '.<%= projectName %>-container'
     },
 
     initialize: function() {
