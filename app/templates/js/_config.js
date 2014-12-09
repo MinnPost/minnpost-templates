@@ -25,10 +25,10 @@ require.config({
     },
     <% } %>
     <% if (projectFeatures.hasMapbox === true) { %>
-    // Mapbox and requireJS don't really work, so we just let
-    // the L be global
+    // Mapbox does not support RequireJS but it does include libraries
+    // that do which is annoying
     'mapbox': {
-      exports: 'mapbox'
+      exports: 'L'
     },
     <% } %>
     'lazyload': {
@@ -39,6 +39,9 @@ require.config({
   paths: {
     <% for (var c in filteredComponentMap) { if (filteredComponentMap[c].js) { %>
     '<%= filteredComponentMap[c].rname %>': '../bower_components/<%= filteredComponentMap[c].js[0] %>',<% }} %>
+    <% if (projectFeatures.hasMapbox === true) { %>
+    'leaflet': 'build/mapbox-leaflet-shim',
+    <% } %>
     'jquery-noconflict': 'build/jquery-noconflict'
   }
 });

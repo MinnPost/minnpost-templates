@@ -78,18 +78,28 @@ Adding libraries is not difficult, but there are a few steps.
 1. Add an entry in the `dependencyMap` object in `bower.json`.  This is used to automatically collect resources in the build process.  It is possible, like with `minnpost-styles` that multiple entries will need to be made, one ber `.js` file.  Here is an example:
 
 ```
-// Should be bower identifier.  Order matters for build, meaning that any dependencies should come first.
+// Should be bower identifier.  Order matters for build, meaning
+// that any dependencies should come first.
 "library": {
-  // Name used for reference in RequireJS (some modules expect dependencies with specific case, otherwise its arbitrary and you can just use the library name from above).
+  // Name used for reference in RequireJS (some modules
+  // expect dependencies with specific case, otherwise its
+  // arbitrary and you can just use the library name from above).
   // If this is not a JS library, do not include.
   "rname": "library",
-  // (optional) Path to un-minified JS files within bower_components excluding .js suffix.
+  // (optional) Path to un-minified JS files within bower_components
+  // excluding .js suffix.
   "js": ["library/dist/library"],
-  // (optional) Path to un-minified CSS files within bower_components excluding .css suffix.
+  // (optional) Path to un-minified CSS files within bower_components
+  // excluding .css suffix.
   "css": ["library/dist/css/library"],
-  // (optional) Path to un-minified IE-specific CSS files within bower_components excluding .css suffix.
+  // (optional) Path to un-minified IE-specific CSS files
+  // within bower_components excluding .css suffix.
   "ie": ["library/dist/css/library.ie"],
-  // What is expected to be returned when using as a RequireJS dependency.  Some specific libraries, like jQuery use $, or backbone returns the Backbone class.
+  // (optional) Folder where images are; these will be copied to the
+  // dist/images folder.
+  "images": ["library/dist/css/images"],
+  // What is expected to be returned when using as a RequireJS dependency.
+  // Some specific libraries, like jQuery use $, or backbone returns the Backbone class.
   // If this is not a JS library, do not include.
   "returns": "Library"
 }

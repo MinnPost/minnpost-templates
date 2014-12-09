@@ -8,6 +8,9 @@
   // Import specific parts as need.  Specificity doesn't always
   // work out well
   //@import "../bower_components/minnpost-styles/styles/_nav.scss";
+  <% if (projectFeatures.hasMapbox === true || projectFeatures.hasLeaflet === true) { %>
+  @import "../bower_components/minnpost-styles/styles/_maps.scss";
+  <% } %>
 }
 
 @import "_mixins";

@@ -208,7 +208,9 @@ MinnpostApplicationGenerator.prototype.askFor = function askFor() {
         extras: 'mpMaps'
       },
       'hasMapbox': {
-        lib: 'mapbox.js#~2.1.0',
+        // 2.x has some odd issue of not allowing JSONP but the Mapbox
+        // API still uses it ??
+        lib: 'mapbox.js#~1.6.4',
         extras: 'mpMaps'
       },
       'hasDatatables': {

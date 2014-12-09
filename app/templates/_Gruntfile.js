@@ -20,6 +20,20 @@ module.exports = function(grunt) {
     ie: _.map(_.compact(_.flatten(_.pluck(components, 'ie'))), function(c) {
       return 'bower_components/' + c + '.css'; })
   };
+  // Images map for copying
+  componentParts.images = {};
+  _.each(_.compact(_.flatten(_.pluck(components, 'images'))), function(c, ci) {
+    componentParts.images['imageL' + ci] = {
+      files: [
+      {
+        cwd: 'bower_components/' + c,
+        expand: true,
+        src: ['**'],
+        dest: 'dist/images/'
+      }
+      ]
+    };
+  });
 
   // Project configuration.  Many values are directly read from
   // package.json.
@@ -114,7 +128,7 @@ module.exports = function(grunt) {
           }
         ]
       }
-    },
+    }, componentParts.images),
 
     // R.js to bring together files through requirejs.  We have two main builds.
     // The first is the application build, for application, we exclude libraries
