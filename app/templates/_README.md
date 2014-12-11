@@ -52,7 +52,7 @@ Get the code for this project and install the necessary dependency libraries and
 
 The `Makefile` runs tasks such as downloading sources and converting data.
 
-1. Run: `make`
+1. Run: `make all`
 
 ### Running locally
 
