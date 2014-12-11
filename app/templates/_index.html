@@ -71,7 +71,17 @@
       window._trackJs = {
         token: '39ecc28b4f344805a47e8e4f56ae353c',
         application: '<%= projectName %>',
-        enabled: (window.mpMakeDeployment) ? false : true
+        enabled: (window.mpMakeDeployment) ? false : true,
+        onError: function (payload, error) {
+          // Ignore Mapbox 404 errors
+          if (error.indexOf('404') !== -1 && payload && payload.entry === 'ajax') {
+            if (payload.network && payload.network.length > 0 && payload.network[0].url.indexOf('mapbox') !== -1) {
+              return false;
+            }
+          }
+          // Otherwise pass
+          return true;
+        }
       }
       //]]>
     </script>
