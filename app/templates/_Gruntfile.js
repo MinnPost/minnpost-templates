@@ -106,7 +106,7 @@ module.exports = function(grunt) {
     <% } %>
 
     // Copy relevant files over to distribution
-    copy: {
+    copy: _.extend({
       images: {
         files: [
           {
